@@ -1,0 +1,99 @@
+.restaurant-card {
+    display: flex;
+    background: #fff;
+    width: 100%;
+    border-radius: 16px 200px 200px 16px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    gap: 20px;
+    align-items: center;
+  }
+  
+  /* Left Image */
+  .card-image img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  
+  /* Middle Content */
+  .card-content {
+    flex: 1;
+  }
+  
+  .card-content h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .res-location,
+  .res-details,
+  .res-price {
+    margin: 4px 0;
+    color: #555;
+  }
+  
+  .menu-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-weight: 600;
+    color: #FF8A00;
+  }
+  
+  .status {
+    margin-top: 10px;
+    font-weight: 600;
+  }
+  
+  .status.open {
+    color: #0A8A1F;
+  }
+  
+  .reviews {
+    margin-top: 10px;
+  }
+  
+  .review {
+    line-height: 0.2;
+    font-size: 12px;
+    color: #444;
+    margin-bottom: 4px;
+  }
+  
+  .line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.1;
+  }
+  
+  /* Right: Rating + Heart */
+  .card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  /* Rating Circle */
+  .rating-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #FF8A00;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Heart Icon */
+  .heart {
+    font-size: 24px;
+    cursor: pointer;
+  }
+  

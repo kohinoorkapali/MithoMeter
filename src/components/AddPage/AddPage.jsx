@@ -47,14 +47,14 @@ export function AddPage() {
   
             <div className="cuisine">
               <label>What cuisine does it offer?</label>
-              <div className="dropdown">
-                <div className="dropdown-trigger">Select cuisines</div>
-                <div className="dropdown-options">
-                  <label><input type="checkbox" value="Nepali" /> Nepali</label>
-                  <label><input type="checkbox" value="Fast Food" /> Fast Food</label>
-                  <label><input type="checkbox" value="All" /> All</label>
+                <div className="dropdown">
+                    <div className="dropdown-trigger">Select cuisines</div>
+                    <div className="dropdown-options">
+                    <label><input type="checkbox" value="Nepali" /> Nepali</label>
+                    <label><input type="checkbox" value="Fast Food" /> Fast Food</label>
+                    <label><input type="checkbox" value="All" /> All</label>
+                    </div>
                 </div>
-              </div>
             </div>
   
             <div className="price">
