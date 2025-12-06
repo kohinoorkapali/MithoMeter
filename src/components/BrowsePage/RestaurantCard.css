@@ -24,8 +24,9 @@
   
   .card-content h2 {
     margin: 0;
-    font-size: 18px;
+    font-size: 30px;
     font-weight: 700;
+    color: #444;
   }
   
   .res-location,
@@ -42,13 +43,10 @@
     color: #FF8A00;
   }
   
-  .status {
-    margin-top: 10px;
-    font-weight: 600;
-  }
-  
-  .status.open {
-    color: #0A8A1F;
+  .location-status {
+    display: flex;
+    align-items: center;
+    gap: 20px;     /* space between location & status icon */
   }
   
   .reviews {

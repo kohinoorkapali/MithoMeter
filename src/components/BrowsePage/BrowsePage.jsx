@@ -1,10 +1,9 @@
 import './BrowsePage.css';
-import './RestaurantCard.jsx';
 import '../header.css';
-
 
 import Logo from "../../assets/Logo.png";
 import Img from "../../assets/Chyura.png";
+import search from "../../assets/search.png";
 import { RestaurantCard } from './RestaurantCard.jsx';
 
 export function BrowsePage() {
@@ -45,7 +44,7 @@ export function BrowsePage() {
                     <input type="text" placeholder="Search restaurants..." />
 
                     <div className="icon-circle">
-                        <img src="/search.png" alt="search icon" />
+                        <img src={search} alt="search icon" />
                     </div>
                 </div>
 

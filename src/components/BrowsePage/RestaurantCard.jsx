@@ -1,7 +1,17 @@
 
 import './RestaurantCard.css';
+import location from "../../assets/location.png";
+import menu from "../../assets/menu.png";
+import price from "../../assets/tag.png";
+import cuisine from "../../assets/dish.png";
+import open from "../../assets/open.png";
+import closed from "../../assets/closed.png";
+import heart from "../../assets/favorite.png";
+
 
 export function RestaurantCard(){
+    const isOpen = true;  
+
     return(
         <div className="restaurant-card">
             {/* LEFT IMAGE */}
@@ -13,30 +23,35 @@ export function RestaurantCard(){
             <div className="card-content">
                 <h2 className="res-name">Himalayan Bistro</h2>
 
-                <p className="line res-location">
-                    <img src="/icons/location.png" className="icon" alt="" />
-                    Kathmandu, Nepal
-                </p>
+                {/* LOCATION + OPEN/CLOSED STATUS IN ONE LINE */}
+                <div className="line location-status">
+                    <p className="line res-location">
+                        <img src={location} className="icon" alt="" />
+                        Kathmandu, Nepal
+                    </p>
+
+                    {/* CONDITIONAL OPEN/CLOSED ICON */}
+                    <img 
+                        src={isOpen ? open : closed} 
+                        alt="Status Icon"
+                        className="status-icon"
+                    />
+                </div>
 
                 <p className="line res-details">
-                    <img src="/icons/cuisine.png" className="icon" alt="" />
+                    <img src={cuisine} className="icon" alt="" />
                     Nepali · Continental 
                 </p>
 
                 <p className="line res-price">
-                    <img src="/icons/price.png" className="icon" alt="" />
+                    <img src={price} className="icon" alt="" />
                     ₹₹ Medium
                 </p>
 
                 <a href="menu" className="line menu-link">
-                    <img src="/icons/menu.png" className="icon" alt="" />
+                    <img src={menu} className="icon" alt="" />
                     Menu
                 </a>
-
-                <p className="line status open">
-                    <img src="/icons/open.png" className="icon" alt="" />
-                    Open Now
-                </p>
 
                 <div className="reviews">
                     <p className="review">“Amazing thakali! Fresh and flavorful.”</p>
@@ -48,7 +63,7 @@ export function RestaurantCard(){
             {/* RIGHT SIDE */}
             <div className="card-right">
             <div className="rating-circle">4.5</div>
-            <img src="/icons/heart.png" alt="" className="heart-icon" />
+            <img src={heart} alt="" className="heart-icon" />
             </div>
 
 
