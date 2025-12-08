@@ -2,7 +2,6 @@ import { Header } from '../Header.jsx';
 import { RestaurantCard } from './RestaurantCard.jsx';
 
 import './BrowsePage.css';
-import '../header.css';
 
 import Img from "../../assets/Chyura.png";
 import search from "../../assets/search.png";
