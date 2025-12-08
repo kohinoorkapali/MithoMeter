@@ -1,0 +1,176 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #2F3136; /* keep your background */
+}
+
+.header-placeholder {
+   position: fixed;     /* header stays on top */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 60px;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #555;
+  border-radius: 8px;
+  margin-bottom: 60px;
+  z-index: 1000;    
+}
+
+.profile-page {
+   width: 90%;
+  max-width: 1000px;
+  margin: 120px auto 40px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
+.profile-title {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.profile-card {
+  width: 100%;
+   min-height: 600px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column; /* make title on top */
+  gap: 20px;
+}
+
+.card-content {
+  display: flex;
+  gap: 60px;
+}
+
+
+.left-box {
+  width: 35%;
+  text-align: center;
+}
+
+.photo-placeholder {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+  margin: 0 auto 15px;
+}
+
+.username-display {
+  margin: 10px 0;
+  color: #333;
+}
+
+.registered-date {
+  font-size: 0.8rem;
+  color: #555;
+  margin-top: 4px;
+}
+
+.edit-image-btn {
+  padding: 8px 16px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.edit-image-btn:hover {
+  background-color: #0056b3;
+}
+
+.info-box {
+  background-color: #f8f8f8;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  color: #555;
+}
+
+.right-box {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+}
+
+.right-box label {
+  display: inline-block;
+  margin: 3px;        
+  font-weight: 500;
+  color: #333;
+  text-align: left; 
+  
+}
+
+.right-box input {
+  width: 90%;        /* remaining width for input */
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  display: inline-block;
+}
+
+.readonly-input {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.editable-input {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #007bff;
+}
+.delete-btn,
+.logout-btn {
+  align-self: flex-end;
+  margin-top: 30px;
+  padding: 20px;           
+  border-radius: 15px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  width: 150px;            /* smaller fixed width (~half) */
+  float: right;            /* align to right */
+}
+
+.delete-btn {
+  background-color: #D32F2F;
+  color: white;
+}
+
+.logout-btn {
+  background-color: #343a34;
+  color: white;
+  margin-top: 20px;  /* keep some spacing from delete button */
+}
+
+.delete-btn:hover {
+  background-color: #B71C1C;
+}
+
+.logout-btn:hover {
+  background-color: #5A6268;
+}
