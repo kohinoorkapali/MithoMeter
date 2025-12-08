@@ -1,22 +1,30 @@
-
+import { useState } from 'react';
 import './RestaurantCard.css';
+
 import location from "../../assets/location.png";
 import menu from "../../assets/menu.png";
 import price from "../../assets/tag.png";
 import cuisine from "../../assets/dish.png";
 import open from "../../assets/open.png";
 import closed from "../../assets/closed.png";
-import heart from "../../assets/favorite.png";
+import heart from "../../assets/heart.png";
+import Img from "../../assets/Chyura.png";
 
 
 export function RestaurantCard(){
     const isOpen = true;  
 
+    const [isSaved, setIsSaved] = useState(false);
+
+    const toggleSave = () => {
+        setIsSaved(!isSaved);
+    };
+
     return(
         <div className="restaurant-card">
             {/* LEFT IMAGE */}
             <div className="card-image">
-            <img src="/images/restaurant.jpg" alt="Restaurant" />
+            <img src={Img} alt="Restaurant" />
             </div>
 
             {/* MIDDLE CONTENT */}
@@ -61,9 +69,24 @@ export function RestaurantCard(){
             </div>
 
             {/* RIGHT SIDE */}
-            <div className="card-right">
-            <div className="rating-circle">4.5</div>
-            <img src={heart} alt="" className="heart-icon" />
+            <div className="card-right" onClick={toggleSave}>
+
+                {isSaved ? (
+                    <div className="saved-wrapper">
+                        <img 
+                            src={heart} 
+                            alt="saved" 
+                            className="heart-big"
+                        />
+                        <span className="rating-on-heart">4.5</span>
+                    </div>
+                ) : (
+                    <div className="rating-circle">
+                        <span className="rating">4.5</span>
+                        <span className="save-text">Click to save</span>
+                    </div>
+                )}
+
             </div>
 
 

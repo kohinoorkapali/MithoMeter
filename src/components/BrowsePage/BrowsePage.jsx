@@ -1,29 +1,17 @@
+import { Header } from '../Header.jsx';
+import { RestaurantCard } from './RestaurantCard.jsx';
+
 import './BrowsePage.css';
 import '../header.css';
 
-import Logo from "../../assets/Logo.png";
 import Img from "../../assets/Chyura.png";
 import search from "../../assets/search.png";
-import { RestaurantCard } from './RestaurantCard.jsx';
+
 
 export function BrowsePage() {
     return (
         <>
-            <div className="header">
-                <div className="logo">
-                    <img src={Logo} alt="Logo" />
-                </div>
-
-                <div className="mid-header">
-                    <a href="/home">Home</a>
-                    <a href="/browse">Browse</a>
-                    <a href="/reviews">Reviews</a>
-                </div>
-
-                <div className="left-header">
-                    <a href="/profile">Profile</a>
-                </div>
-            </div>
+            <Header />  
 
             <div className="browse-container">
                 <div className="top">
@@ -109,6 +97,9 @@ export function BrowsePage() {
 
                 </div>
 
+                <RestaurantCard/>
+                <RestaurantCard/>
+                <RestaurantCard/>
                 <RestaurantCard/>
 
                 
