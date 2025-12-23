@@ -24,3 +24,24 @@ function App() {
 
 export default App;
 
+// import React from "react";
+
+// import ViewDetail from "./components/ViewDetail/ViewDetail";
+
+// function App() {
+//   return (
+//     <div>
+//       <ViewDetail/>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+
+
+
+
+
+
+
