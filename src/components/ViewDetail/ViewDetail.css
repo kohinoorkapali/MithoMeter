@@ -37,10 +37,14 @@ body{
 }
 
 .icon {
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
+  filter: brightness(0) invert(1);
+  
 }
+.icon--original { filter: none; }
+
 
 /* Image */
 .image-wrapper {
@@ -155,8 +159,21 @@ body{
   display: flex;
   align-items: center;
   gap: 10px;
-
   margin-bottom: 10px;
 }
+
+.overview-link {
+  color: white;
+  text-decoration: underline;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.overview-link:hover {
+  opacity: 0.8;
+}
+
 
 

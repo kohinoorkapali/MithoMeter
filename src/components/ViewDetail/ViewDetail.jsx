@@ -62,7 +62,7 @@ export function ViewDetail() {
 
           <ul className="overview-list">
             <li className="overview-item">
-              <img src={open} alt="Time" className="icon" />
+              <img src={open} alt="Time" className="icon--original" />
               <strong>Time:</strong> 9:00 AM – 10:00 PM
             </li>
 
@@ -71,12 +71,12 @@ export function ViewDetail() {
               <strong>Location:</strong> Baneshwor, Kathmandu
             </li>
 
-            <li className="overview-item">
+            <li className="overview-link">
               <img src={menu} alt="Menu" className="icon" />
               <strong>Menu</strong>
             </li>
 
-            <li className="overview-item">
+            <li className="overview-link">
               <img src={website} alt="Website" className="icon" />
               <strong>Website</strong>
             </li>
