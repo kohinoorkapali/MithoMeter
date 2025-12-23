@@ -21,6 +21,10 @@ export function BrowsePage() {
     const [filters, setFilters] = useState(initialFilters);
   
     // CLEAR ALL
+    const hasActiveFilters = Object.values(filters).some(
+        filterArray => filterArray.length > 0
+      );      
+
     function clearAllFilters() {
       setFilters(initialFilters);
     }
@@ -109,9 +113,9 @@ export function BrowsePage() {
                             { label: "Family", value: "Family" },
                             { label: "Friends", value: "Friends" }
                         ]}
-                        selectedValues={filters.price}
+                        selectedValues={filters.mood}
                         onChange={(values)=>
-                            setFilters(prev=> ({...prev, price: values}))
+                            setFilters(prev=> ({...prev, mood: values}))
                         }
                     />
 
@@ -124,22 +128,25 @@ export function BrowsePage() {
                             { label: "Outdoor Seating", value: "Outdoor Seating" },
                             { label: "Live Music", value: "Live Music" }
                         ]}
-                        selectedValues={filters.price}
+                        selectedValues={filters.amenities}
                         onChange={(values)=>
-                            setFilters(prev=> ({...prev, price: values}))
+                            setFilters(prev=> ({...prev, amenities: values}))
                         }
                     />
+
+                    {/* CLEAR BUTTON */}
+                    {hasActiveFilters && (
+                    <div className="clear-filters-wrapper">
+                        <button
+                        className="clear-filters-btn"
+                        onClick={clearAllFilters}
+                        >
+                        Clear All Filters
+                        </button>
+                    </div>
+                    )}
+
                 </div>
-
-                {/* 🔴 CLEAR BUTTON */}
-                <div className="clear-filters-wrapper">
-                    <button className="clear-filters-btn" onClick={clearAllFilters}>
-                    Clear All Filters
-                    </button>
-                </div>
-
-
-
 
                 {/* Cards */}
 

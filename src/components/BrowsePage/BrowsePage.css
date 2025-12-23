@@ -126,21 +126,25 @@ body{
 
   /*CLEAR BUTTON*/
 .clear-filters-wrapper {
-  margin-top: 20px;
+  display: flex;
+  align-items: center;
   text-align: right;
+  z-index: 2;
 }
 
 .clear-filters-btn {
-  background: transparent;
-  border: 1px solid #FF8A00;
-  color: #FF8A00;
-  padding: 6px 12px;
-  border-radius: 12px;
+  background: #FF8A00;        
+  border: 1px solid #FFCC00;
+  color: #ffffff;            
+  padding: 8px 14px;       
+  border-radius: 16px;      
   cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .clear-filters-btn:hover {
-  background: #FF8A00;
-  color: white;
+  background: #ff9c1a;   
+  transform: translateY(-1px);
 }
