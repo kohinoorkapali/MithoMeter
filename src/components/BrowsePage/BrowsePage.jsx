@@ -1,7 +1,7 @@
 import { Header } from '../Header.jsx';
-import { RestaurantCard } from './RestaurantCard.jsx';
-import { DropdownFilter } from "./DropdownFilter.jsx";
-import { Pagination } from "./Pagination.jsx";
+import { RestaurantCard } from '../../common/RestaurantCard.jsx';
+import { DropdownFilter } from "../../common/DropdownFilter.jsx";
+import { Pagination } from "../../common/Pagination.jsx";
 
 import './BrowsePage.css';
 

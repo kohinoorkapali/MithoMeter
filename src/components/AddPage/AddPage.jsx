@@ -1,8 +1,34 @@
 import { Header } from '../Header.jsx';
+import { DropdownFilter } from "../../common/DropdownFilter.jsx";
 
 import './AddPage.css';
 
+import { useState } from 'react';
+
 export function AddPage() {
+  const [selectedCuisines, setSelectedCuisines] = useState([]);
+  const [selectedPrices, setSelectedPrices] = useState([]);
+
+  const cuisineOptions = [
+    { label: "Nepali", value: "Nepali" },
+    { label: "Newari", value: "Newari" },
+    { label: "Indian", value: "Indian" },
+    { label: "Chinese", value: "Chinese" },
+    { label: "Tibetan", value: "Tibetan" },
+    { label: "Fast Food", value: "Fast Food" },
+    { label: "Italian", value: "Italian" },
+    { label: "Continental", value: "Continental" },
+    { label: "Cafe", value: "Cafe" },
+    { label: "Bakery", value: "Bakery" }
+  ];
+  
+
+  const priceOptions = [
+    { label: "₹ Low", value: "Low" },
+    { label: "₹₹ Medium", value: "Medium" },
+    { label: "₹₹₹ High", value: "High" }
+  ];
+
     return (
       <>
         <Header />
@@ -32,28 +58,25 @@ export function AddPage() {
   
             <div className="cuisine">
               <label>What cuisine does it offer?</label>
-                <div className="dropdown">
-                    <div className="dropdown-trigger">Select cuisines</div>
-                    <div className="dropdown-options">
-                    <label><input type="checkbox" value="Nepali" /> Nepali</label>
-                    <label><input type="checkbox" value="Fast Food" /> Fast Food</label>
-                    <label><input type="checkbox" value="All" /> All</label>
-                    </div>
-                </div>
+              <DropdownFilter
+                title="Cuisines"
+                options={cuisineOptions}
+                selectedValues={selectedCuisines}
+                onChange={setSelectedCuisines}
+              />
             </div>
+
   
             <div className="price">
               <label>Enter the price range</label>
-              <div className="dropdown">
-                <div className="dropdown-trigger">Select price range</div>
-                <div className="dropdown-options">
-                  <label><input type="checkbox" value="Low" /> ₹ Low</label>
-                  <label><input type="checkbox" value="Moderate" /> ₹₹ Medium</label>
-                  <label><input type="checkbox" value="High" /> ₹₹₹ High</label>
-                  <label><input type="checkbox" value="All" /> All</label>
-                </div>
-              </div>
+              <DropdownFilter
+                title="Price"
+                options={priceOptions}
+                selectedValues={selectedPrices}
+                onChange={setSelectedPrices}
+              />
             </div>
+
   
             <div className="hours">
               <label>Enter the opening hours</label>

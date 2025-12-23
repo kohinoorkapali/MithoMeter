@@ -1,5 +1,5 @@
 import { Header } from "../Header";
-import { RestaurantCard } from '../BrowsePage/RestaurantCard.jsx';
+import { RestaurantCard } from '../../commonRestaurantCard.jsx';
 import './FavouritesPage.css'
 
 export function FavouritesPage(){
