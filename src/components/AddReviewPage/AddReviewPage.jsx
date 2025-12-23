@@ -101,13 +101,16 @@ export default function AddReviewPage() {
               {renderStars("value")}
             </div>
 
+            <div className="rating-divider"></div>
+
             <label>When did you go?</label>
 <div className="datepicker-wrapper">
   <DatePicker
     selected={visitDate}
     onChange={(date) => setVisitDate(date)}
     placeholderText="Select date"
-    className="dropdown" // This applies to the <input>
+    className="dropdown"
+    maxDate={new Date()}  // cannot select dates future dates 
   />
 </div>
 
@@ -117,6 +120,7 @@ export default function AddReviewPage() {
               <option>Business</option>
               <option>Friends</option>
               <option>Family</option>
+              <option>Solo</option>
             </select>
 
             <label htmlFor="review-text">Write your review</label>

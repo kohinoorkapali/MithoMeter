@@ -5,43 +5,53 @@
 }
 
 .review-container {
-  max-width: 1100px;
+  max-width: 1400px; 
   margin: auto;
   padding: 40px;
   display: flex;
-  gap: 40px;
-}
-
-.left-section {
-  flex: 1;
+  gap: 100px; 
 }
 
 .subtitle {
   color: #aaa;
 }
 
+.left-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* stack content vertically */
+  align-items: center;   
+}
+
 .restaurant-card {
-  border: 1px solid orange;
-  width: 280px;
-  margin-top: 20px;
+  border: 2px solid orange;
+  width: 400px;          
+  margin: 20px 0;         
+  border-radius: 15px;    
+  overflow: hidden;
+  background-color: #111; 
+  box-shadow: 0 0 20px rgba(255, 165, 0, 0.4);
 }
 
 .restaurant-card img {
   width: 100%;
-  height: 180px;
+  height: 250px;          
   object-fit: cover;
 }
 
 .restaurant-card h3 {
-  margin: 10px 0 0 10px;
+  margin: 15px 0 5px 15px;
+  font-size: 28px;        
+  font-weight: 700;
+  color: #fff;
 }
 
 .restaurant-card p {
-  margin: 0 0 10px 10px;
-  font-size: 12px;
+  margin: 5px 0 15px 15px;
+  font-size: 20px;        
   color: #aaa;
+  font-weight: 500;
 }
-
 .right-section {
   flex: 1;
   display: flex;
@@ -49,23 +59,31 @@
   align-items: center;  
 }
 
-
+.right-section h3{
+  font-weight: 600;
+  font-size: 24px; 
+  text-align: left;
+}
 .right-section label {
   display: block;
-  margin: 10px 0 5px;
+    margin: 20px 0 10px; 
   font-weight: 600;
+  font-size: 24px; 
   text-align: left;
   width: 100%;
+  letter-spacing: 0.5px;
 }
 
 .rating-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 20px;
-  font-weight: 600;
   margin: 10px 0;
   width: 100%;
+}
+.rating-row label {
+  font-size: 18px;     
+  font-weight: 400;    
 }
 
 .star {
@@ -75,9 +93,16 @@
   cursor: pointer;
 }
 
+/* for diveder between rating and when did you go */
+.rating-divider {
+  width: 100%;            
+  height: 2px;            
+  background-color: #666;  
+  margin: 15px 0;          
+}
+
 .dropdown,
-.title-input,
-.review-text {
+.title-input {
   width: 100%;
   padding: 10px;
   margin-top: 15px;
@@ -85,29 +110,41 @@
   border: none;
 }
 
+.review-text {
+  width: 100%;
+  height: 110px;       
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  resize: none;        /* disable resizing */
+  overflow-y: auto;    /* scrollable */
+  box-sizing: border-box;
+}
+
 .datepicker-wrapper,
 .react-datepicker-wrapper,
 .react-datepicker__input-container,
 .react-datepicker__input-container input {
-  display: block ;
-  width: 100% ;
+  display: block;
+  width: 100%;
 }
 
-/* Ensure the input matches your .dropdown styles exactly */
 .react-datepicker__input-container input {
   padding: 10px;
   margin-top: 15px;
   border-radius: 10px;
   border: none;
-  box-sizing: border-box; /* Prevents the input from leaking out of the container */
-  background-color: #fff; /* Or whatever color your dropdowns are */
+  box-sizing: border-box;
+  background-color: #fff;
   color: #000;
 }
+
+/* Photo Upload Section */
 .photo-upload-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
+  align-items: center; /* container stays centered */
+  margin-top: 30px;
   width: 100%;
 }
 
@@ -115,53 +152,55 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;       
-  height: 120px;      
+  width: 100%;
+  height: 120px;
   border: 2px dashed #ccc;
   cursor: pointer;
   border-radius: 10px;
   text-align: center;
-  margin: 0;
   background-color: #1a1a1a;
   color: #aaa;
+  margin: 0;
 }
 
 .photo-preview {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center; 
-}
-
-.uploaded-photo {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  gap: 10px;                 
+  justify-content: flex-start; 
+  margin-top: 15px;           
+  width: 100%;
 }
 
 .uploaded-photo-wrapper {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 150px;   
+  height: 150px;  
+}
+
+.uploaded-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 .remove-photo {
   position: absolute;
   top: -5px;
   right: -5px;
+  width: 24px;
+  height: 24px;
   background-color: rgba(0,0,0,0.6);
   color: #fff;
-  width: 20px;
-  height: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 22px;
   border-radius: 50%;
   cursor: pointer;
   display: none;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .uploaded-photo-wrapper:hover .remove-photo {
