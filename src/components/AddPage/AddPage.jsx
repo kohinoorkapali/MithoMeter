@@ -6,6 +6,39 @@ import './AddPage.css';
 import { useState } from 'react';
 
 export function AddPage() {
+  const [selectedMoods, setSelectedMoods] = useState([]);
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+
+  function toggleChip(value, selectedList, setSelectedList) {
+    if (selectedList.includes(value)) {
+      setSelectedList(selectedList.filter(item => item !== value));
+    } else {
+      setSelectedList([...selectedList, value]);
+    }
+  }
+
+  const moodOptions = [
+    { label: "Cozy", value: "Cozy" },
+    { label: "Romantic", value: "Romantic" },
+    { label: "Family-Friendly", value: "Family-Friendly" },
+    { label: "Luxury", value: "Luxury" },
+    { label: "Casual", value: "Casual" },
+    { label: "Party", value: "Party" },
+    { label: "Pet-Friendly", value: "Pet-Friendly" },
+    { label: "Business", value: "Business" }
+  ];
+  
+  const featureOptions = [
+    { label: "WiFi", value: "WiFi" },
+    { label: "Parking", value: "Parking" },
+    { label: "Outdoor Seating", value: "Outdoor Seating" },
+    { label: "Non-Smoking", value: "Non-Smoking" },
+    { label: "Air Conditioned", value: "Air Conditioned" },
+    { label: "Wheelchair Accessibility", value: "Wheelchair Accessibility" }
+  ];
+  
+  
+
   const [selectedCuisines, setSelectedCuisines] = useState([]);
   const [selectedPrices, setSelectedPrices] = useState([]);
 
@@ -22,12 +55,12 @@ export function AddPage() {
     { label: "Bakery", value: "Bakery" }
   ];
   
-
   const priceOptions = [
     { label: "₹ Low", value: "Low" },
     { label: "₹₹ Medium", value: "Medium" },
     { label: "₹₹₹ High", value: "High" }
   ];
+  
 
     return (
       <>
@@ -105,29 +138,41 @@ export function AddPage() {
             <div className="moods">
               <label>Add moods</label>
               <div className="chip-list">
-                <div className="chip">Cozy</div>
-                <div className="chip">Romantic</div>
-                <div className="chip">Family-Friendly</div>
-                <div className="chip">Luxury</div>
-                <div className="chip">Casual</div>
-                <div className="chip">Party</div>
-                <div className="chip">Pet-Friendly</div>
-                <div className="chip">Business</div>
+                {moodOptions.map(function (mood) {
+                  return (
+                    <div
+                      key={mood.value}
+                      className={`chip ${selectedMoods.includes(mood.value) ? "selected" : ""}`}
+                      onClick={function () {
+                        toggleChip(mood.value, selectedMoods, setSelectedMoods);
+                      }}
+                    >
+                      {mood.label}
+                    </div>
+                  );
+                })}
               </div>
             </div>
   
             <div className="features">
               <label>Add features</label>
               <div className="chip-list">
-                <div className="chip">WiFi</div>
-                <div className="chip">Parking</div>
-                <div className="chip">Outdoor Seating</div>
-                <div className="chip">Non-Smoking</div>
-                <div className="chip">Air conditioned</div>
-                <div className="chip">Wheelchair Accessibility</div>
+                {featureOptions.map(function (feature) {
+                  return (
+                    <div
+                      key={feature.value}
+                      className={`chip ${selectedFeatures.includes(feature.value) ? "selected" : ""}`}
+                      onClick={function () {
+                        toggleChip(feature.value, selectedFeatures, setSelectedFeatures);
+                      }}
+                    >
+                      {feature.label}
+                    </div>
+                  );
+                })}
               </div>
             </div>
-  
+
             <button type="submit" className="submit-btn">Submit</button>
           </div>
         </div>
