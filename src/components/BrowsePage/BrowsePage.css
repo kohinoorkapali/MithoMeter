@@ -3,7 +3,7 @@ body{
   color: white;
 }
 
-.browse-conatiner{
+.browse-container{
   margin-left: 200px;
   margin-right: 200px;
 }
@@ -112,48 +112,14 @@ body{
 
 .dropdown-line {
   display: flex;
-  gap: 20px;              /* space between dropdowns */
-  justify-content: space-between; 
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;  /* or flex-start */
+
+  gap: 20px;
   width: 100%;
   margin-top: 20px;
   margin-bottom: 100px;
-  flex-wrap: nowrap;      /* forces them to stay in one line */
-}
 
-.dropdown {
-  position: relative;
-  width: 100px;
-}
-
-.dropdown-trigger {
-  border: 1px solid #FFCC00;
-  padding: 8px;
-  border-radius: 16px;
-  cursor: pointer;
-  background: #FF8A00;
-  text-align: center;
-}
-
-.dropdown-options {
-  display: none;
-  position: absolute;
-  width: 100%;
-  background: #fff;
-  border: 2px solid #FFCC00;
-  border-radius: 6px;
-  padding: 8px;
-  margin-top: 4px;
-  z-index: 10;
-}
-
-.dropdown.open .dropdown-options {
-  display: block;
-}
-
-.dropdown-options label {
-  display: block;
-  font-size: 16px;
-  font-weight: 300;
-  margin-bottom: 4px;
+  flex-wrap: nowrap;   /* keeps everything in one line */
 }

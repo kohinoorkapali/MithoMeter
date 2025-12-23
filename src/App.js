@@ -1,10 +1,10 @@
 //import logo from './logo.svg';
 import './App.css';
-import {FavouritesPage} from './components/FavouritesPage/FavouritesPage'
+import {BrowsePage} from './components/BrowsePage/BrowsePage'
  
 function App() {
   return (
-    <FavouritesPage/>
+    <BrowsePage/>
     // <div className="App">
     //   <header className="App-header">
     //     <img src={logo} className="App-logo" alt="logo" />

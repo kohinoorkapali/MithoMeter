@@ -1,13 +1,23 @@
 import { Header } from '../Header.jsx';
 import { RestaurantCard } from './RestaurantCard.jsx';
+import { DropdownFilter } from "./DropdownFilter";
 
 import './BrowsePage.css';
 
 import Img from "../../assets/Chyura.png";
 import search from "../../assets/search.png";
 
+import { useState } from "react";
 
 export function BrowsePage() {
+    const [filters, setFilters] = useState({
+        cuisine: [],
+        ratings: [],
+        price: [],
+        mood: [],
+        amenities: []
+      });
+
     return (
         <>
             <Header />  
@@ -38,16 +48,20 @@ export function BrowsePage() {
                 <div className="dropdown-line">
 
                     {/* CUISINE */}
-                    <div className="dropdown">
-                        <div className="dropdown-trigger">Cuisine</div>
-                        <div className="dropdown-options">
-                            <label><input type="checkbox" value="Nepali" /> Nepali</label>
-                            <label><input type="checkbox" value="Indian" /> Indian</label>
-                            <label><input type="checkbox" value="Chinese" /> Chinese</label>
-                            <label><input type="checkbox" value="Continental" /> Continental</label>
-                            <label><input type="checkbox" value="All" /> All</label>
-                        </div>
-                    </div>
+                    <DropdownFilter
+                            title="Cuisine"
+                            options={[
+                                { label: "Nepali", value: "Nepali" },
+                                { label: "Indian", value: "Indian" },
+                                { label: "Chinese", value: "Chinese" },
+                                { label: "Continental", value: "Continental" }
+                            ]}
+                            selectedValues = {filters.cuisine}
+                            onChange={(values)=>
+                                setFilters(prev=>({...prev, cuisine:values}))
+                            }
+                            />
+                    
 
                     {/* RATINGS */}
                     <div className="dropdown">
