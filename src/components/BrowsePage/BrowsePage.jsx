@@ -1,13 +1,51 @@
 import { Header } from '../Header.jsx';
-import { RestaurantCard } from './RestaurantCard.jsx';
+import { RestaurantCard } from '../../common/RestaurantCard.jsx';
+import { DropdownFilter } from "../../common/DropdownFilter.jsx";
+import { Pagination } from "../../common/Pagination.jsx";
 
 import './BrowsePage.css';
 
 import Img from "../../assets/Chyura.png";
 import search from "../../assets/search.png";
 
+import { useState } from "react";
 
-export function BrowsePage() {
+export function BrowsePage({items=[]}) {
+    const ITEMS_PER_PAGE = 10;
+    const safeItems = Array.isArray(items) ? items : [];
+
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const totalPages = Math.ceil(safeItems.length / ITEMS_PER_PAGE);
+
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const currentItems = safeItems.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+    );
+
+
+    const initialFilters = {
+      cuisine: [],
+      ratings: [],
+      price: [],
+      mood: [],
+      amenities: []
+    };
+  
+    const [filters, setFilters] = useState(initialFilters);
+  
+    // CLEAR ALL
+    const hasActiveFilters = Object.values(filters).some(
+        filterArray => filterArray.length > 0
+      );      
+
+    function clearAllFilters() {
+      setFilters(initialFilters);
+    }
+  
+
     return (
         <>
             <Header />  
@@ -27,6 +65,7 @@ export function BrowsePage() {
                     </div>
                 </div>
 
+                {/* Search Bar */}
                 <div className="search-wrapper">
                     <input type="text" placeholder="Search restaurants..." />
 
@@ -35,71 +74,114 @@ export function BrowsePage() {
                     </div>
                 </div>
 
+                {/* Dropdowns */}
                 <div className="dropdown-line">
 
                     {/* CUISINE */}
-                    <div className="dropdown">
-                        <div className="dropdown-trigger">Cuisine</div>
-                        <div className="dropdown-options">
-                            <label><input type="checkbox" value="Nepali" /> Nepali</label>
-                            <label><input type="checkbox" value="Indian" /> Indian</label>
-                            <label><input type="checkbox" value="Chinese" /> Chinese</label>
-                            <label><input type="checkbox" value="Continental" /> Continental</label>
-                            <label><input type="checkbox" value="All" /> All</label>
-                        </div>
-                    </div>
+                    <DropdownFilter
+                        title="Cuisine"
+                        options={[
+                            { label: "Nepali", value: "Nepali" },
+                            { label: "Indian", value: "Indian" },
+                            { label: "Chinese", value: "Chinese" },
+                            { label: "Continental", value: "Continental" }
+                        ]}
+                        selectedValues = {filters.cuisine}
+                        onChange={(values)=>
+                            setFilters(prev=>({...prev, cuisine:values}))
+                        }
+                    />
+                    
 
                     {/* RATINGS */}
-                    <div className="dropdown">
-                        <div className="dropdown-trigger">Ratings</div>
-                        <div className="dropdown-options">
-                            <label><input type="checkbox" value="5" /> ⭐⭐⭐⭐⭐</label>
-                            <label><input type="checkbox" value="4" /> ⭐⭐⭐⭐</label>
-                            <label><input type="checkbox" value="3" /> ⭐⭐⭐</label>
-                            <label><input type="checkbox" value="2" /> ⭐⭐</label>
-                            <label><input type="checkbox" value="1" /> ⭐</label>
-                        </div>
-                    </div>
+                    <DropdownFilter
+                        title="Ratings"
+                        options={[5,4,3,2,1].map(r => ({
+                            label: "⭐".repeat(r),
+                            value: r
+                        }))}
+                        selectedValues={filters.ratings}
+                        onChange={(values) =>
+                            setFilters(prev => ({ ...prev, ratings: values }))
+                        }
+                    />
 
                     {/* PRICE */}
-                    <div className="dropdown">
-                        <div className="dropdown-trigger">Price</div>
-                        <div className="dropdown-options">
-                            <label><input type="checkbox" value="cheap" /> Budget</label>
-                            <label><input type="checkbox" value="mid" /> Moderate</label>
-                            <label><input type="checkbox" value="expensive" /> Premium</label>
-                        </div>
-                    </div>
+                    <DropdownFilter
+                        title="Price"
+                        options={[
+                            {label:"Budget", value:"cheap"},
+                            { label: "Moderate", value: "mid" },
+                            { label: "Premium", value: "expensive" }
+                        ]}
+                        selectedValues={filters.price}
+                        onChange={(values)=>
+                            setFilters(prev=> ({...prev, price: values}))
+                        }
+                    />
 
                     {/* MOOD */}
-                    <div className="dropdown">
-                        <div className="dropdown-trigger">Mood</div>
-                        <div className="dropdown-options">
-                            <label><input type="checkbox" value="Cozy" /> Cozy</label>
-                            <label><input type="checkbox" value="Romantic" /> Romantic</label>
-                            <label><input type="checkbox" value="Family" /> Family-Friendly</label>
-                            <label><input type="checkbox" value="Friends" /> Perfect for Friends</label>
-                        </div>
-                    </div>
+                    <DropdownFilter
+                        title="Mood"
+                        options={[
+                            {label:"Cozy", value:"Cozy"},
+                            { label: "Romantic", value: "Romantic" },
+                            { label: "Family", value: "Family" },
+                            { label: "Friends", value: "Friends" }
+                        ]}
+                        selectedValues={filters.mood}
+                        onChange={(values)=>
+                            setFilters(prev=> ({...prev, mood: values}))
+                        }
+                    />
 
                     {/* AMENITIES */}
-                    <div className="dropdown">
-                        <div className="dropdown-trigger">Amenities</div>
-                        <div className="dropdown-options">
-                            <label><input type="checkbox" value="Parking" /> Parking</label>
-                            <label><input type="checkbox" value="Wifi" /> Wi-Fi</label>
-                            <label><input type="checkbox" value="Outdoor" /> Outdoor Seating</label>
-                            <label><input type="checkbox" value="Live Music" /> Live Music</label>
-                            <label><input type="checkbox" value="All" /> All</label>
-                        </div>
+                    <DropdownFilter
+                        title="Amenities"
+                        options={[
+                            {label:"Parking", value:"Parking"},
+                            { label: "Wi-Fi", value: "Wi-Fi" },
+                            { label: "Outdoor Seating", value: "Outdoor Seating" },
+                            { label: "Live Music", value: "Live Music" }
+                        ]}
+                        selectedValues={filters.amenities}
+                        onChange={(values)=>
+                            setFilters(prev=> ({...prev, amenities: values}))
+                        }
+                    />
+
+                    {/* CLEAR BUTTON */}
+                    {hasActiveFilters && (
+                    <div className="clear-filters-wrapper">
+                        <button
+                        className="clear-filters-btn"
+                        onClick={clearAllFilters}
+                        >
+                        Clear All Filters
+                        </button>
                     </div>
+                    )}
 
                 </div>
 
-                <RestaurantCard/>
-                <RestaurantCard/>
-                <RestaurantCard/>
-                <RestaurantCard/>
+                {/* Cards */}
+
+                <div className="items-grid">
+                    {currentItems.map(function (item) {
+                        return (
+                        <RestaurantCard key={item.id} item={item} />
+                        );
+                    })}
+                </div>
+
+
+
+                {/* Pagination */}
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
 
                 
             </div>
