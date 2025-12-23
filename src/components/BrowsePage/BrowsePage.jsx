@@ -1,6 +1,7 @@
 import { Header } from '../Header.jsx';
 import { RestaurantCard } from './RestaurantCard.jsx';
-import { DropdownFilter } from "./DropdownFilter";
+import { DropdownFilter } from "./DropdownFilter.jsx";
+import { Pagination } from "./Pagination.jsx";
 
 import './BrowsePage.css';
 
@@ -9,7 +10,22 @@ import search from "../../assets/search.png";
 
 import { useState } from "react";
 
-export function BrowsePage() {
+export function BrowsePage({items=[]}) {
+    const ITEMS_PER_PAGE = 10;
+    const safeItems = Array.isArray(items) ? items : [];
+
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const totalPages = Math.ceil(safeItems.length / ITEMS_PER_PAGE);
+
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const currentItems = safeItems.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+    );
+
+
     const initialFilters = {
       cuisine: [],
       ratings: [],
@@ -150,10 +166,22 @@ export function BrowsePage() {
 
                 {/* Cards */}
 
-                <RestaurantCard/>
-                <RestaurantCard/>
-                <RestaurantCard/>
-                <RestaurantCard/>
+                <div className="items-grid">
+                    {currentItems.map(function (item) {
+                        return (
+                        <RestaurantCard key={item.id} item={item} />
+                        );
+                    })}
+                </div>
+
+
+
+                {/* Pagination */}
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
 
                 
             </div>

@@ -1,10 +1,11 @@
 //import logo from './logo.svg';
 import './App.css';
-import {BrowsePage} from './components/BrowsePage/BrowsePage'
+import {BrowsePage} from './components/BrowsePage/BrowsePage.jsx'
+import { restaurants } from './components/BrowsePage/RestaurantData.js';
  
 function App() {
   return (
-    <BrowsePage/>
+    <BrowsePage items={restaurants}/>
     // <div className="App">
     //   <header className="App-header">
     //     <img src={logo} className="App-logo" alt="logo" />

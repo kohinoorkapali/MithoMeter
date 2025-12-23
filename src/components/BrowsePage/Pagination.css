@@ -1,0 +1,48 @@
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 24px;
+  }
+  
+  /* Common button style */
+  .page-btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 50%;
+    border: 1px solid #FFCC00;
+    background: #FF8A00;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+  
+  .page-btn:hover:not(:disabled) {
+    background: #ff9c1a;
+    transform: translateY(-1px);
+  }
+  
+  /* Active page */
+  .page-btn.active {
+    background: #FFCC00;
+    color: #000;
+    border-color: #FFCC00;
+  }
+  
+  /* Prev / Next circles */
+  .page-btn.circle {
+    font-size: 20px;
+    line-height: 1;
+  }
+  
+  /* Disabled state */
+  .page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+  

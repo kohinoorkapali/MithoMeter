@@ -11,8 +11,8 @@ import heart from "../../assets/heart.png";
 import Img from "../../assets/Chyura.png";
 
 
-export function RestaurantCard(){
-    const isOpen = true;  
+export function RestaurantCard({item}){
+    const isOpen = item.isOpen;  
 
     const [isSaved, setIsSaved] = useState(false);
 
@@ -29,13 +29,13 @@ export function RestaurantCard(){
 
             {/* MIDDLE CONTENT */}
             <div className="card-content">
-                <h2 className="res-name">Himalayan Bistro</h2>
+                <h2 className="res-name"> {item.name}</h2>
 
                 {/* LOCATION + OPEN/CLOSED STATUS IN ONE LINE */}
                 <div className="line location-status">
                     <p className="line res-location">
                         <img src={location} className="icon" alt="" />
-                        Kathmandu, Nepal
+                        {item.location}, 
                     </p>
 
                     {/* CONDITIONAL OPEN/CLOSED ICON */}
@@ -48,12 +48,12 @@ export function RestaurantCard(){
 
                 <p className="line res-details">
                     <img src={cuisine} className="icon" alt="" />
-                    Nepali · Continental 
+                    {item.cuisine} 
                 </p>
 
                 <p className="line res-price">
                     <img src={price} className="icon" alt="" />
-                    ₹₹ Medium
+                    {item.price} 
                 </p>
 
                 <a href="menu" className="line menu-link">
@@ -78,7 +78,7 @@ export function RestaurantCard(){
                             alt="saved" 
                             className="heart-big"
                         />
-                        <span className="rating-on-heart">4.5</span>
+                        <span className="rating-on-heart">{item.rating}</span>
                     </div>
                 ) : (
                     <div className="rating-circle">
