@@ -1,8 +1,11 @@
 body{
-  margin-left: 200px;
-  margin-right: 200px;
   background-color: #000000;
   color: white;
+}
+
+.browse-container{
+  margin-left: 200px;
+  margin-right: 200px;
 }
 
 .title{
@@ -109,48 +112,39 @@ body{
 
 .dropdown-line {
   display: flex;
-  gap: 20px;              /* space between dropdowns */
-  justify-content: space-between; 
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;  /* or flex-start */
+
+  gap: 20px;
   width: 100%;
   margin-top: 20px;
   margin-bottom: 100px;
-  flex-wrap: nowrap;      /* forces them to stay in one line */
+
+  flex-wrap: nowrap;   /* keeps everything in one line */
 }
 
-.dropdown {
-  position: relative;
-  width: 100px;
+  /*CLEAR BUTTON*/
+.clear-filters-wrapper {
+  display: flex;
+  align-items: center;
+  text-align: right;
+  z-index: 2;
 }
 
-.dropdown-trigger {
+.clear-filters-btn {
+  background: #FF8A00;        
   border: 1px solid #FFCC00;
-  padding: 8px;
-  border-radius: 16px;
+  color: #ffffff;            
+  padding: 8px 14px;       
+  border-radius: 16px;      
   cursor: pointer;
-  background: #FF8A00;
-  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
-.dropdown-options {
-  display: none;
-  position: absolute;
-  width: 100%;
-  background: #fff;
-  border: 2px solid #FFCC00;
-  border-radius: 6px;
-  padding: 8px;
-  margin-top: 4px;
-  z-index: 10;
-}
-
-.dropdown.open .dropdown-options {
-  display: block;
-}
-
-.dropdown-options label {
-  display: block;
-  font-size: 16px;
-  font-weight: 300;
-  margin-bottom: 4px;
+.clear-filters-btn:hover {
+  background: #ff9c1a;   
+  transform: translateY(-1px);
 }

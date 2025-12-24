@@ -1,13 +1,13 @@
 /* MAIN CONTAINER */
 
 body{
-  margin-left: 200px;
-  margin-right: 200px;
   background-color: #000000;
   color: white;
 }
 
 .create-container {
+    margin-left: 200px;
+    margin-right: 200px;
     display: flex;
     padding: 30px;
     gap: 30px;
@@ -106,41 +106,8 @@ textarea:focus{
     /*DROPDOWNS*/
 .dropdown {
     position: relative;
-    width: 200px;
 }
   
-.dropdown-trigger {
-    border: 1px solid #FFCC00;
-    padding: 8px;
-    border-radius: 16px;
-    cursor: pointer;
-    background: #FF8A00;
-}
-  
-.dropdown-options {
-    display: none;
-    position: absolute;
-    width: 100%;
-    background: #fff;
-    border: 2px solid #FFCC00;
-    border-radius: 6px;
-    padding: 8px;
-    margin-top: 4px;
-    z-index: 10;
-}
-  
-.dropdown.open .dropdown-options {
-    display: block;
-}
-  
-.dropdown-options label {
-    display: block;
-    font-size: 16px;
-    font-weight: 300;
-    margin-bottom: 4px;
-}
-
-    
     /*CHIPS*/
 .chip-list {
     display: flex;

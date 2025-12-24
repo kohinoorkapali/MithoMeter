@@ -1,5 +1,6 @@
 import React, { useState }  from "react";
 import "./ProfilePage.css";
+import { Header } from "../Header";
 
 
 export default function ProfilePage() {
@@ -10,8 +11,10 @@ export default function ProfilePage() {
     setUsername(e.target.value);
   };
  return (
+  <>
+  <Header />
     <div className="profile-page">
-      <div className="header-placeholder">Header will go here</div>
+      
 
       <div className="profile-card">
         <h1 className="profile-title">My Profile</h1>
@@ -53,5 +56,6 @@ export default function ProfilePage() {
       </div>
     </div>
   </div>
+  </>
    );
 }
