@@ -1,8 +1,6 @@
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent scrolling */
 }
 * {
   box-sizing: border-box;
@@ -51,22 +49,15 @@ html, body {
   gap: 10px;
 }
 
-.login-btn,
-.signin-btn {
+.landing-login-btn,
+.landing-signin-btn {
   padding: 8px 15px;
   border: none;
   border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
   color: white;
-}
-
-.login-btn {
   background: #a82424;
-}
-
-.signin-btn {
-  background: #b32929;
 }
 
 .hero-section {

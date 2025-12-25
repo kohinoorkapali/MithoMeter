@@ -2,13 +2,19 @@
 import './App.css';
 import { useState } from 'react'
 import logo from './assets/Logo.png'
-import ViewDetail_Bottom from './components/ViewDetail/ViewDetail_Bottom';
+import LandingPage from './components/LandingPage/Landingpage';
+
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <ViewDetail_Bottom/>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        
+      </Routes>
+    </BrowserRouter>
   );
 }
 

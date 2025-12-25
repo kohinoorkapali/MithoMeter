@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import "./Login.css";
 import logo from "../../assets/Logo.png";
-
-// ✔ Add these two lines (import your images)
 import viewIcon from "../../assets/view.png";
 import hideIcon from "../../assets/hide.png";
 
-function Login() {
+export function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -56,4 +54,3 @@ function Login() {
   );
 }
 
-export default Login;
