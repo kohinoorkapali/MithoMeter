@@ -1,0 +1,14 @@
+
+body{
+    background-color: #000000;
+    color: white;
+  }
+
+
+.dashboard-container {
+margin-left: 200px;
+margin-right: 200px;
+display: flex;
+padding: 30px;
+gap: 30px;
+}
