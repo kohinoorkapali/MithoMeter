@@ -20,12 +20,11 @@ export function Header({role}){
                     )}
 
                     {role === "admin" ? (
-                    <a href="/add">Add (Admin)</a>
+                    <a href="/add">Add</a>
                     ) : (
                     <a href="/favourites">Favourites</a>
                     )}
                     </div>
-
 
                 <div className="left-header">
                     <a href="/profile">Profile</a>

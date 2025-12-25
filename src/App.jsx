@@ -1,15 +1,13 @@
 
 import './App.css';
-import { useState } from 'react'
-import logo from './assets/Logo.png'
-import ViewDetail_Bottom from './components/ViewDetail/ViewDetail_Bottom';
+import { AdminDashboard } from './components/AdminDashboard/AdminDashboard';
 
 function App() {
   return (
     <div className="App">
-      <ViewDetail_Bottom/>
+      <AdminDashboard />
     </div>
   );
 }
 
-export default App
+export default App;
