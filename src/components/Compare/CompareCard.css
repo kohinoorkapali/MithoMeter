@@ -1,0 +1,72 @@
+
+.compare-card {
+  width: 350px;
+  padding: 16px;
+  border-radius: 10px;
+  background: transparent;
+  border: 2px solid transparent;
+  flex: 1 1 calc(50% - 15px); /* 50% width minus half gap */
+}
+
+.compare-card.active {
+  border: 2px solid #1da1f2;
+}
+
+.compare-card:hover {
+  border: 2px solid #1da1f2;
+}
+
+.rank {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+/* IMAGES */
+.image-row {
+  display: flex;
+  gap: 6px;
+}
+
+.image-row img {
+  width: 50%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* TEXT */
+.rating,
+.price,
+.cuisine,
+.location {
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+.open {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+/* FEATURES */
+.compare-card ul {
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+.compare-card li {
+  margin-bottom: 4px;
+}
+
+/* BUTTON */
+.visit-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
