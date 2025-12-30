@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import './RestaurantCard.css';
 
-import location from "../../assets/location.png";
-import menu from "../../assets/menu.png";
-import price from "../../assets/tag.png";
-import cuisine from "../../assets/dish.png";
-import open from "../../assets/open.png";
-import closed from "../../assets/closed.png";
-import heart from "../../assets/heart.png";
-import Img from "../../assets/Chyura.png";
+import location from "../assets/location.png";
+import menu from "../assets/menu.png";
+import price from "../assets/tag.png";
+import cuisine from "../assets/dish.png";
+import open from "../assets/open.png";
+import closed from "../assets/closed.png";
+import heart from "../assets/heart.png";
+import Img from "../assets/Chyura.png";
 
 
 export function RestaurantCard({item}){
