@@ -5,7 +5,7 @@ import './Header.css';
 export function Header({role}){
     return(
         <div className="header">
-                <div className="logo">
+                <div className="header-logo">
                     <img src={Logo} alt="Logo" />
                 </div>
 
