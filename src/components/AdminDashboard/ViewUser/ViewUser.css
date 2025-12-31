@@ -1,0 +1,134 @@
+/* Page background */
+.user-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #ff8c00; /* Orange background */
+  padding: 30px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Header area */
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  color: #1c1c1c;
+}
+
+.user-header h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.user-header p {
+  font-size: 16px;
+  color: #333;
+  margin: 4px 0 0;
+}
+
+/* Dropdown */
+.status-dropdown {
+  margin-top: 10px;
+}
+
+.dropdown-btn {
+  background: transparent;
+  border: 2px solid #ffcc80;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #1c1c1c;
+}
+
+/* Navigation buttons */
+.nav-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.circle-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+}
+
+/* User list */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;           /* SPACE BETWEEN CARDS */
+  padding: 10px 0;
+}
+
+/* Individual user card */
+.user-card {
+  background: #fff7f0;               /* CARD BACKGROUND */
+  padding: 8px 12px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border: 1px solid #ffb36b;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: 0.2s ease;
+}
+
+/* Hover effect */
+.user-card:hover {
+  transform: translateY(-2px);
+}
+
+/* User info */
+.user-info {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+/* Profile image */
+.profile-img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Name */
+.user-info h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Date */
+.user-info p {
+  margin: 12px 0 0;
+  color: #777;
+  font-size: 14px;
+}
+
+/* Ban button */
+.ban-btn {
+  background: #0c2540;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 13px;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.ban-btn:hover {
+  opacity: 0.9;
+}

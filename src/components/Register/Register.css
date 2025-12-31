@@ -1,0 +1,109 @@
+/* Fullscreen background */
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-image: url("../../assets/Login.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    font-family: Arial, sans-serif;
+}
+
+
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.logo img {
+    width: 120px; 
+    height: auto;
+}
+
+
+/* Center container */
+.register-container {
+    
+    margin: 0 200px;
+    width: 500px;
+    background: black;
+    border: #f9f9f7 1px solid;
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow:
+    0 0 40px rgba(0, 0, 0, 0.9),
+    0 0 20px rgba(0, 0, 0, 0.7);
+
+
+    text-align: center;
+}
+
+/* Title */
+h2 {
+    margin: 0;
+    color: #fff;
+}
+
+.subtitle {
+    margin-bottom: 20px;
+    color: #f3f3f3;
+}
+
+/* Input groups */
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.input-group label {
+    width: 120px;   /* adjust based on your design */
+    font-weight: 500;
+    color: #f3f3f3;
+}
+
+.input-group input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+}
+
+/* Button */
+.btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background:#e2301d;
+
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #a91403;
+}
+
+.login-link {
+    margin-top: 15px;
+    color: #f3f3f3;
+    text-align: right;
+    font-size: 14px;
+}
+.login-link a {
+    color: #FFCC00;
+    text-decoration: none;
+}
+

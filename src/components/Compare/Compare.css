@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  background: radial-gradient(circle, #2b0000, #000);
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+/* CARDS */
+.cards-container {
+  display: flex;
+  gap: 30px;
+  padding: 40px 80px;
+}
