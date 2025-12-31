@@ -1,12 +1,11 @@
 import './Register.css';
-import Img from "../../assets/Login.jpg";
 import logo from "../../assets/Logo.png";
 
 
 export function Register() {
     return (
     <>
-        <div className="page-wrapper">
+        <div className="register-page">
             
             <div className="logo">
                 <img src={logo} alt="MithoMeter Logo" />

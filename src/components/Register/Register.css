@@ -1,8 +1,6 @@
 /* Fullscreen background */
-body {
-    margin: 0 200px ;
-    padding: 0;
-    height: 100vh;
+.register-page {
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,6 +12,7 @@ body {
 
     font-family: Arial, sans-serif;
 }
+
 
 .logo {
     position: absolute;
@@ -29,6 +28,8 @@ body {
 
 /* Center container */
 .register-container {
+    
+    margin: 0 200px;
     width: 500px;
     background: black;
     border: #f9f9f7 1px solid;
