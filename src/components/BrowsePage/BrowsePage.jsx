@@ -11,6 +11,7 @@ import search from "../../assets/search.png";
 import { useState } from "react";
 
 export function BrowsePage({items=[]}) {
+    //PAGINATION
     const ITEMS_PER_PAGE = 10;
     const safeItems = Array.isArray(items) ? items : [];
 
@@ -25,7 +26,7 @@ export function BrowsePage({items=[]}) {
     startIndex + ITEMS_PER_PAGE
     );
 
-
+    //DROPDOWNS
     const initialFilters = {
       cuisine: [],
       ratings: [],
