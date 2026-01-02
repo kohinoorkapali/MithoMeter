@@ -3,11 +3,42 @@ import { DropdownFilter } from "../../common/DropdownFilter.jsx";
 
 import './AddPage.css';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useForm } from "react-hook-form";
 
 export function AddPage() {
+  // REACT FORM SETUP
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState:{errors}
+  }= useForm();
+
   const [selectedMoods, setSelectedMoods] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [selectedCuisines, setSelectedCuisines] = useState([]);
+  const [selectedPrices, setSelectedPrices] = useState([]);
+
+  const [photos, setPhotos] = useState([]);
+
+
+  //SYNC UI STATE
+  useEffect(()=>{
+    setValue("moods", selectedMoods);
+  }, [selectedMoods, setValue]);
+
+  useEffect(() => {
+    setValue("features", selectedFeatures); 
+  }, [selectedFeatures, setValue]);
+
+  useEffect(() => {
+    setValue("cuisines", selectedCuisines); // 
+  }, [selectedCuisines, setValue]);
+
+  useEffect(() => {
+    setValue("priceRange", selectedPrices); // 
+  }, [selectedPrices, setValue]);
 
   function toggleChip(value, selectedList, setSelectedList) {
     if (selectedList.includes(value)) {
@@ -16,6 +47,19 @@ export function AddPage() {
       setSelectedList([...selectedList, value]);
     }
   }
+
+  function handlePhotoUpload(e) {
+    const files = Array.from(e.target.files);
+  
+    setPhotos(prev => {
+      const combined = [...prev, ...files];
+      return combined.slice(0, 5); // max 5 images
+    });
+  
+    // keep react-hook-form in sync
+    setValue("photos", e.target.files);
+  }
+  
 
   const moodOptions = [
     { label: "Cozy", value: "Cozy" },
@@ -37,10 +81,7 @@ export function AddPage() {
     { label: "Wheelchair Accessibility", value: "Wheelchair Accessibility" }
   ];
   
-  
 
-  const [selectedCuisines, setSelectedCuisines] = useState([]);
-  const [selectedPrices, setSelectedPrices] = useState([]);
 
   const cuisineOptions = [
     { label: "Nepali", value: "Nepali" },
@@ -60,122 +101,167 @@ export function AddPage() {
     { label: "₹₹ Medium", value: "Medium" },
     { label: "₹₹₹ High", value: "High" }
   ];
-  
+
+  const onSubmit = (data) => {
+    console.log("Submitted Restaurant Data:", data);
+  };
 
     return (
       <>
         <Header />
   
-        <div className="create-container">
-          <div className="left-container">
-            Bring this restaurant onto the MithoMeter radar.
-            <div className="photo-container">
-              Add some photos
-              <label htmlFor="photo-upload" className="photo-box">
-                Click to add photos
-              </label>
-              <input type="file" id="photo-upload" accept="image/*" multiple />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="create-container">
+            <div className="left-container">
+              Bring this restaurant onto the MithoMeter radar.
+              <div className="photo-container">
+                Add some photos
+                <label htmlFor="photo-upload" className="photo-box">
+                  Click to add photos
+                </label>
+                <input
+                  type="file"
+                  id="photo-upload"
+                  accept="image/*"
+                  multiple
+                  onChange={handlePhotoUpload}
+                />
+                <div className="photo-preview">
+                  {photos.map((photo, index) => {
+                    const previewUrl = URL.createObjectURL(photo);
+
+                    return (
+                      <div className="uploaded-photo-wrapper" key={index}>
+                        <img
+                          src={previewUrl}
+                          className="uploaded-photo"
+                          alt="preview"
+                          onLoad={() => URL.revokeObjectURL(previewUrl)}
+                        />
+
+                        <span
+                          className="remove-photo"
+                          onClick={() =>
+                            setPhotos(prev => prev.filter((_, i) => i !== index))
+                          }
+                        >
+                          ×
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+
+              </div>
+            </div>
+    
+            <div className="right-container">
+              <div className="name">
+                <label>Title the restaurant</label>
+                <input
+                type="text"
+                {...register("name", { required: "Restaurant name is required" })} 
+                />
+              {errors.name && <small>{errors.name.message}</small>}
+              </div>
+    
+              <div className="location">
+                <label>Add the location</label>
+                <input type="text" 
+                {...register("location", {required: "Location is required"})} />
+              </div>
+    
+              <div className="cuisine">
+                <label>What cuisine does it offer?</label>
+                <DropdownFilter
+                  title="Cuisines"
+                  options={cuisineOptions}
+                  selectedValues={selectedCuisines}
+                  onChange={setSelectedCuisines}
+                />
+              </div>
+
+    
+              <div className="price">
+                <label>Enter the price range</label>
+                <DropdownFilter
+                  title="Price"
+                  options={priceOptions}
+                  selectedValues={selectedPrices}
+                  onChange={setSelectedPrices}
+                />
+              </div>
+
+    
+              <div className="hours">
+                <label>Enter the opening hours</label>
+                <div className="hour-inputs">
+                  <input type="time" 
+                  {...register ("openTime")} />
+                  <span>to</span>
+                  <input type="time" 
+                  {...register("closeTime")} />
+                </div>
+              </div>
+    
+              <div className="description">
+                <label>Add a description</label>
+                <textarea rows="7" {...register("desription")}></textarea>
+              </div>
+    
+              <div className="website">
+                <label>Link to the restaurant</label>
+                <input type="text" {...register("website")} />
+              </div>
+    
+              <div className="menu">
+                <label>Link to the restaurant's menu</label>
+                <input type="text" {...register("menu")}/>
+              </div>
+    
+              <div className="moods">
+                <label>Add moods</label>
+                <div className="chip-list">
+                  {moodOptions.map(function (mood) {
+                    return (
+                      <div
+                        key={mood.value}
+                        className={`chip ${selectedMoods.includes(mood.value) ? "selected" : ""}`}
+                        onClick={function () {
+                          toggleChip(mood.value, selectedMoods, setSelectedMoods);
+                        }}
+                      >
+                        {mood.label}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+    
+              <div className="features">
+                <label>Add features</label>
+                <div className="chip-list">
+                  {featureOptions.map(function (feature) {
+                    return (
+                      <div
+                        key={feature.value}
+                        className={`chip ${selectedFeatures.includes(feature.value) ? "selected" : ""}`}
+                        onClick={function () {
+                          toggleChip(feature.value, selectedFeatures, setSelectedFeatures);
+                        }}
+                      >
+                        {feature.label}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <button type="submit" className="submit-btn">Submit</button>
             </div>
           </div>
-  
-          <div className="right-container">
-            <div className="name">
-              <label htmlFor="q1">Title the restaurant</label>
-              <input type="text" id="q1" />
-            </div>
-  
-            <div className="location">
-              <label htmlFor="q2">Add the location</label>
-              <input type="text" id="q2" />
-            </div>
-  
-            <div className="cuisine">
-              <label>What cuisine does it offer?</label>
-              <DropdownFilter
-                title="Cuisines"
-                options={cuisineOptions}
-                selectedValues={selectedCuisines}
-                onChange={setSelectedCuisines}
-              />
-            </div>
-
-  
-            <div className="price">
-              <label>Enter the price range</label>
-              <DropdownFilter
-                title="Price"
-                options={priceOptions}
-                selectedValues={selectedPrices}
-                onChange={setSelectedPrices}
-              />
-            </div>
-
-  
-            <div className="hours">
-              <label>Enter the opening hours</label>
-              <div className="hour-inputs">
-                <input type="time" id="q5a" />
-                <span>to</span>
-                <input type="time" id="q5b" />
-              </div>
-            </div>
-  
-            <div className="description">
-              <label htmlFor="q6">Add a description</label>
-              <textarea id="q6" rows="7"></textarea>
-            </div>
-  
-            <div className="website">
-              <label htmlFor="q7">Link to the restaurant</label>
-              <input type="text" id="q7" />
-            </div>
-  
-            <div className="menu">
-              <label htmlFor="q8">Link to the restaurant's menu</label>
-              <input type="text" id="q8" />
-            </div>
-  
-            <div className="moods">
-              <label>Add moods</label>
-              <div className="chip-list">
-                {moodOptions.map(function (mood) {
-                  return (
-                    <div
-                      key={mood.value}
-                      className={`chip ${selectedMoods.includes(mood.value) ? "selected" : ""}`}
-                      onClick={function () {
-                        toggleChip(mood.value, selectedMoods, setSelectedMoods);
-                      }}
-                    >
-                      {mood.label}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-  
-            <div className="features">
-              <label>Add features</label>
-              <div className="chip-list">
-                {featureOptions.map(function (feature) {
-                  return (
-                    <div
-                      key={feature.value}
-                      className={`chip ${selectedFeatures.includes(feature.value) ? "selected" : ""}`}
-                      onClick={function () {
-                        toggleChip(feature.value, selectedFeatures, setSelectedFeatures);
-                      }}
-                    >
-                      {feature.label}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <button type="submit" className="submit-btn">Submit</button>
-          </div>
-        </div>
+        </form>
       </>
     );
   }
