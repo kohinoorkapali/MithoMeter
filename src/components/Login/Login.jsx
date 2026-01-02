@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import "./Login.css";
 import logo from "../../assets/Logo.png";
-
-// ✔ Add these two lines (import your images)
 import viewIcon from "../../assets/view.png";
 import hideIcon from "../../assets/hide.png";
+import { Link } from "react-router-dom";
 
-function Login() {
+export function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -44,7 +43,7 @@ function Login() {
 
         {/* Register text */}
         <div className="register-text">
-          Don't have an account? <span>Register here.</span>
+          Don't have an account? <Link to="/register">Register here.</Link>
         </div>
 
         <div className="forget">
@@ -56,4 +55,3 @@ function Login() {
   );
 }
 
-export default Login;

@@ -1,0 +1,24 @@
+
+body{
+    background-color: #000000;
+    color: white;
+}
+
+
+.dashboard-container {
+margin-left: 200px;
+margin-right: 200px;
+display: flex;
+flex-direction: column;
+padding: 30px;
+gap: 30px;
+}
+
+.user-report {
+display: flex;
+gap: 20px;              
+}
+
+.user-report > * {
+flex: 1;                  /* equal width */
+}

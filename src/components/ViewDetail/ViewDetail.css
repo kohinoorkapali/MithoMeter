@@ -1,8 +1,6 @@
-body{
+.ViewDetail-container{
   margin-left: 200px;
   margin-right: 200px;
-  background-color: #000000;
-  color: white;
 }
 
 /* Title */

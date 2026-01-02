@@ -109,11 +109,18 @@
   color: #ddd;
 }
 
-.register-text span {
-  color: #ffffff;
+.register-text a {
+  color: #f0f0f0;      
   text-decoration: underline;
+  font-weight: 500;    
   cursor: pointer;
+  transition: color 0.3s;
 }
+
+.register-text a:hover {
+  color: #ffffff;      
+}
+
 .forget {
   margin-top: 25px;
   text-align: center;
