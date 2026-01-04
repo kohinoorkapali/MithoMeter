@@ -164,6 +164,7 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   z-index: 100;
   overflow: hidden;
+  width: 130px;
 }
 
 .menu-dropdown button {
@@ -180,3 +181,47 @@
 .menu-dropdown button:hover {
   background: #f2f2f2;
 }
+
+.like-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.like-btn.liked {
+  color: #f5b400; /* yellow */
+  font-weight: 600;
+}
+
+.like-btn:active {
+  transform: scale(1.1);
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user div {
+  display: flex;
+  flex-direction: column;
+}
+
+.user strong {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.user small {
+  font-size: 12px;
+  color: #777;
+  margin-top: 2px;
+}
+

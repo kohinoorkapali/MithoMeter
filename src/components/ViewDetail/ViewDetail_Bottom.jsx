@@ -4,7 +4,7 @@ import "./ViewDetail_Bottom.css";
 export default function ViewDetail_Bottom() {
   const [openMenuId, setOpenMenuId] = useState(null);
 
-  const reviews = [
+  const [reviews, setReviews]= useState([
     {
       id: 1,
       name: "Meera",
@@ -14,7 +14,10 @@ export default function ViewDetail_Bottom() {
       date: "Nov 2025 · Family",
       text:
         "Himalayan Bistro serves some of the most comforting Himalayan dishes in the city. The momo platter was juicy and flavorful, and the thakali set tasted truly homemade. The ambience is warm and cozy, perfect for a quiet meal with friends. Service was polite and quick.",
-      images: []
+      images: [],
+      like:0,
+      linked:false,
+
     },
     {
       id: 2,
@@ -28,9 +31,28 @@ export default function ViewDetail_Bottom() {
       images: [
         "https://picsum.photos/120/80?1",
         "https://picsum.photos/120/80?2"
-      ]
-    }
-  ];
+      ],
+      likes:0,
+      liked:false,
+    },
+  ]);
+
+    const toggleLike = (id) => {
+     setReviews((prev) =>
+      prev.map((review) => {
+      if (review.id !== id) return review;
+
+      const currentLikes = Number(review.likes) || 0;
+
+      return {
+        ...review,
+        liked: !review.liked,
+        likes: review.liked ? currentLikes - 1 : currentLikes + 1,
+      };
+    })
+  );
+};
+
 
   return (
     <div className="review-page">
@@ -98,16 +120,21 @@ export default function ViewDetail_Bottom() {
       {reviews.map((review) => (
         <div className="review-card" key={review.id}>
           <div className="review-header">
-            <div className="user">
+          <div className="user">
               <img src={review.profile} alt={review.name} />
               <div>
                 <strong>{review.name}</strong>
                 <small>{review.contributions} contributions</small>
-              </div>
+            </div>
             </div>
 
             <div className="review-actions">
-              <span className="like">👍 0</span>
+              <button
+                className={`like-btn ${review.liked ? "liked" : ""}`}
+                onClick={() => toggleLike(review.id)}
+              >
+                👍 {review.likes}
+              </button>
 
               <div className="menu-wrapper">
                 <button
@@ -122,7 +149,7 @@ export default function ViewDetail_Bottom() {
                 {openMenuId === review.id && (
                   <div className="menu-dropdown">
                     <button>✏️ Edit</button>
-                    <button>🗑 Delete</button>
+                    <button>🗑  Delete</button>
                     <button>🚩 Report</button>
                   </div>
                 )}
