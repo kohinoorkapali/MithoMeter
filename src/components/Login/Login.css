@@ -6,12 +6,11 @@
   background-size: cover;
   background-position: center;
   display: flex;
-  justify-content: center;     
-  align-items: center;        
+  justify-content: center;
+  align-items: center;
   position: relative;
-  padding-top: 0;              
+  padding-top: 0;
 }
-
 
 .login-logo {
   position: absolute;
@@ -20,7 +19,6 @@
   width: 120px;
   height: auto;
 }
-
 
 .login-box {
   width: 400px;
@@ -31,9 +29,8 @@
   color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
   height: auto;
-  margin-top: 0;               
+  margin-top: 0;
 }
-
 
 .login-title {
   text-align: center;
@@ -42,13 +39,11 @@
   font-weight: bold;
 }
 
-
 .login-label {
   display: block;
   margin-bottom: 5px;
   font-size: 15px;
 }
-
 
 .login-input {
   width: 100%;
@@ -56,19 +51,22 @@
   border-radius: 8px;
   border: none;
   background: #dfdfdf;
-  margin-bottom: 20px;
+  margin-bottom: 10px; /* reduced to leave space for error */
   font-size: 15px;
 }
-
 
 .password-wrapper {
   position: relative;
 }
 
+.password-wrapper input.login-input {
+  padding-right: 40px; /* space for eye icon */
+}
+
 .eye-icon {
   position: absolute;
-  right: -5px;
-  top: 35%;
+  top: 50%;               /* vertically center */
+  right: 10px;            /* inside the input box */
   transform: translateY(-50%);
   width: 22px;
   height: 22px;
@@ -80,9 +78,15 @@
   opacity: 1;
 }
 
+/* Error messages */
+.invalid-feedback {
+  color: #ff5555;
+  font-size: 13px;
+  margin-top: 5px; /* pushes content below */
+}
 
 .login-btn {
-  width: 40%;                 
+  width: 40%;
   background: #752e2e;
   border: none;
   padding: 12px;
@@ -90,17 +94,14 @@
   font-size: 17px;
   border-radius: 6px;
   cursor: pointer;
-  margin-top: 10px;
+  margin: 15px auto 0 auto;
+  display: block;
   font-weight: bold;
-    margin: 15px auto 0 auto;   
-
-    display: block;
 }
 
 .login-btn:hover {
   background: #5d2424;
 }
-
 
 .register-text {
   margin-top: 25px;
@@ -110,15 +111,15 @@
 }
 
 .register-text a {
-  color: #f0f0f0;      
+  color: #f0f0f0;
   text-decoration: underline;
-  font-weight: 500;    
+  font-weight: 500;
   cursor: pointer;
   transition: color 0.3s;
 }
 
 .register-text a:hover {
-  color: #ffffff;      
+  color: #ffffff;
 }
 
 .forget {
@@ -127,6 +128,7 @@
   font-size: 13px;
   color: #ddd;
 }
+
 .forget span {
   color: #ffffff;
   text-decoration: underline;
