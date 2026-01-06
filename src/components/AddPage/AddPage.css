@@ -6,8 +6,6 @@
     display: flex;
     padding: 30px;
     gap: 30px;
-    height: calc(100vh - 80px); /* adjust 80px to your Header height */
-  overflow: hidden; /* prevents body scrolling */
   }
   
   /* LEFT SIDE */
@@ -17,11 +15,6 @@
     font-weight: bolder;
     color: #FFF7EC;
 
-    position: sticky;
-  top: 20px; /* space below header */
-  align-self: flex-start;
-
-  height: fit-content;
   }
   
   /* PHOTO UPLOAD BOX */
@@ -105,8 +98,6 @@ input[type="file"] {
     flex-direction: column;
     gap: 20px;
 
-    overflow-y: auto;
-  padding-right: 10px; 
   }
   
 .right-container label {

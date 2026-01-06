@@ -204,17 +204,17 @@ export function AddPage() {
     
               <div className="description">
                 <label>Add a description</label>
-                <textarea rows="7" {...register("desription")}></textarea>
+                <textarea rows="7" {...register("description")}></textarea>
               </div>
     
               <div className="website">
                 <label>Link to the restaurant</label>
-                <input type="text" {...register("website")} />
+                <input type="text" {...register("websiteLink")} />
               </div>
     
               <div className="menu">
                 <label>Link to the restaurant's menu</label>
-                <input type="text" {...register("menu")}/>
+                <input type="text" {...register("menuLink")}/>
               </div>
     
               <div className="moods">
