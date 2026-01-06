@@ -108,7 +108,7 @@ export function AddPage() {
 
     return (
       <>
-        <Header />
+        <Header role = "admin"/>
   
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="create-container">
@@ -129,7 +129,6 @@ export function AddPage() {
                 <div className="photo-preview">
                   {photos.map((photo, index) => {
                     const previewUrl = URL.createObjectURL(photo);
-
                     return (
                       <div className="uploaded-photo-wrapper" key={index}>
                         <img
@@ -151,8 +150,6 @@ export function AddPage() {
                     );
                   })}
                 </div>
-
-
               </div>
             </div>
     
