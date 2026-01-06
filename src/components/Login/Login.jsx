@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../../schema/loginschema"; // your Zod schema
-import { Link } from "react-router-dom";
+import { loginSchema } from "../../schema/loginschema"; 
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/Logo.png";
 import viewIcon from "../../assets/view.png";
 import hideIcon from "../../assets/hide.png";
-import "./Login.css"; // your CSS
+import { apiRequest } from "../../utils/api.js";
+import "./Login.css";
 
-export function Login() {
+export default function Login({ setToken }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [backendError, setBackendError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -19,9 +23,27 @@ export function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log("Login Data:", data);
-    // Call your backend API here
+   const onSubmit = async (data) => {
+    try {
+      setBackendError("");
+      setLoading(true);
+
+      const res = await apiRequest("POST", "/auth/login", {
+        data: { email: data.email, password: data.password },
+      });
+
+      if (res.access_token) {
+        localStorage.setItem("access_token", res.access_token);
+        setToken(res.access_token);   // update App state
+        navigate("/browse", { replace: true });
+      } else {
+        setBackendError(res.message || "Invalid credentials");
+      }
+    } catch (err) {
+      setBackendError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,15 +54,15 @@ export function Login() {
         <h3 className="login-title">Login</h3>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Username */}
-          <label className="login-label">Username</label>
+          {/* Email */}
+          <label className="login-label">Email</label>
           <input
-            type="text"
-            className={`login-input ${errors.username ? "is-invalid" : ""}`}
-            {...register("username")}
+            type="email"
+            className={`login-input ${errors.email ? "is-invalid" : ""}`}
+            {...register("email")}
           />
-          {errors.username && (
-            <div className="invalid-feedback">{errors.username.message}</div>
+          {errors.email && (
+            <div className="invalid-feedback">{errors.email.message}</div>
           )}
 
           {/* Password */}
@@ -48,6 +70,8 @@ export function Login() {
           <div className="password-wrapper">
             <input
               type={showPassword ? "text" : "password"}
+              autoComplete="off"        // turn off autocomplete entirely
+              spellCheck="false"        
               className={`login-input ${errors.password ? "is-invalid" : ""}`}
               {...register("password")}
             />
@@ -62,9 +86,19 @@ export function Login() {
             <div className="invalid-feedback">{errors.password.message}</div>
           )}
 
+          {/* Backend Error */}
+          {backendError && (
+            <div
+              className="backend-error"
+              style={{ color: "red", margin: "10px 0" }}
+            >
+              {backendError}
+            </div>
+          )}
+
           {/* Login Button */}
-          <button type="submit" className="login-btn">
-            Login
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
           </button>
 
           {/* Register & Forget Password */}

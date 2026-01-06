@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../../assets/Logo.png";
 import "./Register.css";
 
-export function Register() {
+export default function Register() {
 
   const navigate = useNavigate();
 

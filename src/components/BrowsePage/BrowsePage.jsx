@@ -10,7 +10,7 @@ import search from "../../assets/search.png";
 
 import { useState } from "react";
 
-export function BrowsePage({items=[]}) {
+export default function BrowsePage({items=[]}) {
     //PAGINATION
     const ITEMS_PER_PAGE = 10;
     const safeItems = Array.isArray(items) ? items : [];

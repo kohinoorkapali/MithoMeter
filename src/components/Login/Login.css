@@ -28,8 +28,9 @@
   border: 1px solid #f7f4f4;
   color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-  height: auto;
+  min-height: 500px;
   margin-top: 0;
+  box-sizing: border-box;
 }
 
 .login-title {
@@ -51,23 +52,26 @@
   border-radius: 8px;
   border: none;
   background: #dfdfdf;
-  margin-bottom: 10px; /* reduced to leave space for error */
+  margin-bottom: 10px;
   font-size: 15px;
+  box-sizing: border-box;
 }
 
+
 .password-wrapper {
+  display: flex;
+  align-items: center;
   position: relative;
 }
 
 .password-wrapper input.login-input {
-  padding-right: 40px; /* space for eye icon */
+  flex: 1;
+  padding-right: 40px; 
 }
 
 .eye-icon {
   position: absolute;
-  top: 50%;               /* vertically center */
-  right: 10px;            /* inside the input box */
-  transform: translateY(-50%);
+  right: 10px;
   width: 22px;
   height: 22px;
   cursor: pointer;
@@ -82,7 +86,7 @@
 .invalid-feedback {
   color: #ff5555;
   font-size: 13px;
-  margin-top: 5px; /* pushes content below */
+  margin-top: 5px;
 }
 
 .login-btn {
@@ -133,4 +137,55 @@
   color: #ffffff;
   text-decoration: underline;
   cursor: pointer;
+}
+
+/* Hide Chrome / Edge native password toggle icon */
+input[type="password"]::-webkit-password-eye,
+input[type="password"]::-webkit-inner-spin-button,
+input[type="password"]::-ms-reveal {
+  display: none !important;
+}
+
+
+input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px #dfdfdf inset !important;
+  -webkit-text-fill-color: #000 !important;
+}
+
+/* Mobile styles */
+@media (max-width: 480px) {
+  .login-box {
+    width: 90%; /* make it smaller on mobile */
+    padding: 30px;
+  }
+
+  .login-title {
+    font-size: 22px;
+  }
+
+  .login-input {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .login-btn {
+    width: 60%;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .password-wrapper input.login-input {
+    padding-right: 35px; 
+  }
+
+  .eye-icon {
+    width: 20px;
+    height: 20px;
+    right: 8px;
+  }
+
+  .register-text,
+  .forget {
+    font-size: 12px;
+  }
 }

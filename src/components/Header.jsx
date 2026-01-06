@@ -1,5 +1,5 @@
 import Logo from "../assets/Logo.png";
-
+import { Link } from "react-router-dom";
 import './Header.css';
 
 export function Header({role}){
@@ -26,9 +26,10 @@ export function Header({role}){
                     )}
                     </div>
 
-                <div className="left-header">
-                    <a href="/profile">Profile</a>
-                </div>
+                    <div className="left-header">
+                        <Link to="/profile">Profile</Link> 
+                    </div>
+
             </div>
     );
 }

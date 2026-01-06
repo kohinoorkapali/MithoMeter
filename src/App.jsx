@@ -1,26 +1,21 @@
-
-import './App.css';
-import LandingPage from './components/LandingPage/Landingpage';
-import {Login} from './components/Login/Login';
-import {Register} from './components/Register/Register';
-import { BrowsePage } from './components/BrowsePage/BrowsePage.jsx';
-
-import { AddPage } from './components/AddPage/AddPage.jsx';
-
-
-
-import { Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import PrivateRoutes from "./routes/PrivateRoutes";
+import PublicRoutes from "./routes/PublicRoutes";
 
 function App() {
-  return (
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/browse" element={<BrowsePage />} />
-        <Route path="/add" element={<AddPage/>} />
-      </Routes>
-  );
+  const [token, setToken] = useState(localStorage.getItem("access_token"));
+
+  // keep localStorage and state in sync
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem("access_token"));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  return <>{token ? <PrivateRoutes setToken={setToken} /> : <PublicRoutes setToken={setToken} />}</>;
 }
 
 export default App;
