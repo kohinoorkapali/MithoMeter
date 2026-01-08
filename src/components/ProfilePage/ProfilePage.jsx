@@ -1,21 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./ProfilePage.css";
 import { Header } from "../Header";
 
 export default function ProfilePage({ setToken }) {
   const [username, setUsername] = useState("");
-  const navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("access_token"); // delete token
-    setToken(null);                           // update App state
+   const handleLogout = () => {
+    setToken(null); // clears token, redirects to login
   };
-
   return (
     <>
       <Header />

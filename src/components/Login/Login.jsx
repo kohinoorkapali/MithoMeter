@@ -2,18 +2,17 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../schema/loginschema"; 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../../assets/Logo.png";
 import viewIcon from "../../assets/view.png";
 import hideIcon from "../../assets/hide.png";
 import { apiRequest } from "../../utils/api.js";
 import "./Login.css";
 
-export default function Login({ setToken }) {
+export default function Login({ setToken, setRole }) {
   const [showPassword, setShowPassword] = useState(false);
   const [backendError, setBackendError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const {
     register,
@@ -25,17 +24,14 @@ export default function Login({ setToken }) {
 
    const onSubmit = async (data) => {
     try {
-      setBackendError("");
-      setLoading(true);
-
       const res = await apiRequest("POST", "/auth/login", {
         data: { email: data.email, password: data.password },
       });
 
       if (res.access_token) {
-        localStorage.setItem("access_token", res.access_token);
-        setToken(res.access_token);   // update App state
-        navigate("/browse", { replace: true });
+        const normalizedRole = res.role?.trim().toLowerCase();
+        setToken(res.access_token);
+        setRole(normalizedRole); // only in state
       } else {
         setBackendError(res.message || "Invalid credentials");
       }
@@ -70,8 +66,8 @@ export default function Login({ setToken }) {
           <div className="password-wrapper">
             <input
               type={showPassword ? "text" : "password"}
-              autoComplete="off"        // turn off autocomplete entirely
-              spellCheck="false"        
+              autoComplete="off"
+              spellCheck="false"
               className={`login-input ${errors.password ? "is-invalid" : ""}`}
               {...register("password")}
             />
@@ -88,10 +84,7 @@ export default function Login({ setToken }) {
 
           {/* Backend Error */}
           {backendError && (
-            <div
-              className="backend-error"
-              style={{ color: "red", margin: "10px 0" }}
-            >
+            <div className="backend-error" style={{ color: "red", margin: "10px 0" }}>
               {backendError}
             </div>
           )}

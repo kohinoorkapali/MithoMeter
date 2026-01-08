@@ -6,7 +6,7 @@ import './AddPage.css';
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 
-export function AddPage() {
+export default function AddPage() {
   // REACT FORM SETUP
   const {
     register,

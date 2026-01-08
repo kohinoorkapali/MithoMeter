@@ -4,7 +4,7 @@ const BASE_URL = "http://localhost:5000/api";
 
 export const apiRequest = async (method, endpoint, options = {}) => {
   const { data, params, headers } = options;
-  const token = localStorage.getItem("token"); // optional auth token
+  const token = localStorage.getItem("token"); 
 
   try {
     const response = await axios({
