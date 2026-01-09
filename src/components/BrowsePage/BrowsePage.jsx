@@ -60,7 +60,7 @@ export default function BrowsePage() {
 
     return (
         <>
-            <Header />  
+            <Header/>  
 
             <div className="browse-container">
                 <div className="top">
