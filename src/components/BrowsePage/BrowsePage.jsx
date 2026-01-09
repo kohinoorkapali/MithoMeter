@@ -8,23 +8,34 @@ import './BrowsePage.css';
 import Img from "../../assets/Chyura.png";
 import search from "../../assets/search.png";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from 'axios';
 
-export default function BrowsePage({items=[]}) {
+export default function BrowsePage() {
+    const [items, setItems] = useState([]);
+    const [currentPage, setCurrentPage] = useState([])
+
     //PAGINATION
     const ITEMS_PER_PAGE = 10;
-    const safeItems = Array.isArray(items) ? items : [];
 
+    useEffect(()=>{
+        axios.get("http://localhost:5000/api/restaurants")
+        .then(res=>{
+            setItems(res.data.data);
+        }).catch(err=>{
+            console.error("Failed to fetch restaurants");
+        });
+    }, []);
 
-    const [currentPage, setCurrentPage] = useState(1);
+    console.log(items);
 
-    const totalPages = Math.ceil(safeItems.length / ITEMS_PER_PAGE);
+        
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
 
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const currentItems = safeItems.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE
-    );
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const currentItems = items.slice(startIndex, endIndex);
+
 
     //DROPDOWNS
     const initialFilters = {
@@ -166,7 +177,6 @@ export default function BrowsePage({items=[]}) {
                 </div>
 
                 {/* Cards */}
-
                 <div className="items-grid">
                     {currentItems.map(function (item) {
                         return (
@@ -174,8 +184,6 @@ export default function BrowsePage({items=[]}) {
                         );
                     })}
                 </div>
-
-
 
                 {/* Pagination */}
                 <Pagination

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from "react-router-dom";
 import './RestaurantCard.css';
 
 import location from "../assets/location.png";
@@ -8,7 +9,6 @@ import cuisine from "../assets/dish.png";
 import open from "../assets/open.png";
 import closed from "../assets/closed.png";
 import heart from "../assets/heart.png";
-import Img from "../assets/Chyura.png";
 
 
 export function RestaurantCard({item}){
@@ -24,7 +24,7 @@ export function RestaurantCard({item}){
         <div className="restaurant-card">
             {/* LEFT IMAGE */}
             <div className="card-image">
-            <img src={Img} alt="Restaurant" />
+            <img src={`http://localhost:5000/uploads/${item.image}`} alt="Restaurant" />
             </div>
 
             {/* MIDDLE CONTENT */}
@@ -53,13 +53,13 @@ export function RestaurantCard({item}){
 
                 <p className="line res-price">
                     <img src={price} className="icon" alt="" />
-                    {item.price} 
+                    {item.priceRange} 
                 </p>
-
-                <a href="menu" className="line menu-link">
-                    <img src={menu} className="icon" alt="" />
-                    Menu
-                </a>
+           
+                <Link to={`/restaurant/${item.id}/menu`} className="line menu-link" >
+                <img src={menu} className="icon" alt="" />
+                Menu
+                </Link>
 
                 <div className="reviews">
                     <p className="review">“Amazing thakali! Fresh and flavorful.”</p>
