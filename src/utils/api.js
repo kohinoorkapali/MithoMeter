@@ -27,3 +27,24 @@ export const apiRequest = async (method, endpoint, options = {}) => {
     }
   }
 };
+
+export const apiUpload = async (endpoint, formData, extraHeaders = {}) => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await axios.post(`${BASE_URL}${endpoint}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...extraHeaders,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data.message || "Something went wrong!");
+    } else {
+      throw new Error("Server not reachable!");
+    }
+  }
+};
