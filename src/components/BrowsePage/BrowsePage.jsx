@@ -178,12 +178,11 @@ export default function BrowsePage() {
 
                 {/* Cards */}
                 <div className="items-grid">
-  {items?.length > 0
-    ? items.map((item) => <RestaurantCard key={item.restaurantId} item={item} />)
-    : <p>No restaurants available</p>
-  }
-</div>
-
+                    {items?.length > 0
+                        ? items.map((item) => <RestaurantCard key={item.restaurantId} item={item} />)
+                        : <p>No restaurants available</p>
+                    }
+                </div>
 
                 {/* Pagination */}
                 <Pagination

@@ -10,11 +10,13 @@ import openIcon from "../assets/open.png";
 import closedIcon from "../assets/closed.png";
 import heartIcon from "../assets/heart.png";
 
-export function RestaurantCard({ item }) {
+export function RestaurantCard({ item, role }) {
     const isOpen = item.isOpen;  
     const [isSaved, setIsSaved] = useState(false);
+    const [showAdminMenu, setShowAdminMenu] = useState(false)
 
     const toggleSave = () => setIsSaved(!isSaved);
+    const toggleAdminMenu = ()=> setShowAdminMenu(!showAdminMenu);
 
     // Determine image to display
     const restaurantImage = item.photos && item.photos.length > 0
@@ -71,16 +73,36 @@ export function RestaurantCard({ item }) {
             </div>
 
             {/* RIGHT SIDE: Rating / Heart */}
-            <div className="card-right" onClick={toggleSave}>
-                {isSaved ? (
-                    <div className="saved-wrapper">
-                        <img src={heartIcon} alt="saved" className="heart-big" />
-                        <span className="rating-on-heart">{item.rating || "N/A"}</span>
+            <div className="card-right">
+                {role === "admin" ? (
+                    <div className="admin-menu-wrapper">
+                        <span 
+                            className="admin-menu-icon" 
+                            onClick={toggleAdminMenu}
+                        >
+                            &#8230; {/* Unicode for ... */}
+                        </span>
+
+                        {showAdminMenu && (
+                            <div className="admin-menu-dropdown">
+                                <button onClick={() => console.log("Edit", item.restaurantId)}>Edit</button>
+                                <button onClick={() => console.log("Delete", item.restaurantId)}>Delete</button>
+                            </div>
+                        )}
                     </div>
                 ) : (
-                    <div className="rating-circle">
-                        <span className="rating">{item.rating || "4.5"}</span>
-                        <span className="save-text">Click to save</span>
+                    <div className="user-toggle" onClick={toggleSave}>
+                        {isSaved ? (
+                            <div className="saved-wrapper">
+                                <img src={heartIcon} alt="saved" className="heart-big" />
+                                <span className="rating-on-heart">{item.rating || "N/A"}</span>
+                            </div>
+                        ) : (
+                            <div className="rating-circle">
+                                <span className="rating">{item.rating || "N/A"}</span>
+                                <span className="save-text">Click to save</span>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
