@@ -4,7 +4,7 @@ import { RestaurantCard } from '../../common/RestaurantCard.jsx';
 import { useEffect, useState } from "react";
 import axios from 'axios';
 
-export function ActivityPage(){
+export default function ActivityPage(){
     const [items, setItems] = useState([]);
 
     useEffect(()=>{
@@ -17,11 +17,11 @@ export function ActivityPage(){
     }, []);
 
     console.log(items);
-    
+
     return(
         <>
         <Header role = "admin"/>
-        <div className='actvity-container'>
+        <div className='activity-container'>
             <div className="items-grid">
                 {items?.length > 0
                     ? items.map((item) => <RestaurantCard key={item.restaurantId} item={item} />)

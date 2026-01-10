@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import './Header.css';
 
 export function Header({ role }) {
+    console.log("Header role:", role);
     return (
         <div className="header">
             <div className="header-logo">
@@ -14,10 +15,14 @@ export function Header({ role }) {
                     <Link to="/home">Home</Link>
                 )}
 
-                <Link to="/browse">Browse</Link>
+                {role === "admin" ? (
+                    <Link to="/activityPage">Activity</Link>
+                ) : (
+                    <Link to="/browse">Browse</Link>
+                )}
 
                 {role === "user" && (
-                    <Link to="/review">Reviews</Link>
+                    <Link to="/review">Review</Link>
                 )}
 
                 {role === "admin" ? (
