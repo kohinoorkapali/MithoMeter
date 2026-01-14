@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from "react-router-dom";
+import axios from 'axios';
 import './RestaurantCard.css';
 
 import locationIcon from "../assets/location.png";
@@ -10,7 +11,7 @@ import openIcon from "../assets/open.png";
 import closedIcon from "../assets/closed.png";
 import heartIcon from "../assets/heart.png";
 
-export function RestaurantCard({ item, role }) {
+export function RestaurantCard({ item, role, onDelete }) {
     const isOpen = item.isOpen;  
     const [isSaved, setIsSaved] = useState(false);
     const [showAdminMenu, setShowAdminMenu] = useState(false)
@@ -22,6 +23,30 @@ export function RestaurantCard({ item, role }) {
     const restaurantImage = item.photos && item.photos.length > 0
         ? `http://localhost:5000/${item.photos[0].replace(/\\/g, "/")}`
         : "/placeholder.png"; // make sure placeholder.png exists in public folder
+
+    const handleDelete = async () => {
+        const confirmDelete = window.confirm(
+            `Are you sure you want to delete ${item.name}?`
+        );
+        
+        if (!confirmDelete) return;
+        
+        try {console.log("Deleting restaurantId:", item.restaurantId);
+
+            await axios.delete(
+            `http://localhost:5000/api/restaurants/${item.restaurantId}`
+
+            );
+        
+            // Notify parent to remove item from UI
+            onDelete?.(item.restaurantId);
+        
+        } catch (error) {
+            console.error("Delete failed", error);
+            alert("Failed to delete restaurant");
+        }
+        };
+          
 
     return (
         <div className="restaurant-card">
@@ -74,37 +99,29 @@ export function RestaurantCard({ item, role }) {
 
             {/* RIGHT SIDE: Rating / Heart */}
             <div className="card-right">
-                {role === "admin" ? (
-                    <div className="admin-menu-wrapper">
-                        <span 
-                            className="admin-menu-icon" 
-                            onClick={toggleAdminMenu}
-                        >
-                            &#8230; {/* Unicode for ... */}
-                        </span>
+                {/* {role === "admin" ? ( */}
+                <div className="card-right admin">
+                    <div className="admin-actions">
+                        <button className="edit-btn">Edit</button>
+                        <button className="delete-btn" onClick={handleDelete}>Delete</button>
+                    </div>
+                </div>
 
-                        {showAdminMenu && (
-                            <div className="admin-menu-dropdown">
-                                <button onClick={() => console.log("Edit", item.restaurantId)}>Edit</button>
-                                <button onClick={() => console.log("Delete", item.restaurantId)}>Delete</button>
-                            </div>
-                        )}
-                    </div>
-                ) : (
-                    <div className="user-toggle" onClick={toggleSave}>
-                        {isSaved ? (
-                            <div className="saved-wrapper">
-                                <img src={heartIcon} alt="saved" className="heart-big" />
-                                <span className="rating-on-heart">{item.rating || "N/A"}</span>
-                            </div>
-                        ) : (
-                            <div className="rating-circle">
-                                <span className="rating">{item.rating || "N/A"}</span>
-                                <span className="save-text">Click to save</span>
-                            </div>
-                        )}
-                    </div>
-                )}
+                {/* // ) : (
+                //     <div className="user-toggle" onClick={toggleSave}>
+                //         {isSaved ? (
+                //             <div className="saved-wrapper">
+                //                 <img src={heartIcon} alt="saved" className="heart-big" />
+                //                 <span className="rating-on-heart">{item.rating || "N/A"}</span>
+                //             </div>
+                //         ) : (
+                //             <div className="rating-circle">
+                //                 <span className="rating">{item.rating || "N/A"}</span>
+                //                 <span className="save-text">Click to save</span>
+                //             </div>
+                //         )}
+                //     </div>
+                // )} */}
             </div>
         </div>
     );

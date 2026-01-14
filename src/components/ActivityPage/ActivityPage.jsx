@@ -24,7 +24,14 @@ export default function ActivityPage(){
         <div className='activity-container'>
             <div className="items-grid">
                 {items?.length > 0
-                    ? items.map((item) => <RestaurantCard key={item.restaurantId} item={item} />)
+                    ? items.map((item) => 
+                    <RestaurantCard key={item.restaurantId}
+                                         item={item}
+                                         role="admin"
+                                        onDelete={(id) =>
+                                            setItems((prev) => prev.filter((r) => r.restaurantId !== id)) 
+                                        }
+    />)
                     : <p>No restaurants available</p>
                 }
             </div>
