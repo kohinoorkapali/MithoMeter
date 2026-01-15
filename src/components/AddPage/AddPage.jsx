@@ -3,22 +3,29 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { restaurantSchema } from "../../schema/restaurant.schema.js";
-import { apiUpload } from "../../utils/api.js";
+import { apiRequest, apiUpload } from "../../utils/api.js";
+import { useParams } from "react-router-dom";
+
 
 import { Header } from "../Header.jsx";
 import { DropdownFilter } from "../../common/DropdownFilter.jsx";
 import "./AddPage.css";
 
 export default function AddPage() {
+  const { id } = useParams();
+  const isEdit = Boolean(id);
+
   // react-hook-form with Zod
   const [backendError, setBackendError] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); // ✅ success state
+  
+  const [Restaurant, setRestaurants] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); //  success state
 
   const {
     register,
     handleSubmit,
     setValue,
-    reset, // ✅ add reset
+    reset, //  add reset
     formState: { errors, isValid },
   } = useForm({
     resolver: zodResolver(restaurantSchema),
@@ -32,7 +39,45 @@ export default function AddPage() {
     },
   });
 
-
+  //EDIT PAGE
+  useEffect(() => {
+    if (!id) return;
+  
+    const fetchRestaurant = async () => {
+      try {
+        const res = await apiRequest("GET", `/restaurants/${id}`);
+  
+        console.log("EDIT FETCH RESPONSE:", res);
+  
+        const restaurant = res.data; // ✅ THIS IS THE KEY
+  
+        reset({
+          name: restaurant.name ?? "",
+          location: restaurant.location ?? "",
+          openTime: restaurant.openTime ?? "",
+          closeTime: restaurant.closeTime ?? "",
+          description: restaurant.description ?? "",
+          websiteLink: restaurant.websiteLink ?? "",
+          menuLink: restaurant.menuLink ?? "",
+          cuisines: restaurant.cuisines ?? [],
+          priceRange: restaurant.priceRange ?? [],
+          moods: restaurant.moods ?? [],
+          features: restaurant.features ?? [],
+          photos: restaurant.photos ?? [],
+        });
+  
+        setSelectedCuisines(restaurant.cuisines ?? []);
+        setSelectedPrices(restaurant.priceRange ?? []);
+        setSelectedMoods(restaurant.moods ?? []);
+        setSelectedFeatures(restaurant.features ?? []);
+      } catch (err) {
+        console.error("Edit fetch failed:", err.message);
+      }
+    };
+  
+    fetchRestaurant();
+  }, [id, reset]);
+  
 
   const [selectedMoods, setSelectedMoods] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
@@ -118,7 +163,15 @@ useEffect(() => {
     try {
       setBackendError("");
       setSuccessMessage(""); // clear previous message
+
       const formData = new FormData();
+
+      Object.entries(data).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          formData.append(key, JSON.stringify(value));
+        }
+      });
+
       formData.append("name", data.name);
       formData.append("location", data.location);
       formData.append("openTime", data.openTime);
@@ -127,28 +180,18 @@ useEffect(() => {
       formData.append("websiteLink", data.websiteLink);
       formData.append("menuLink", data.menuLink);
 
-      formData.append("cuisines", JSON.stringify(data.cuisines));
-      formData.append("priceRange", JSON.stringify(data.priceRange));
-      formData.append("moods", JSON.stringify(data.moods));
-      formData.append("features", JSON.stringify(data.features));
-
       data.photos.forEach((photo) => formData.append("photos", photo));
 
-      const res = await apiUpload("/restaurants", formData);
-      console.log("Restaurant added:", res);
-
-      // ✅ Success message
-      setSuccessMessage("Restaurant submitted successfully!");
-
-      // ✅ Clear form and states
-      reset();
-      setSelectedMoods([]);
-      setSelectedFeatures([]);
-      setSelectedCuisines([]);
-      setSelectedPrices([]);
-      setPhotos([]);
-
-      // ✅ Clear message after 3 seconds
+      if (isEdit) {
+        await apiUpload("PATCH", `/restaurants/${id}`, formData);
+        setSuccessMessage("Restaurant updated successfully!");
+      } else {
+        await apiUpload("POST", "/restaurants", formData);
+        setSuccessMessage("Restaurant submitted successfully!");
+        reset();
+      }
+    
+      //  Clear message after 3 seconds
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       setBackendError(
@@ -269,13 +312,13 @@ useEffect(() => {
             </div>
 
             {backendError && (
-  <div className="backend-error" style={{ color: "red", margin: "10px 0" }}>
-    {backendError}
-  </div>
-)}
-            <button type="submit" className="submit-btn">
+              <div className="backend-error" style={{ color: "red", margin: "10px 0" }}>
+                {backendError}
+              </div>
+            )}
 
-              Submit
+            <button type="submit" className="submit-btn">
+              {isEdit ? "Update" : "Submit"}
             </button>
           </div>
         </div>

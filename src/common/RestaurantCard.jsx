@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
 import './RestaurantCard.css';
 
 import locationIcon from "../assets/location.png";
@@ -20,9 +22,17 @@ export function RestaurantCard({ item, role, onDelete }) {
     const toggleAdminMenu = ()=> setShowAdminMenu(!showAdminMenu);
 
     // Determine image to display
-    const restaurantImage = item.photos && item.photos.length > 0
-        ? `http://localhost:5000/${item.photos[0].replace(/\\/g, "/")}`
-        : "/placeholder.png"; // make sure placeholder.png exists in public folder
+    const restaurantImage =
+    item.photos && item.photos.length > 0
+        ? encodeURI(
+            `http://localhost:5000/${item.photos[0].replace(/\\/g, "/")}`
+        )
+        : "/placeholder.png";
+
+    const navigate = useNavigate();
+    const handleEdit = () => {
+        navigate(`/restaurants/edit/${item.restaurantId}`);
+    };
 
     const handleDelete = async () => {
         const confirmDelete = window.confirm(
@@ -102,7 +112,7 @@ export function RestaurantCard({ item, role, onDelete }) {
                 {/* {role === "admin" ? ( */}
                 <div className="card-right admin">
                     <div className="admin-actions">
-                        <button className="edit-btn">Edit</button>
+                        <button className="edit-btn" onClick={handleEdit}>Edit</button>
                         <button className="delete-btn" onClick={handleDelete}>Delete</button>
                     </div>
                 </div>

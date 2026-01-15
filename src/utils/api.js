@@ -28,13 +28,15 @@ export const apiRequest = async (method, endpoint, options = {}) => {
   }
 };
 
-export const apiUpload = async (endpoint, formData, extraHeaders = {}) => {
+export const apiUpload = async (method, endpoint, formData, extraHeaders = {}) => {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await axios.post(`${BASE_URL}${endpoint}`, formData, {
+    const response = await axios({
+      method, // POST | PATCH
+      url: `${BASE_URL}${endpoint}`,
+      data: formData,
       headers: {
-        "Content-Type": "multipart/form-data",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...extraHeaders,
       },
@@ -48,3 +50,4 @@ export const apiUpload = async (endpoint, formData, extraHeaders = {}) => {
     }
   }
 };
+

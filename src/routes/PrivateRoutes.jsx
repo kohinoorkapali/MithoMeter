@@ -30,6 +30,10 @@ const PrivateRoutes = ({ token, role, setToken }) => {
           path="/activityPage"
           element={userRole === "admin" ? <ActivityPage /> : <Navigate to="/browse" replace />}
         />
+          <Route
+    path="/restaurants/edit/:id"
+    element={userRole === "admin" ? <AddPage /> : <Navigate to="/browse" replace />}
+  />
 
         {/* Browse accessible to everyone logged in */}
         <Route path="/browse" element={<BrowsePage />} />
