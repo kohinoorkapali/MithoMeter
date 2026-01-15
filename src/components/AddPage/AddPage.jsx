@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { restaurantSchema } from "../../schema/restaurant.schema.js";
+import { createRestaurantSchema, editRestaurantSchema } from "../../schema/restaurant.schema.js";
 import { apiRequest, apiUpload } from "../../utils/api.js";
 import { useParams } from "react-router-dom";
 
@@ -18,17 +18,26 @@ export default function AddPage() {
   // react-hook-form with Zod
   const [backendError, setBackendError] = useState("");
   
-  const [Restaurant, setRestaurants] = useState("");
   const [successMessage, setSuccessMessage] = useState(""); //  success state
+
+  
+  const [selectedMoods, setSelectedMoods] = useState([]);
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [selectedCuisines, setSelectedCuisines] = useState([]);
+  const [selectedPrices, setSelectedPrices] = useState([]);
+  const [existingPhotos, setExistingPhotos] = useState([]);
+  const [newPhotos, setNewPhotos] = useState([]);
 
   const {
     register,
     handleSubmit,
     setValue,
-    reset, //  add reset
+    reset,
     formState: { errors, isValid },
   } = useForm({
-    resolver: zodResolver(restaurantSchema),
+    resolver: zodResolver(
+      isEdit ? editRestaurantSchema : createRestaurantSchema
+    ),
     mode: "onChange",
     defaultValues: {
       moods: [],
@@ -38,11 +47,11 @@ export default function AddPage() {
       photos: [],
     },
   });
+  
 
   //EDIT PAGE
   useEffect(() => {
     if (!id) return;
-  
     const fetchRestaurant = async () => {
       try {
         const res = await apiRequest("GET", `/restaurants/${id}`);
@@ -62,9 +71,10 @@ export default function AddPage() {
           cuisines: restaurant.cuisines ?? [],
           priceRange: restaurant.priceRange ?? [],
           moods: restaurant.moods ?? [],
-          features: restaurant.features ?? [],
-          photos: restaurant.photos ?? [],
+          features: restaurant.features ?? []
         });
+
+        setExistingPhotos(restaurant.photos ?? []);
   
         setSelectedCuisines(restaurant.cuisines ?? []);
         setSelectedPrices(restaurant.priceRange ?? []);
@@ -74,17 +84,9 @@ export default function AddPage() {
         console.error("Edit fetch failed:", err.message);
       }
     };
-  
     fetchRestaurant();
   }, [id, reset]);
   
-
-  const [selectedMoods, setSelectedMoods] = useState([]);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
-  const [selectedCuisines, setSelectedCuisines] = useState([]);
-  const [selectedPrices, setSelectedPrices] = useState([]);
-  const [photos, setPhotos] = useState([]);
-
 useEffect(() => {
   setValue("moods", selectedMoods, { shouldValidate: true });
 }, [selectedMoods, setValue]);
@@ -101,10 +103,6 @@ useEffect(() => {
   setValue("priceRange", selectedPrices, { shouldValidate: true });
 }, [selectedPrices, setValue]);
 
-useEffect(() => {
-  setValue("photos", photos, { shouldValidate: true });
-}, [photos, setValue]);
-
 
   const toggleChip = (value, selectedList, setSelectedList) => {
     if (selectedList.includes(value)) {
@@ -115,9 +113,15 @@ useEffect(() => {
   };
 
   const handlePhotoUpload = (e) => {
-    const files = Array.from(e.target.files);
-    setPhotos((prev) => [...prev, ...files].slice(0, 5)); // max 5 photos
+    const files = Array.from(e.target.files); 
+    const oversized = files.find(file => file.size > 5 * 1024 * 1024);
+    if (oversized) {
+      alert("Each image must be under 5MB");
+      return;
+    } 
+    setNewPhotos(prev => [...prev, ...files].slice(0, 5));
   };
+  
 
   // options
   const moodOptions = [
@@ -159,49 +163,37 @@ useEffect(() => {
     { label: "₹₹₹ High", value: "High" },
   ];
 
-   const onSubmit = async (data) => {
-    try {
-      setBackendError("");
-      setSuccessMessage(""); // clear previous message
-
-      const formData = new FormData();
-
-      Object.entries(data).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          formData.append(key, JSON.stringify(value));
-        }
-      });
-
-      formData.append("name", data.name);
-      formData.append("location", data.location);
-      formData.append("openTime", data.openTime);
-      formData.append("closeTime", data.closeTime);
-      formData.append("description", data.description);
-      formData.append("websiteLink", data.websiteLink);
-      formData.append("menuLink", data.menuLink);
-
-      data.photos.forEach((photo) => formData.append("photos", photo));
-
-      if (isEdit) {
-        await apiUpload("PATCH", `/restaurants/${id}`, formData);
-        setSuccessMessage("Restaurant updated successfully!");
-      } else {
-        await apiUpload("POST", "/restaurants", formData);
-        setSuccessMessage("Restaurant submitted successfully!");
-        reset();
-      }
-    
-      //  Clear message after 3 seconds
-      setTimeout(() => setSuccessMessage(""), 3000);
-    } catch (err) {
-      setBackendError(
-        err?.message || "Something went wrong while adding restaurant"
-      );
-    }
+  const onSubmit = async (data) => {
+    const formData = new FormData();
   
-
+    formData.append("name", data.name);
+    formData.append("location", data.location);
+    formData.append("openTime", data.openTime);
+    formData.append("closeTime", data.closeTime);
+    formData.append("description", data.description);
+    formData.append("websiteLink", data.websiteLink);
+    formData.append("menuLink", data.menuLink);
+  
+    formData.append("cuisines", JSON.stringify(selectedCuisines));
+    formData.append("priceRange", JSON.stringify(selectedPrices));
+    formData.append("moods", JSON.stringify(selectedMoods));
+    formData.append("features", JSON.stringify(selectedFeatures));
+  
+    //  tell backend which existing images to keep
+    formData.append("existingPhotos", JSON.stringify(existingPhotos));
+  
+    //  upload only NEW files
+    newPhotos.forEach(photo => {
+      formData.append("photos", photo);
+    });
+  
+    if (isEdit) {
+      await apiUpload("PATCH", `/restaurants/${id}`, formData);
+    } else {
+      await apiUpload("POST", "/restaurants", formData);
+    }
   };
-
+  
   return (
     <>
       <Header role="admin" />
@@ -214,15 +206,63 @@ useEffect(() => {
               <label htmlFor="photo-upload" className="photo-box">
                 Click to add photos
               </label>
-              <input type="file" id="photo-upload" accept="image/*" multiple onChange={handlePhotoUpload} />
+              <input
+                type="file"
+                id="photo-upload"
+                name="photos"          
+                accept="image/*"
+                multiple
+                onChange={handlePhotoUpload}
+              />
               {errors.photos && <small className="error">{errors.photos.message}</small>}
+
+              {/* EXISTING PHOTOS (from DB) */}
+              {existingPhotos.length > 0 && (
+                <div className="photo-preview">
+                  {existingPhotos.map((photo, index) => (
+                    <div key={index} className="uploaded-photo-wrapper">
+                      <img
+                        src={encodeURI(
+                          `http://localhost:5000/${photo.replace(/\\/g, "/")}`
+                        )}
+                        alt="existing"
+                        className="uploaded-photo"
+                      />
+                      <span
+                        className="remove-photo"
+                        onClick={() =>
+                          setExistingPhotos((prev) =>
+                            prev.filter((_, i) => i !== index)
+                          )
+                        }
+                      >
+                        ×
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* NEWLY UPLOADED PHOTOS */}
               <div className="photo-preview">
-                {photos.map((photo, index) => {
+                {newPhotos.map((photo, index) => {
                   const previewUrl = URL.createObjectURL(photo);
                   return (
                     <div key={index} className="uploaded-photo-wrapper">
-                      <img src={previewUrl} alt="preview" className="uploaded-photo" onLoad={() => URL.revokeObjectURL(previewUrl)} />
-                      <span className="remove-photo" onClick={() => setPhotos((prev) => prev.filter((_, i) => i !== index))}>
+                      <img
+                        src={previewUrl}
+                        alt="preview"
+                        className="uploaded-photo"
+                        onLoad={() => URL.revokeObjectURL(previewUrl)}
+                      />
+                      <span
+                        className="remove-photo"
+                        onClick={() =>
+                          setNewPhotos((prev) =>
+                            prev.filter((_, i) => i !== index)
+                          )
+                        }
+                      >
                         ×
                       </span>
                     </div>
