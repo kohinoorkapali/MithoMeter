@@ -9,30 +9,41 @@ import hideIcon from "../../assets/hide.png";
 import { apiRequest } from "../../utils/api.js";
 import "./Login.css";
 
-export default function Login({ setToken, setRole }) {
+export default function Login({ setToken, setUser }) {
+
+  
   const [showPassword, setShowPassword] = useState(false);
   const [backendError, setBackendError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(loginSchema),
   });
+ 
 
-   const onSubmit = async (data) => {
+  const onSubmit = async (data) => {
+    setLoading(true);
+    setBackendError("");
+
     try {
       const res = await apiRequest("POST", "/auth/login", {
         data: { email: data.email, password: data.password },
       });
 
       if (res.access_token) {
-        const normalizedRole = res.role?.trim().toLowerCase();
-        setToken(res.access_token);
-        setRole(normalizedRole); // only in state
-      } else {
+  // store token
+  setToken(res.access_token);
+
+  // store full user info including role
+  setUser({
+    id: res.user.id,
+    username: res.user.username,
+    fullname: res.user.fullname,
+    role: res.user.role?.trim().toLowerCase(), // admin/user
+    email: res.user.email,
+  });
+}
+ else {
         setBackendError(res.message || "Invalid credentials");
       }
     } catch (err) {
@@ -41,7 +52,6 @@ export default function Login({ setToken, setRole }) {
       setLoading(false);
     }
   };
-
   return (
     <div className="login-container">
       <div className="login-box">

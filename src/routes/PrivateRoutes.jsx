@@ -1,38 +1,34 @@
 import React, { Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-// Lazy-loaded pages
+const ViewDetail = React.lazy(() => import("../components/ViewDetail/ViewDetail"));
 const BrowsePage = React.lazy(() => import("../components/BrowsePage/BrowsePage"));
 const AddPage = React.lazy(() => import("../components/AddPage/AddPage.jsx"));
 const ProfilePage = React.lazy(() => import("../components/ProfilePage/ProfilePage"));
+const AddReviewPage = React.lazy(() => import("../components/AddReviewPage/AddReviewPage"));
 
-const PrivateRoutes = ({ token, role, setToken }) => {
-  if (!token) return <Navigate to="/login" replace />;
+const PrivateRoutes = ({ token, user, setToken }) => {
+  if (!token || !user) return <Navigate to="/login" replace />;
 
-  const userRole = role?.toLowerCase() || "";
+  const userRole = user.role || "";
 
   return (
     <Suspense fallback={<div>Loading Page...</div>}>
       <Routes>
-        {/* Redirect "/" to proper page */}
         <Route
           path="/"
           element={<Navigate to={userRole === "admin" ? "/addPage" : "/browse"} replace />}
         />
 
-        {/* Admin-only page */}
         <Route
           path="/addPage"
           element={userRole === "admin" ? <AddPage /> : <Navigate to="/browse" replace />}
         />
 
-        {/* Browse accessible to everyone logged in */}
-        <Route path="/browse" element={<BrowsePage />} />
-
-        {/* Profile page */}
+        <Route path="/browse" element={<BrowsePage currentUser={user} />} />
         <Route path="/profile" element={<ProfilePage setToken={setToken} />} />
-
-        {/* Catch-all redirect */}
+        <Route path="/restaurant/:id" element={<ViewDetail user={user} />} />
+        <Route path="/restaurant/:id/add-review" element={<AddReviewPage currentUser={user} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>

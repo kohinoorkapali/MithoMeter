@@ -11,7 +11,7 @@ import search from "../../assets/search.png";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 
-export default function BrowsePage() {
+export default function BrowsePage({ currentUser })  {
     const [items, setItems] = useState([]);
     const [currentPage, setCurrentPage] = useState([])
 
@@ -179,11 +179,17 @@ export default function BrowsePage() {
                 {/* Cards */}
                 <div className="items-grid">
                     {items?.length > 0
-                        ? items.map((item) => <RestaurantCard key={item.restaurantId} item={item} />)
+                        ? items.map((item) => (
+                            <RestaurantCard 
+                                 key={item.restaurantId}
+                                item={item}
+                                role={currentUser?.role}      // pass role
+                                currentUser={currentUser}
+                            />
+                        ))
                         : <p>No restaurants available</p>
                     }
-                </div>
-
+                    </div>
                 {/* Pagination */}
                 <Pagination
                     currentPage={currentPage}

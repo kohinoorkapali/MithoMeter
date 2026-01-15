@@ -1,4 +1,6 @@
+// src/pages/AddReviewPage.jsx
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "./AddReviewPage.css";
 import { Header } from "../Header";
 import Chyura from '../../assets/Chyura.png';
@@ -6,12 +8,13 @@ import StarFilled from '../../assets/star_filled.png';
 import StarEmpty from '../../assets/star_empty.png';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { apiRequest } from "../../utils/api.js";
 
-export default function AddReviewPage() {
+export default function AddReviewPage({ currentUser }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [restaurant, setRestaurant] = useState(null);
-  const [photos, setPhotos] = useState([]);
-
-  const [visitDate, setVisitDate] = useState(null);
   const [ratings, setRatings] = useState({
     location: 0,
     ambience: 0,
@@ -19,42 +22,117 @@ export default function AddReviewPage() {
     service: 0,
     value: 0,
   });
+  const [reviewTitle, setReviewTitle] = useState("");
+  const [reviewText, setReviewText] = useState("");
+  const [photos, setPhotos] = useState([]);
+  const [visitDate, setVisitDate] = useState(null);
+  const [visitCompany, setVisitCompany] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
+  console.log("Current User:", currentUser);
 
-  const handlePhotoUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const newPhotos = [...photos, ...files].slice(0, 5);
-    setPhotos(newPhotos);
-  };
+  if (!currentUser) return null; // wait for user to load
 
-  const renderStars = (category) => {
-    return [...Array(5)].map((_, i) => {
-      const starNumber = i + 1;
-      const isActive = starNumber <= ratings[category];
+  // Fetch restaurant info by ID
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      try {
+        setRestaurant({
+          restaurantId: parseInt(id),
+          name: "Himalayan Bistro",
+          location: "Inside Thamel, Kathmandu",
+          image: Chyura,
+        });
+      } catch (err) {
+        console.error(err);
+        alert("Failed to fetch restaurant");
+      }
+    };
+    fetchRestaurant();
+  }, [id]);
+
+  // Star rendering
+  const renderStars = (category) =>
+    [...Array(5)].map((_, i) => {
+      const starNum = i + 1;
+      const isActive = starNum <= ratings[category];
       return (
         <img
-          key={starNumber}
+          key={starNum}
           src={isActive ? StarFilled : StarEmpty}
           alt="star"
           className="star"
-          onClick={() => setRatings({ ...ratings, [category]: starNumber })}
+          onClick={() => setRatings({ ...ratings, [category]: starNum })}
         />
       );
     });
+
+  // Photo upload
+  const handlePhotoUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setPhotos([...photos, ...files].slice(0, 5));
   };
 
-  useEffect(() => {
-    const fetchRestaurant = async () => {
-      const data = {
-        name: "Himalayan Bistro",
-        location: "Inside Thamel, Kathmandu",
-        image: Chyura,
-      };
-      setRestaurant(data);
-    };
-    fetchRestaurant();
-  }, []);
+  // Submit review
+  const handleSubmitReview = async () => {
+  setError("");
 
+  if (!reviewTitle.trim() || !reviewText.trim()) {
+    setError("Please provide a title and review text.");
+    return;
+  }
+
+  if (!restaurant || !restaurant.restaurantId) {
+    setError("Restaurant info missing.");
+    return;
+  }
+
+  const totalRating =
+    Object.values(ratings).reduce((sum, r) => sum + r, 0) /
+    Object.keys(ratings).length;
+
+  const formData = new FormData();
+  formData.append("restaurantId", restaurant.restaurantId);
+  formData.append("userId", currentUser.id);
+  formData.append("username", currentUser.username);
+  formData.append("title", reviewTitle);
+  formData.append("text", reviewText);
+  formData.append("ratings", JSON.stringify(ratings));
+  formData.append("totalRating", totalRating);
+  formData.append("visitDate", visitDate?.toISOString() || "");
+  formData.append("visitCompany", visitCompany);
+
+  // send real image files
+  photos.forEach((file) => {
+    formData.append("photos", file);
+  });
+
+  console.log("Sending review with files:", photos);
+
+  try {
+    setLoading(true);
+
+    const res = await fetch("http://localhost:5000/api/reviews", {
+      method: "POST",
+      body: formData,        // IMPORTANT
+    });
+
+    const data = await res.json();
+    setLoading(false);
+
+    if (data.success) {
+      alert("Review submitted!");
+      navigate(`/restaurant/${restaurant.restaurantId}`);
+    } else {
+      setError(data.message || "Failed to submit review");
+    }
+  } catch (err) {
+    console.error(err);
+    setLoading(false);
+    setError("Failed to submit review");
+  }
+};
   return (
     <>
       <Header />
@@ -80,42 +158,32 @@ export default function AddReviewPage() {
           <div className="right-section">
             <h3>Rate your experience</h3>
 
-            <div className="rating-row">
-              <label>Location</label>
-              {renderStars("location")}
-            </div>
-            <div className="rating-row">
-              <label>Ambience</label>
-              {renderStars("ambience")}
-            </div>
-            <div className="rating-row">
-              <label>Food</label>
-              {renderStars("food")}
-            </div>
-            <div className="rating-row">
-              <label>Service</label>
-              {renderStars("service")}
-            </div>
-            <div className="rating-row">
-              <label>Value</label>
-              {renderStars("value")}
-            </div>
+            {["location", "ambience", "food", "service", "value"].map(cat => (
+              <div className="rating-row" key={cat}>
+                <label>{cat.charAt(0).toUpperCase() + cat.slice(1)}</label>
+                {renderStars(cat)}
+              </div>
+            ))}
 
             <div className="rating-divider"></div>
 
             <label>When did you go?</label>
-<div className="datepicker-wrapper">
-  <DatePicker
-    selected={visitDate}
-    onChange={(date) => setVisitDate(date)}
-    placeholderText="Select date"
-    className="dropdown"
-    maxDate={new Date()}  // cannot select dates future dates 
-  />
-</div>
+            <div className="datepicker-wrapper">
+              <DatePicker
+                selected={visitDate}
+                onChange={(date) => setVisitDate(date)}
+                placeholderText="Select date"
+                className="dropdown"
+                maxDate={new Date()}
+              />
+            </div>
 
-            <label htmlFor="visit-company">Whom did you go with?</label>
-            <select id="visit-company" className="dropdown">
+            <label>Whom did you go with?</label>
+            <select
+              className="dropdown"
+              value={visitCompany}
+              onChange={(e) => setVisitCompany(e.target.value)}
+            >
               <option value="">Select option</option>
               <option>Business</option>
               <option>Friends</option>
@@ -123,11 +191,19 @@ export default function AddReviewPage() {
               <option>Solo</option>
             </select>
 
-            <label htmlFor="review-text">Write your review</label>
-            <textarea id="review-text" className="review-text"></textarea>
+            <label>Write your review</label>
+            <textarea
+              className="review-text"
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+            />
 
-            <label htmlFor="review-title">Title your review</label>
-            <input id="review-title" type="text" className="title-input" />
+            <label>Title your review</label>
+            <input
+              className="title-input"
+              value={reviewTitle}
+              onChange={(e) => setReviewTitle(e.target.value)}
+            />
 
             {/* PHOTO UPLOAD */}
             <div className="photo-upload-container">
@@ -144,28 +220,31 @@ export default function AddReviewPage() {
               </label>
 
               <div className="photo-preview">
-              {photos.map((photo, index) => (
-                <div className="uploaded-photo-wrapper" key={index}>
-                  <img
-                    src={URL.createObjectURL(photo)}
-                    alt={`upload-${index}`}
-                    className="uploaded-photo"
-                  />
-                  <span
-                    className="remove-photo"
-                    onClick={() => {
-                      const newPhotos = photos.filter((_, i) => i !== index);
-                      setPhotos(newPhotos);
-                    }}
-                  >
-                    &times;
-                  </span>
-                </div>
-              ))}
-            </div>
+                {photos.map((photo, index) => (
+                  <div className="uploaded-photo-wrapper" key={index}>
+                    <img
+                      src={URL.createObjectURL(photo)}
+                      alt={`upload-${index}`}
+                      className="uploaded-photo"
+                    />
+                    <span
+                      className="remove-photo"
+                      onClick={() =>
+                        setPhotos(photos.filter((_, i) => i !== index))
+                      }
+                    >
+                      &times;
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <button className="submit-btn">Submit Review</button>
+            {error && <p style={{ color: "red" }}>{error}</p>}
+
+            <button className="submit-btn" onClick={handleSubmitReview} disabled={loading}>
+              {loading ? "Submitting..." : "Submit Review"}
+            </button>
           </div>
         </div>
       </div>

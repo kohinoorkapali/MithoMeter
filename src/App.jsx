@@ -4,14 +4,21 @@ import PublicRoutes from "./routes/PublicRoutes";
 
 export default function App() {
   const [token, setToken] = useState(null);
-  const [role, setRole] = useState(null);
+  const [user, setUser] = useState(null); // user object contains role
 
   return (
     <>
-      {token && role ? (
-        <PrivateRoutes token={token} role={role} setToken={setToken} />
+      {token && user ? (
+        <PrivateRoutes
+          token={token}
+          user={user}       // pass user including role
+          setToken={setToken}
+        />
       ) : (
-        <PublicRoutes setToken={setToken} setRole={setRole} />
+        <PublicRoutes
+          setToken={setToken} 
+          setUser={setUser} // login page will set user
+        />
       )}
     </>
   );
