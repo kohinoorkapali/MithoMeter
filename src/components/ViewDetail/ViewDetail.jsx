@@ -107,16 +107,12 @@ function ViewDetail() {
               </button>
 
               <img
-                src={`http://localhost:5000/${images[currentIndex].replace(
-                  /\\/g,
-                  "/"
-                )}`}
-                alt={`Restaurant ${currentIndex}`}
-                className="carousel-img"
-                onError={(e) => {
-                  e.target.src = placeholderImg;
-                }}
-              />
+  src={`http://localhost:5000${images[currentIndex]}`}
+  alt={`Restaurant ${currentIndex}`}
+  className="carousel-img"
+  onError={(e) => { e.target.src = placeholderImg; }}
+/>
+
 
               <button className="nav-btn right" onClick={nextImage}>
                 ›

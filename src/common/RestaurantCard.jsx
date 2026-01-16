@@ -19,9 +19,11 @@ export function RestaurantCard({ item, currentUser, role }) {
     const toggleAdminMenu = () => setShowAdminMenu(!showAdminMenu);
 
     // Determine image to display
-    const restaurantImage = item.photos && item.photos.length > 0
-        ? `http://localhost:5000/${item.photos[0].replace(/\\/g, "/")}`
-        : "/placeholder.png";
+    const restaurantImage =
+  item.photos && item.photos.length > 0
+    ? `http://localhost:5000${item.photos[0]}`
+    : "/placeholder.png";
+
 
     const rating = typeof item.rating === "number" || typeof item.rating === "string" 
         ? item.rating 
@@ -45,7 +47,7 @@ export function RestaurantCard({ item, currentUser, role }) {
             className="restaurant-card"
             style={{ textDecoration: 'none', color: 'inherit' }}
         >
-            <div className="restaurant-card">
+
 
                 {/* LEFT IMAGE */}
                 <div className="card-image">
@@ -125,8 +127,6 @@ export function RestaurantCard({ item, currentUser, role }) {
                         </div>
                     )}
                 </div>
-
-            </div>
         </Link>
     );
 }

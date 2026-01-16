@@ -104,6 +104,7 @@
 .stars {
   color: orange;
   margin: 8px 0;
+  font-size: 30px;
 }
 
 .date {
@@ -214,7 +215,7 @@
 }
 
 .user strong {
-  font-size: 15px;
+  font-size: 22px;
   font-weight: 600;
   line-height: 1.2;
 }
