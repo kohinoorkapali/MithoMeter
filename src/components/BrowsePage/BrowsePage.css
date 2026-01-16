@@ -1,3 +1,7 @@
+body{
+  background-color: #000000;
+  color: white;
+}
 
 .browse-container{
   margin-left: 200px;
@@ -143,12 +147,4 @@
 .clear-filters-btn:hover {
   background: #ff9c1a;   
   transform: translateY(-1px);
-}
-
-.items-grid {
-  display: flex;           /* arrange cards in a row */
-  flex-wrap: wrap;         /* wrap to next line if too long */
-  gap: 20px;               /* space between cards */
-  justify-content: flex-start; /* align to left */
-  padding: 20px;           /* some spacing around */
 }

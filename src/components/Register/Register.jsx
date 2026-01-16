@@ -42,8 +42,6 @@ const onSubmit = async (data) => {
   }
 };
 
-
-
   return (
     <div className="register-page">
       <div className="logo">
