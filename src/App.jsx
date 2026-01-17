@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PrivateRoutes from "./routes/PrivateRoutes";
 import PublicRoutes from "./routes/PublicRoutes";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   const [token, setToken] = useState(null);
@@ -8,6 +9,8 @@ export default function App() {
 
   return (
     <>
+    {/* 🔔 Toast renderer (ONE TIME ONLY) */}
+    <Toaster position="top-right" />
       {token && user ? (
         <PrivateRoutes
           token={token}

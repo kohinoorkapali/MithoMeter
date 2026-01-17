@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import "./ProfilePage.css";
 import { Header } from "../Header";
+import toast from "react-hot-toast";
+import { apiRequest } from "../../utils/api";
 
 export default function ProfilePage({ setToken }) {
   const [username, setUsername] = useState("");
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
+
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -12,6 +17,36 @@ export default function ProfilePage({ setToken }) {
    const handleLogout = () => {
     setToken(null); // clears token, redirects to login
   };
+
+  const handleDelete = async () => {
+    if (!userId) {
+      toast.error("User not found");
+      return;
+    }
+  
+    const confirmed = window.confirm(
+      "Are you sure? This action cannot be undone."
+    );
+  
+    if (!confirmed) return;
+  
+    toast.promise(
+      apiRequest("DELETE", `/users/${userId}`),
+      {
+        loading: "Deleting account...",
+        success: "Account deleted successfully",
+        error: "Failed to delete account",
+      }
+    ).then(() => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+  
+      setTimeout(() => {
+        setToken(null);
+      }, 1500);
+    });
+  };
+
   return (
     <>
       <Header />
@@ -49,7 +84,7 @@ export default function ProfilePage({ setToken }) {
               <label>Email</label>
               <input type="email" value="" readOnly className="readonly-input" />
 
-              <button className="delete-btn">Delete Account</button>
+              <button className="delete-btn" onClick={handleDelete}>Delete Account</button>
               <button className="logout-btn" onClick={handleLogout}>
                 Logout
               </button>
