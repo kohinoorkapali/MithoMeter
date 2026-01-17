@@ -1,3 +1,7 @@
+body{
+  background-color: #000000;
+  color: white;
+}
 
 .browse-container{
   margin-left: 200px;

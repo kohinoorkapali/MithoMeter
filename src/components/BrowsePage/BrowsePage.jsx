@@ -13,54 +13,51 @@ import axios from 'axios';
 
 export default function BrowsePage({ currentUser })  {
     const [items, setItems] = useState([]);
-    const [currentPage, setCurrentPage] = useState([])
+    const [currentPage, setCurrentPage] = useState(1); 
+    const [searchTerm, setSearchTerm] = useState("");
 
-    //PAGINATION
-    const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 10;
 
-    useEffect(()=>{
-        axios.get("http://localhost:5000/api/restaurants")
-        .then(res=>{
-            setItems(res.data.data);
-        }).catch(err=>{
-            console.error("Failed to fetch restaurants");
-        });
-    }, []);
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/restaurants")
+      .then(res => {
+        setItems(res.data.data);
+      })
+      .catch(err => {
+        console.error("Failed to fetch restaurants");
+      });
+  }, []);
 
-    console.log(items);
+  const filteredItems = items.filter(item =>
+  item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+);
 
-        
-    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+const currentItems = filteredItems.slice(startIndex, endIndex);
 
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const currentItems = items.slice(startIndex, endIndex);
+  const initialFilters = {
+    cuisine: [],
+    ratings: [],
+    price: [],
+    mood: [],
+    amenities: []
+  };
 
+  const [filters, setFilters] = useState(initialFilters);
 
-    //DROPDOWNS
-    const initialFilters = {
-      cuisine: [],
-      ratings: [],
-      price: [],
-      mood: [],
-      amenities: []
-    };
-  
-    const [filters, setFilters] = useState(initialFilters);
-  
-    // CLEAR ALL
-    const hasActiveFilters = Object.values(filters).some(
-        filterArray => filterArray.length > 0
-      );      
+  const hasActiveFilters = Object.values(filters).some(
+    filterArray => filterArray.length > 0
+  );
 
-    function clearAllFilters() {
-      setFilters(initialFilters);
-    }
-  
+  function clearAllFilters() {
+    setFilters(initialFilters);
+  }
 
-    return (
-        <>
-            <Header/>  
+  return (
+    <>
+      <Header />
 
             <div className="browse-container">
                 <div className="top">
@@ -79,11 +76,19 @@ export default function BrowsePage({ currentUser })  {
 
                 {/* Search Bar */}
                 <div className="search-wrapper">
-                    <input type="text" placeholder="Search restaurants..." />
+                <input
+                    type="text"
+                    placeholder="Search restaurants..."
+                    value={searchTerm}
+                    onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setCurrentPage(1); 
+                    }}
+                />
 
-                    <div className="icon-circle">
-                        <img src={search} alt="search icon" />
-                    </div>
+                <div className="icon-circle">
+                    <img src={search} alt="search icon" />
+                </div>
                 </div>
 
                 {/* Dropdowns */}
@@ -178,18 +183,19 @@ export default function BrowsePage({ currentUser })  {
 
                 {/* Cards */}
                 <div className="items-grid">
-                    {items?.length > 0
-                        ? items.map((item) => (
-                            <RestaurantCard 
-                                 key={item.restaurantId}
-                                item={item}
-                                role={currentUser?.role}      // pass role
-                                currentUser={currentUser}
-                            />
-                        ))
-                        : <p>No restaurants available</p>
-                    }
-                    </div>
+                {currentItems.length > 0
+                    ? currentItems.map((item) => (
+                        <RestaurantCard 
+                        key={item.restaurantId}
+                        item={item}
+                        role={currentUser?.role}      
+                        currentUser={currentUser}
+                        />
+                    ))
+                    : <p>No restaurants available</p>
+                }
+                </div>
+
                 {/* Pagination */}
                 <Pagination
                     currentPage={currentPage}
@@ -198,7 +204,8 @@ export default function BrowsePage({ currentUser })  {
                 />
 
                 
-            </div>
-        </>
-    );
+
+      </div>
+    </>
+  );
 }

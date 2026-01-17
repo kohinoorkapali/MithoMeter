@@ -6,6 +6,7 @@ const BrowsePage = React.lazy(() => import("../components/BrowsePage/BrowsePage"
 const AddPage = React.lazy(() => import("../components/AddPage/AddPage.jsx"));
 const ProfilePage = React.lazy(() => import("../components/ProfilePage/ProfilePage"));
 const AddReviewPage = React.lazy(() => import("../components/AddReviewPage/AddReviewPage"));
+const ActivityPage = React.lazy(() => import("../components/ActivityPage/ActivityPage.jsx"));
 
 const PrivateRoutes = ({ token, user, setToken }) => {
   if (!token || !user) return <Navigate to="/login" replace />;
@@ -23,6 +24,10 @@ const PrivateRoutes = ({ token, user, setToken }) => {
         <Route
           path="/addPage"
           element={userRole === "admin" ? <AddPage /> : <Navigate to="/browse" replace />}
+        />
+        <Route
+          path="/activityPage"
+          element={userRole === "admin" ? <ActivityPage /> : <Navigate to="/browse" replace />}
         />
 
         <Route path="/browse" element={<BrowsePage currentUser={user} />} />
