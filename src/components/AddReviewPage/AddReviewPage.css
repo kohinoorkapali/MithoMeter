@@ -4,7 +4,7 @@
   color: #fff;
 }
 
-.review-container {
+.review-page .review-container {
   max-width: 1400px; 
   margin: auto;
   padding: 40px;
@@ -12,18 +12,18 @@
   gap: 100px; 
 }
 
-.subtitle {
+.review-page .subtitle {
   color: #aaa;
 }
 
-.left-section {
+.review-page .left-section {
   flex: 1;
   display: flex;
   flex-direction: column; /* stack content vertically */
   align-items: center;   
 }
 
-.restaurant-card {
+.review-page .restaurant-card {
   border: 2px solid orange;
   width: 400px;          
   margin: 20px 0;         
@@ -33,38 +33,38 @@
   box-shadow: 0 0 20px rgba(255, 165, 0, 0.4);
 }
 
-.restaurant-card img {
+.review-page .restaurant-card img {
   width: 100%;
   height: 250px;          
   object-fit: cover;
 }
 
-.restaurant-card h3 {
+.review-page .restaurant-card h3 {
   margin: 15px 0 5px 15px;
   font-size: 28px;        
   font-weight: 700;
   color: #fff;
 }
 
-.restaurant-card p {
+.review-page .restaurant-card p {
   margin: 5px 0 15px 15px;
   font-size: 20px;        
   color: #aaa;
   font-weight: 500;
 }
-.right-section {
+.review-page .right-section {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;  
 }
 
-.right-section h3{
+.review-page .right-section h3{
   font-weight: 600;
   font-size: 24px; 
   text-align: left;
 }
-.right-section label {
+.review-page .right-section label {
   display: block;
     margin: 20px 0 10px; 
   font-weight: 600;
@@ -74,19 +74,19 @@
   letter-spacing: 0.5px;
 }
 
-.rating-row {
+.review-page .rating-row {
   display: flex;
   align-items: center;
   gap: 10px;
   margin: 10px 0;
   width: 100%;
 }
-.rating-row label {
+.review-page .rating-row label {
   font-size: 18px;     
   font-weight: 400;    
 }
 
-.star {
+.review-page .star {
   width: 25px;
   height: 25px;
   margin-right: 4px;
@@ -94,15 +94,15 @@
 }
 
 /* for diveder between rating and when did you go */
-.rating-divider {
+.review-page .rating-divider {
   width: 100%;            
   height: 2px;            
   background-color: #666;  
   margin: 15px 0;          
 }
 
-.dropdown,
-.title-input {
+.review-page .dropdown,
+.review-page .title-input {
   width: 100%;
   padding: 10px;
   margin-top: 15px;
@@ -110,7 +110,7 @@
   border: none;
 }
 
-.review-text {
+.review-page .review-text {
   width: 100%;
   height: 110px;       
   padding: 10px;
@@ -121,15 +121,15 @@
   box-sizing: border-box;
 }
 
-.datepicker-wrapper,
-.react-datepicker-wrapper,
-.react-datepicker__input-container,
-.react-datepicker__input-container input {
+.review-page .datepicker-wrapper,
+.review-page .react-datepicker-wrapper,
+.review-page .react-datepicker__input-container,
+.review-page .react-datepicker__input-container input {
   display: block;
   width: 100%;
 }
 
-.react-datepicker__input-container input {
+.review-page .react-datepicker__input-container input {
   padding: 10px;
   margin-top: 15px;
   border-radius: 10px;
@@ -140,7 +140,7 @@
 }
 
 /* Photo Upload Section */
-.photo-upload-container {
+.review-page .photo-upload-container {
   display: flex;
   flex-direction: column;
   align-items: center; /* container stays centered */
@@ -148,7 +148,7 @@
   width: 100%;
 }
 
-.right-section .photo-upload-container .photo-box {
+.review-page .right-section .photo-upload-container .photo-box {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -163,7 +163,7 @@
   margin: 0;
 }
 
-.photo-preview {
+.review-page .photo-preview {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;                 
@@ -172,13 +172,13 @@
   width: 100%;
 }
 
-.uploaded-photo-wrapper {
+.review-page .uploaded-photo-wrapper {
   position: relative;
   width: 150px;   
   height: 150px;  
 }
 
-.uploaded-photo {
+.review-page .uploaded-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -186,7 +186,7 @@
   border: 1px solid #ccc;
 }
 
-.remove-photo {
+.review-page .remove-photo {
   position: absolute;
   top: -5px;
   right: -5px;
@@ -203,11 +203,11 @@
   font-size: 16px;
 }
 
-.uploaded-photo-wrapper:hover .remove-photo {
+.review-page .uploaded-photo-wrapper:hover .remove-photo {
   display: block;
 }
 
-.submit-btn {
+.review-page .submit-btn {
   width: 100%;
   margin-top: 20px;
   padding: 12px;

@@ -33,12 +33,14 @@ export function RestaurantCard({ item, currentUser, role }) {
     const priceRange = Array.isArray(item.priceRange) ? item.priceRange.join(", ") : item.priceRange || "Price N/A";
 
     // Open menu in new tab
-    const openMenu = (e) => {
-        e.stopPropagation(); // Prevent outer card link
-        if (item.menuLink) {
-            window.open(item.menuLink, "_blank", "noopener,noreferrer");
-        }
-    }
+const openMenu = (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (item.menuLink) {
+    window.open(item.menuLink, "_blank", "noopener,noreferrer");
+  }
+};
+
 
     return (
         <Link 
@@ -100,7 +102,8 @@ export function RestaurantCard({ item, currentUser, role }) {
                 {/* RIGHT SIDE: Rating / Heart / Admin */}
                 <div className="card-right">
                     {role === "admin" ? (
-                        <div className="admin-menu-wrapper" onClick={(e) => e.stopPropagation()}>
+                        <div className="admin-menu-wrapper" onClick={(e) => {
+                                e.preventDefault(); e.stopPropagation(); }} >
                             <span className="admin-menu-icon" onClick={toggleAdminMenu}>
                                 &#8230;
                             </span>
@@ -112,7 +115,9 @@ export function RestaurantCard({ item, currentUser, role }) {
                             )}
                         </div>
                     ) : (
-                        <div className="user-toggle" onClick={(e) => { e.stopPropagation(); toggleSave(); }}>
+                        <div className="user-toggle" onClick={(e) => {
+                                e.preventDefault(); e.stopPropagation(); toggleSave();
+                            }} >
                             {isSaved ? (
                                 <div className="saved-wrapper">
                                     <img src={heartIcon} alt="saved" className="heart-big" />

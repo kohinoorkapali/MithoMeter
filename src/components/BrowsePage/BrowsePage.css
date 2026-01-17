@@ -42,7 +42,7 @@
 }
 
 /* ORANGE BLUR AT THE BOTTOM */
-.top::after {
+/* .top::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -56,10 +56,10 @@
       rgba(220, 90, 0, 1) 85%,
       rgba(255, 255, 255, 0) 100%
   );
-  filter: blur(50px);   /* smooth blur */
+  filter: blur(50px);   
   border-radius: inherit;
   pointer-events: none;
-}
+} */
 
 /* Search Bar*/
 .search-wrapper {
