@@ -152,3 +152,58 @@
   justify-content: flex-start; /* align to left */
   padding: 20px;           /* some spacing around */
 }
+
+@media (max-width: 768px) {
+  .browse-container {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .title {
+    font-size: 40px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .top {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .top-left,
+  .top-right {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .top-right {
+    height: 200px;
+  }
+
+  .search-wrapper input {
+    padding: 10px 14px 10px 40px;
+    font-size: 14px;
+  }
+
+  .icon-circle {
+    width: 24px;
+    height: 24px;
+  }
+
+  .icon-circle img {
+    width: 14px;
+    height: 14px;
+  }
+
+  .dropdown-line {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .items-grid {
+    gap: 15px;
+    padding: 10px;
+  }
+}

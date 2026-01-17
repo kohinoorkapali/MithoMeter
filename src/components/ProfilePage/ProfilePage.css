@@ -11,35 +11,41 @@
 
 
 
-.profile-title {
+.profile-page .profile-title {
   margin-bottom: 20px;
   color: #333;
 }
 
-.profile-card {
+.profile-page .profile-card {
   width: 100%;
-   min-height: 600px;
+  min-height: 600px;
   background-color: #fff;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
   display: flex;
-  flex-direction: column; /* make title on top */
+  flex-direction: column; /* title on top */
   gap: 20px;
 }
 
-.card-content {
+.profile-page .card-content {
   display: flex;
+  flex-direction: row;  /* side by side */
+  justify-content: space-between;
+  align-items: flex-start; /* top aligned */
   gap: 60px;
+  flex-wrap: nowrap; /* prevent wrapping if possible */
 }
 
 
-.left-box {
-  width: 35%;
+
+.profile-page .left-box {
+  flex: 0 0 35%; /* don't shrink, fixed % */
   text-align: center;
+  min-width: 200px; /* optional to prevent too narrow */
 }
 
-.photo-placeholder {
+.profile-page .photo-placeholder {
   width: 180px;
   height: 180px;
   border-radius: 50%;
@@ -52,18 +58,18 @@
   margin: 0 auto 15px;
 }
 
-.username-display {
+.profile-page .username-display {
   margin: 10px 0;
   color: #333;
 }
 
-.registered-date {
+.profile-page .registered-date {
   font-size: 0.8rem;
   color: #555;
   margin-top: 4px;
 }
 
-.edit-image-btn {
+.profile-page .edit-image-btn {
   padding: 8px 16px;
   background-color: #007bff;
   border: none;
@@ -73,11 +79,11 @@
   margin-bottom: 15px;
 }
 
-.edit-image-btn:hover {
+.profile-page .edit-image-btn:hover {
   background-color: #0056b3;
 }
 
-.info-box {
+.profile-page .info-box {
   background-color: #f8f8f8;
   padding: 10px;
   margin-top: 10px;
@@ -85,14 +91,15 @@
   color: #555;
 }
 
-.right-box {
-  width: 55%;
+.profile-page .right-box {
+  flex: 0 0 60%; /* don't shrink, fixed % */
   display: flex;
   flex-direction: column;
-  gap: 15px; 
+  gap: 15px;
+  min-width: 250px;
 }
 
-.right-box label {
+.profile-page .right-box label {
   display: inline-block;
   margin: 3px;        
   font-weight: 500;
@@ -101,7 +108,7 @@
   
 }
 
-.right-box input {
+.profile-page .right-box input {
   width: 90%;        /* remaining width for input */
   padding: 10px;
   border-radius: 6px;
@@ -110,18 +117,18 @@
   display: inline-block;
 }
 
-.readonly-input {
+.profile-page .readonly-input {
   background-color: #f0f0f0;
   color: #555;
 }
 
-.editable-input {
+.profile-page .editable-input {
   background-color: #fff;
   color: #333;
   border: 1px solid #007bff;
 }
-.delete-btn,
-.logout-btn {
+.profile-page .delete-btn,
+.profile-page .logout-btn {
   align-self: flex-end;
   margin-top: 30px;
   padding: 20px;           
@@ -133,21 +140,33 @@
   float: right;            /* align to right */
 }
 
-.delete-btn {
+.profile-page .delete-btn {
   background-color: #D32F2F;
   color: white;
 }
 
-.logout-btn {
+.profile-page .logout-btn {
   background-color: #343a34;
   color: white;
   margin-top: 20px;  /* keep some spacing from delete button */
 }
 
-.delete-btn:hover {
+.profile-page .delete-btn:hover {
   background-color: #B71C1C;
 }
 
-.logout-btn:hover {
+.profile-page .logout-btn:hover {
   background-color: #5A6268;
+}
+
+@media (max-width: 900px) {
+  .profile-page .card-content {
+    flex-direction: column;  /* stack on smaller screens */
+    gap: 30px;
+  }
+
+  .profile-page .left-box,
+  .profile-page .right-box {
+    flex: 1 1 100%;  /* full width */
+  }
 }

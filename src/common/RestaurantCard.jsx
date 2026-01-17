@@ -58,46 +58,48 @@ const openMenu = (e) => {
 
                 {/* MIDDLE CONTENT */}
                 <div className="card-content">
-                    <h2 className="res-name">{item.name || "No Name"}</h2>
+                        {/* Title */}
+                        <h2 className="res-name">{item.name}</h2>
 
-                    <div className="line location-status">
+                        {/* Location */}
                         <p className="line res-location">
                             <img src={locationIcon} className="icon" alt="Location" />
                             {item.location || "Unknown Location"}
                         </p>
-                        <img 
-                            src={isOpen ? openIcon : closedIcon} 
-                            alt={isOpen ? "Open" : "Closed"} 
-                            className="status-icon"
-                        />
-                    </div>
 
-                    <p className="line res-details">
-                        <img src={cuisineIcon} className="icon" alt="Cuisine" />
-                        {cuisines}
-                    </p>
+                        {/* Cuisine */}
+                        <p className="line res-details">
+                            <img src={cuisineIcon} className="icon" alt="Cuisine" />
+                            {cuisines}
+                        </p>
 
-                    <p className="line res-price">
-                        <img src={priceIcon} className="icon" alt="Price" />
-                        {priceRange}
-                    </p>
+                        {/* Price */}
+                        <p className="line res-price">
+                            <img src={priceIcon} className="icon" alt="Price" />
+                            {priceRange}
+                        </p>
 
-                    {/* Menu button */}
-                    {item.menuLink && (
-                        <button 
-                            className="line menu-link-btn"
-                            onClick={openMenu}
-                        >
-                            <img src={menuIcon} className="icon" alt="Menu" />
-                            Menu
-                        </button>
-                    )}
+                        {/* Menu button */}
+                        {item.menuLink && (
+                            <button 
+                            className="menu-link-btn"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open(item.menuLink, "_blank", "noopener,noreferrer");
+                            }}
+                            >
+                            <img src={menuIcon} className="icon" alt="Menu" /> Menu
+                            </button>
+                        )}
 
-                    <div className="reviews">
-                        <p className="review">“Amazing food! Fresh and flavorful.”</p>
-                        <p className="review">“Cozy place and quick service.”</p>
-                    </div>
-                </div>
+                        {/* Reviews */}
+                        <div className="reviews">
+                            <p className="review">“Amazing food! Fresh and flavorful.”</p>
+                            <p className="review">“Cozy place and quick service.”</p>
+                        </div>
+                        </div>
+
 
                 {/* RIGHT SIDE: Rating / Heart / Admin */}
                 <div className="card-right">
