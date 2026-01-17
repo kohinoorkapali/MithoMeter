@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ProfilePage.css";
 import { Header } from "../Header";
 import toast from "react-hot-toast";
 import { apiRequest } from "../../utils/api";
 
 export default function ProfilePage({ setToken }) {
-  const [username, setUsername] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
 
+  const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [registeredAt, setRegisteredAt] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -47,6 +51,45 @@ export default function ProfilePage({ setToken }) {
     });
   };
 
+  //FETCH AND EDIT
+  useEffect(() => {
+    if (!userId) return;
+  
+    const fetchProfile = async () => {
+      try {
+        const res = await apiRequest("GET", `/users/${userId}`);
+        const data = res.data;
+  
+        setUsername(data.username);
+        setFullName(data.fullname);
+        setEmail(data.email);
+        setRegisteredAt(data.createdAt);
+      } catch (err) {
+        toast.error("Failed to load profile");
+      }
+    };
+  
+    fetchProfile();
+  }, [userId]);
+
+  const handleSave = async () => {
+    toast.promise(
+      apiRequest("PUT", `/users/${userId}`, {
+        data: {
+          username,
+          fullname: fullName,
+        },
+      }),
+      {
+        loading: "Updating profile...",
+        success: "Profile updated",
+        error: "Update failed",
+      }
+    ).then(() => {
+      setIsEditing(false);
+    });
+  };
+  
   return (
     <>
       <Header />
@@ -58,8 +101,19 @@ export default function ProfilePage({ setToken }) {
             <div className="left-box">
               <div className="photo-placeholder">Profile Photo</div>
               <h3>Username: {username}</h3>
-              <p className="registered-date">Registered on: 2025-12-08</p>
-              <button className="edit-image-btn">Edit Image</button>
+              <p className="registered-date">
+                Registered on: {new Date(registeredAt).toLocaleDateString()}
+              </p>
+
+              {isEditing ? (
+                <button className="save-btn" onClick={handleSave}>
+                  Save Changes
+                </button>
+              ) : (
+                <button className="edit-btn" onClick={() => setIsEditing(true)}>
+                  Edit Profile
+                </button>
+              )}
 
               <div className="info-box">
                 <p>Reviews: ⭐</p>
@@ -72,17 +126,22 @@ export default function ProfilePage({ setToken }) {
             <div className="right-box">
               <label>Username</label>
               <input
-                type="text"
                 value={username}
-                onChange={handleUsernameChange}
-                className="editable-input"
+                onChange={(e) => setUsername(e.target.value)}
+                disabled={!isEditing}
+                className={isEditing ? "editable-input" : "readonly-input"}
               />
 
               <label>Full Name</label>
-              <input type="text" value="" readOnly className="readonly-input" />
+              <input
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                disabled={!isEditing}
+                className={isEditing ? "editable-input" : "readonly-input"}
+              />
 
               <label>Email</label>
-              <input type="email" value="" readOnly className="readonly-input" />
+              <input value={email} readOnly className="readonly-input" />
 
               <button className="delete-btn" onClick={handleDelete}>Delete Account</button>
               <button className="logout-btn" onClick={handleLogout}>

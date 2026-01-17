@@ -9,8 +9,6 @@
   align-items: center;
 }
 
-
-
 .profile-page .profile-title {
   margin-bottom: 20px;
   color: #333;
@@ -36,8 +34,6 @@
   gap: 60px;
   flex-wrap: nowrap; /* prevent wrapping if possible */
 }
-
-
 
 .profile-page .left-box {
   flex: 0 0 35%; /* don't shrink, fixed % */
@@ -69,7 +65,7 @@
   margin-top: 4px;
 }
 
-.profile-page .edit-image-btn {
+.profile-page .edit-btn, .save-btn {
   padding: 8px 16px;
   background-color: #007bff;
   border: none;
@@ -79,7 +75,7 @@
   margin-bottom: 15px;
 }
 
-.profile-page .edit-image-btn:hover {
+.profile-page .edit-btn:hover, .save-btn:hover {
   background-color: #0056b3;
 }
 
