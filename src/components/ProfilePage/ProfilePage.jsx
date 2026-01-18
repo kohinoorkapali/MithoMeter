@@ -4,19 +4,27 @@ import { Header } from "../Header";
 import toast from "react-hot-toast";
 import { apiRequest, apiUpload } from "../../utils/api.js";
 
-export default function ProfilePage({ setToken, setUser }) {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?.id;
+export default function ProfilePage({ setToken, currentUser, setUser }) {
 
-  const [username, setUsername] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [registeredAt, setRegisteredAt] = useState("");
+  if (!currentUser) {
+    return <p>Loading profile...</p>; // wait until user is available
+  }
+
+  const userId = currentUser.id;
+
+  const [username, setUsername] = useState(currentUser.username);
+  const [fullName, setFullName] = useState(currentUser.fullname);
+  const [email, setEmail] = useState(currentUser.email);
+  const [registeredAt, setRegisteredAt] = useState(currentUser.createdAt);
   const [profileImageFile, setProfileImageFile] = useState(null);
-  const [profileImageUrl, setProfileImageUrl] = useState("");
+  const [profileImageUrl, setProfileImageUrl] = useState(
+    currentUser.profile_image 
+      ? `http://localhost:5000/uploads/profile/${currentUser.profile_image}`
+      : ""
+  );
   const [isEditing, setIsEditing] = useState(false);
 
-  // Fetch profile on load
+  // Fetch latest profile info on load
   useEffect(() => {
     if (!userId) return;
 
@@ -29,20 +37,28 @@ export default function ProfilePage({ setToken, setUser }) {
         setFullName(data.fullname);
         setEmail(data.email);
         setRegisteredAt(data.createdAt);
-        setProfileImageUrl(data.profile_image || "");
+        setProfileImageUrl(
+          data.profile_image
+            ? `http://localhost:5000/uploads/profile/${data.profile_image}`
+            : ""
+        );
+
+        // update global user state
+        setUser(data);
       } catch (err) {
+        console.error(err);
         toast.error("Failed to load profile");
       }
     };
 
     fetchProfile();
-  }, [userId]);
+  }, [userId, setUser]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProfileImageFile(file);
-      setProfileImageUrl(URL.createObjectURL(file)); // preview
+      setProfileImageUrl(URL.createObjectURL(file));
     }
   };
 
@@ -53,14 +69,9 @@ export default function ProfilePage({ setToken, setUser }) {
   };
 
   const handleDelete = async () => {
-    if (!userId) {
-      toast.error("User not found");
-      return;
-    }
+    if (!userId) return toast.error("User not found");
 
-    const confirmed = window.confirm(
-      "Are you sure? This action cannot be undone."
-    );
+    const confirmed = window.confirm("Are you sure? This action cannot be undone.");
     if (!confirmed) return;
 
     toast.promise(apiRequest("DELETE", `/users/${userId}`), {
@@ -76,27 +87,38 @@ export default function ProfilePage({ setToken, setUser }) {
 
   const handleSave = async () => {
     try {
-      if (profileImageFile) {
-        const formData = new FormData();
-        formData.append("username", username);
-        formData.append("profile", profileImageFile);
+      const formData = new FormData();
+      if (username && username.trim() !== "") formData.append("username", username);
+      if (profileImageFile) formData.append("profile", profileImageFile);
 
-        await apiUpload(`/users/${userId}/profile`, formData);
-      } else {
-        await apiRequest("PATCH", `/users/${userId}`, {
-          data: { username },
-        });
+      if (formData.has("username") || formData.has("profile")) {
+        await apiUpload(`/users/upload/${userId}`, formData);
       }
 
       toast.success("Profile updated successfully");
       setIsEditing(false);
 
-      const updatedUser = { ...user, username };
-      if (profileImageFile) updatedUser.profile_image = profileImageUrl;
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      setUser(updatedUser);
+      // Refresh latest user data
+      const res = await apiRequest("GET", `/users/${userId}`);
+      const updated = res.data;
+
+      setUsername(updated.username);
+      setFullName(updated.fullname);
+      setEmail(updated.email);
+      setProfileImageUrl(
+        updated.profile_image
+          ? `http://localhost:5000/uploads/profile/${updated.profile_image}`
+          : ""
+      );
+      setProfileImageFile(null);
+
+      // Update global user state
+      setUser(updated);
+      localStorage.setItem("user", JSON.stringify(updated));
+
     } catch (err) {
-      toast.error(err.message);
+      console.error(err);
+      toast.error("Failed to update profile");
     }
   };
 

@@ -31,7 +31,16 @@ const PrivateRoutes = ({ token, user, setToken }) => {
         />
 
         <Route path="/browse" element={<BrowsePage currentUser={user} />} />
-        <Route path="/profile" element={<ProfilePage setToken={setToken} />} />
+        <Route
+  path="/profile"
+  element={
+    <ProfilePage 
+      setToken={setToken} 
+      currentUser={user}        // <--- pass current user
+      setUser={() => {}}         // optional if you want to allow updating user
+    />
+  }
+/>
         <Route path="/restaurant/:id" element={<ViewDetail user={user} />} />
         <Route path="/restaurant/:id/add-review" element={<AddReviewPage currentUser={user} />} />
         <Route path="*" element={<Navigate to="/" replace />} />

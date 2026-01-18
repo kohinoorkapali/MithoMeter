@@ -32,7 +32,7 @@ export const apiUpload = async (endpoint, formData, extraHeaders = {}) => {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await axios.post(`${BASE_URL}${endpoint}`, formData, {
+    const response = await axios.patch(`${BASE_URL}${endpoint}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -48,3 +48,5 @@ export const apiUpload = async (endpoint, formData, extraHeaders = {}) => {
     }
   }
 };
+
+
