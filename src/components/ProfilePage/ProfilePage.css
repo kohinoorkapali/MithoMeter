@@ -20,38 +20,43 @@
   background-color: #fff;
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column; /* title on top */
+  flex-direction: column;
   gap: 20px;
 }
 
 .profile-page .card-content {
   display: flex;
-  flex-direction: row;  /* side by side */
+  flex-direction: row; /* side by side */
   justify-content: space-between;
-  align-items: flex-start; /* top aligned */
+  align-items: flex-start;
   gap: 60px;
-  flex-wrap: nowrap; /* prevent wrapping if possible */
+  flex-wrap: nowrap;
 }
 
 .profile-page .left-box {
-  flex: 0 0 35%; /* don't shrink, fixed % */
+  flex: 0 0 35%;
   text-align: center;
-  min-width: 200px; /* optional to prevent too narrow */
+  min-width: 200px;
 }
 
-.profile-page .photo-placeholder {
-  width: 180px;
-  height: 180px;
+.photo-placeholder {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 15px;
   background-color: #e0e0e0;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 14px;
-  color: #555;
-  margin: 0 auto 15px;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .profile-page .username-display {
@@ -65,7 +70,7 @@
   margin-top: 4px;
 }
 
-.profile-page .edit-btn, .save-btn {
+.profile-page .edit-btn {
   padding: 8px 16px;
   background-color: #007bff;
   border: none;
@@ -75,7 +80,8 @@
   margin-bottom: 15px;
 }
 
-.profile-page .edit-btn:hover, .save-btn:hover {
+.profile-page .edit-btn:hover,
+.profile-page .save-btn:hover {
   background-color: #0056b3;
 }
 
@@ -88,7 +94,7 @@
 }
 
 .profile-page .right-box {
-  flex: 0 0 60%; /* don't shrink, fixed % */
+  flex: 0 0 60%;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -97,15 +103,14 @@
 
 .profile-page .right-box label {
   display: inline-block;
-  margin: 3px;        
+  margin: 3px;
   font-weight: 500;
   color: #333;
-  text-align: left; 
-  
+  text-align: left;
 }
 
 .profile-page .right-box input {
-  width: 90%;        /* remaining width for input */
+  width: 90%;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -123,17 +128,19 @@
   color: #333;
   border: 1px solid #007bff;
 }
+
+/* Buttons on the right section */
 .profile-page .delete-btn,
 .profile-page .logout-btn {
   align-self: flex-end;
   margin-top: 30px;
-  padding: 20px;           
+  padding: 20px;
   border-radius: 15px;
   border: none;
   font-weight: bold;
   cursor: pointer;
-  width: 150px;            /* smaller fixed width (~half) */
-  float: right;            /* align to right */
+  width: 150px;
+  float: right;
 }
 
 .profile-page .delete-btn {
@@ -144,7 +151,7 @@
 .profile-page .logout-btn {
   background-color: #343a34;
   color: white;
-  margin-top: 20px;  /* keep some spacing from delete button */
+  margin-top: 20px;
 }
 
 .profile-page .delete-btn:hover {
@@ -155,14 +162,82 @@
   background-color: #5A6268;
 }
 
+/* Hide default file input */
+.image-input {
+  display: none;
+}
+
+/* Styled Choose File button */
+.file-label {
+  display: inline-block;
+  padding: 7px 7px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  margin: 15px auto; /* center horizontally */
+}
+
+.file-label:hover {
+  background-color: #0056b3;
+}
+
+/* Save + Cancel buttons container */
+.save-cancel-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* space between buttons */
+  margin-top: 15px;
+}
+
+/* Make Save button uniform */
+.profile-page .save-btn{
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4; /* make height consistent */
+}
+
+/* Hover for Save */
+.save-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Cancel button to match Save exactly */
+.cancel-btn {
+  padding: 8px 16px;           /* same as save */
+  background-color: #dc3545;   /* red */
+  color: white;
+  border: none;
+  border-radius: 6px;          /* same as save */
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;             /* same as save */
+  line-height: 1.4;            /* same as save */
+  display: inline-block;
+}
+
+/* Hover for Cancel */
+.cancel-btn:hover {
+  background-color: #b71c1c;
+}
+
+/* Responsive layout */
 @media (max-width: 900px) {
   .profile-page .card-content {
-    flex-direction: column;  /* stack on smaller screens */
+    flex-direction: column;
     gap: 30px;
   }
 
   .profile-page .left-box,
   .profile-page .right-box {
-    flex: 1 1 100%;  /* full width */
+    flex: 1 1 100%;
   }
 }

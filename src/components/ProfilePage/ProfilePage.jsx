@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./ProfilePage.css";
 import { Header } from "../Header";
 import toast from "react-hot-toast";
-import { apiRequest } from "../../utils/api";
+import { apiRequest, apiUpload } from "../../utils/api.js";
 
-export default function ProfilePage({ setToken }) {
+export default function ProfilePage({ setToken, setUser }) {
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
 
@@ -12,14 +12,44 @@ export default function ProfilePage({ setToken }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [registeredAt, setRegisteredAt] = useState("");
+  const [profileImageFile, setProfileImageFile] = useState(null);
+  const [profileImageUrl, setProfileImageUrl] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+  // Fetch profile on load
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchProfile = async () => {
+      try {
+        const res = await apiRequest("GET", `/users/${userId}`);
+        const data = res.data;
+
+        setUsername(data.username);
+        setFullName(data.fullname);
+        setEmail(data.email);
+        setRegisteredAt(data.createdAt);
+        setProfileImageUrl(data.profile_image || "");
+      } catch (err) {
+        toast.error("Failed to load profile");
+      }
+    };
+
+    fetchProfile();
+  }, [userId]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImageFile(file);
+      setProfileImageUrl(URL.createObjectURL(file)); // preview
+    }
   };
 
-   const handleLogout = () => {
-    setToken(null); // clears token, redirects to login
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setToken(null);
   };
 
   const handleDelete = async () => {
@@ -27,69 +57,49 @@ export default function ProfilePage({ setToken }) {
       toast.error("User not found");
       return;
     }
-  
+
     const confirmed = window.confirm(
       "Are you sure? This action cannot be undone."
     );
-  
     if (!confirmed) return;
-  
-    toast.promise(
-      apiRequest("DELETE", `/users/${userId}`),
-      {
-        loading: "Deleting account...",
-        success: "Account deleted successfully",
-        error: "Failed to delete account",
-      }
-    ).then(() => {
+
+    toast.promise(apiRequest("DELETE", `/users/${userId}`), {
+      loading: "Deleting account...",
+      success: "Account deleted successfully",
+      error: "Failed to delete account",
+    }).then(() => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-  
-      setTimeout(() => {
-        setToken(null);
-      }, 1500);
+      setTimeout(() => setToken(null), 1500);
     });
   };
-
-  //FETCH AND EDIT
-  useEffect(() => {
-    if (!userId) return;
-  
-    const fetchProfile = async () => {
-      try {
-        const res = await apiRequest("GET", `/users/${userId}`);
-        const data = res.data;
-  
-        setUsername(data.username);
-        setFullName(data.fullname);
-        setEmail(data.email);
-        setRegisteredAt(data.createdAt);
-      } catch (err) {
-        toast.error("Failed to load profile");
-      }
-    };
-  
-    fetchProfile();
-  }, [userId]);
 
   const handleSave = async () => {
-    toast.promise(
-      apiRequest("PUT", `/users/${userId}`, {
-        data: {
-          username,
-          fullname: fullName,
-        },
-      }),
-      {
-        loading: "Updating profile...",
-        success: "Profile updated",
-        error: "Update failed",
+    try {
+      if (profileImageFile) {
+        const formData = new FormData();
+        formData.append("username", username);
+        formData.append("profile", profileImageFile);
+
+        await apiUpload(`/users/${userId}/profile`, formData);
+      } else {
+        await apiRequest("PATCH", `/users/${userId}`, {
+          data: { username },
+        });
       }
-    ).then(() => {
+
+      toast.success("Profile updated successfully");
       setIsEditing(false);
-    });
+
+      const updatedUser = { ...user, username };
+      if (profileImageFile) updatedUser.profile_image = profileImageUrl;
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
-  
+
   return (
     <>
       <Header />
@@ -98,31 +108,74 @@ export default function ProfilePage({ setToken }) {
           <h1 className="profile-title">My Profile</h1>
 
           <div className="card-content">
+            {/* Left section */}
             <div className="left-box">
-              <div className="photo-placeholder">Profile Photo</div>
-              <h3>Username: {username}</h3>
+              <div className="photo-placeholder">
+                {profileImageUrl ? (
+                  <img
+                    src={profileImageUrl}
+                    alt="Profile"
+                    className="profile-image"
+                  />
+                ) : (
+                  "Profile Photo"
+                )}
+              </div>
+
+              {isEditing && (
+                <div className="file-buttons">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="image-input"
+                    id="profileFile"
+                  />
+                  <label htmlFor="profileFile" className="file-label">
+                    Choose File
+                  </label>
+                </div>
+              )}
+
+              <div className="username-display">Username: {username}</div>
               <p className="registered-date">
                 Registered on: {new Date(registeredAt).toLocaleDateString()}
               </p>
 
-              {isEditing ? (
-                <button className="save-btn" onClick={handleSave}>
-                  Save Changes
-                </button>
-              ) : (
-                <button className="edit-btn" onClick={() => setIsEditing(true)}>
+              {/* Save + Cancel buttons side by side */}
+              {isEditing && (
+                <div className="save-cancel-buttons">
+                  <button className="save-btn" onClick={handleSave}>
+                    Save Changes
+                  </button>
+                  <button
+                    className="cancel-btn"
+                    onClick={() => {
+                      setIsEditing(false); 
+                      setProfileImageFile(null); // remove selected file
+                      setProfileImageUrl(user.profile_image || ""); // reset to original
+                      setUsername(user.username); // reset username as well if changed
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+
+              {!isEditing && (
+                <button
+                  className="edit-btn"
+                  onClick={() => setIsEditing(true)}
+                >
                   Edit Profile
                 </button>
               )}
 
-              <div className="info-box">
-                <p>Reviews: ⭐</p>
-              </div>
-              <div className="info-box">
-                <p>Favorites: ❤️</p>
-              </div>
+              <div className="info-box">Reviews: ⭐</div>
+              <div className="info-box">Favorites: ❤️</div>
             </div>
 
+            {/* Right section */}
             <div className="right-box">
               <label>Username</label>
               <input
@@ -133,17 +186,14 @@ export default function ProfilePage({ setToken }) {
               />
 
               <label>Full Name</label>
-              <input
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                disabled={!isEditing}
-                className={isEditing ? "editable-input" : "readonly-input"}
-              />
+              <input value={fullName} disabled className="readonly-input" />
 
               <label>Email</label>
               <input value={email} readOnly className="readonly-input" />
 
-              <button className="delete-btn" onClick={handleDelete}>Delete Account</button>
+              <button className="delete-btn" onClick={handleDelete}>
+                Delete Account
+              </button>
               <button className="logout-btn" onClick={handleLogout}>
                 Logout
               </button>
