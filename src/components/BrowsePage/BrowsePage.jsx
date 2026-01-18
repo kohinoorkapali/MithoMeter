@@ -13,7 +13,7 @@ import axios from 'axios';
 
 export default function BrowsePage() {
     const [items, setItems] = useState([]);
-    const [currentPage, setCurrentPage] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
 
     //PAGINATION
     const ITEMS_PER_PAGE = 10;
@@ -47,6 +47,33 @@ export default function BrowsePage() {
     };
   
     const [filters, setFilters] = useState(initialFilters);
+
+    const fetchFilteredRestaurants = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/restaurants/filter",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(filters)
+      }
+    );
+
+    const data = await response.json();
+    setItems(data);      // ✅ correct state
+    setCurrentPage(1);  // reset page on filter
+  } catch (error) {
+    console.error("Error fetching restaurants:", error);
+  }
+    };
+    
+    useEffect(() => {
+    fetchFilteredRestaurants();
+    }, [filters]);
+
+
   
     // CLEAR ALL
     const hasActiveFilters = Object.values(filters).some(
@@ -54,8 +81,9 @@ export default function BrowsePage() {
       );      
 
     function clearAllFilters() {
-      setFilters(initialFilters);
+        setFilters(initialFilters);
     }
+
   
 
     return (
@@ -161,7 +189,7 @@ export default function BrowsePage() {
                             setFilters(prev=> ({...prev, amenities: values}))
                         }
                     />
-                    
+
                     {/* OPEN/CLOSED */}
                     <DropdownFilter
                         title="Open"
