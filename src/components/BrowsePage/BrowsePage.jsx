@@ -8,83 +8,90 @@ import './BrowsePage.css';
 import Img from "../../assets/Chyura.png";
 import search from "../../assets/search.png";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from 'axios';
 
+// ✅ Filters constant outside component
+const initialFilters = {
+  cuisine: [],
+  ratings: [],
+  price: [],
+  mood: [],
+  amenities: [],
+  open: []   
+};
+
+
 export default function BrowsePage() {
-    const [items, setItems] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1)
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filters, setFilters] = useState(initialFilters);
 
-    //PAGINATION
-    const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 10;
 
-    useEffect(()=>{
-        axios.get("http://localhost:5000/api/restaurants")
-        .then(res=>{
-            setItems(res.data.data);
-        }).catch(err=>{
-            console.error("Failed to fetch restaurants");
-        });
-    }, []);
+  // ✅ Fetch all restaurants on first render
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/restaurants")
+      .then(res => setItems(res.data.data || []))
+      .catch(() => console.error("Failed to fetch restaurants"));
+  }, []);
 
-    console.log(items);
-
-        
-    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
-
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const currentItems = items.slice(startIndex, endIndex);
-
-
-    //DROPDOWNS
-    const initialFilters = {
-      cuisine: [],
-      ratings: [],
-      price: [],
-      mood: [],
-      amenities: []
-    };
-  
-    const [filters, setFilters] = useState(initialFilters);
-
-    const fetchFilteredRestaurants = async () => {
+  // ✅ Fetch filtered restaurants when filters change
+const fetchFilteredRestaurants = useCallback(async () => {
   try {
-    const response = await fetch(
-      "http://localhost:5000/api/restaurants/filter",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(filters)
-      }
-    );
+    const response = await fetch("http://localhost:5000/api/restaurants/filter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(filters)
+    });
 
-    const data = await response.json();
-    setItems(data);      // ✅ correct state
-    setCurrentPage(1);  // reset page on filter
-  } catch (error) {
-    console.error("Error fetching restaurants:", error);
-  }
-    };
-    
-    useEffect(() => {
-    fetchFilteredRestaurants();
-    }, [filters]);
-
-
-  
-    // CLEAR ALL
-    const hasActiveFilters = Object.values(filters).some(
-        filterArray => filterArray.length > 0
-      );      
-
-    function clearAllFilters() {
-        setFilters(initialFilters);
+    // ✅ check if backend responded 200
+    if (!response.ok) {
+      const text = await response.text();
+      console.error("Backend error:", text); // log HTML or error
+      setItems([]); // fallback
+      return;
     }
 
-  
+    const data = await response.json();
+    setItems(Array.isArray(data.data) ? data.data : []); // ensure array
+    setCurrentPage(1);
+  } catch (error) {
+    console.error("Error fetching restaurants:", error);
+    setItems([]); // fallback
+  }
+}, [filters]);
+
+  useEffect(() => {
+    const hasActiveFilters = Object.values(filters).some(
+      arr => Array.isArray(arr) && arr.length > 0
+    );
+
+    if (hasActiveFilters) {
+      fetchFilteredRestaurants();
+    } else {
+      axios.get("http://localhost:5000/api/restaurants")
+        .then(res => setItems(res.data.data || []))
+        .catch(() => console.error("Failed to fetch restaurants"));
+    }
+  }, [filters, fetchFilteredRestaurants]);
+
+  // ✅ Pagination logic
+  const totalPages = Math.ceil((items?.length || 0) / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentItems = Array.isArray(items) ? items.slice(startIndex, endIndex) : [];
+
+
+  // ✅ Check if any filters active
+  const hasActiveFilters = Object.values(filters).some(
+    arr => Array.isArray(arr) && arr.length > 0
+  );
+
+  // ✅ Clear all filters
+  function clearAllFilters() {
+    setFilters(initialFilters);
+  }
 
     return (
         <>
@@ -219,20 +226,21 @@ export default function BrowsePage() {
 
                 {/* Cards */}
                 <div className="items-grid">
-                    {items?.length > 0
-                        ? items.map((item) => <RestaurantCard key={item.restaurantId} item={item} />)
+                    {currentItems.length > 0
+                        ? currentItems.map(item => (
+                            <RestaurantCard key={item.restaurantId} item={item} />
+                        ))
                         : <p>No restaurants available</p>
                     }
                 </div>
+
 
                 {/* Pagination */}
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
-                />
-
-                
+                />         
             </div>
         </>
     );
