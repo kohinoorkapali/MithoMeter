@@ -12,7 +12,7 @@ export function Header({ role }) {
       <div className="mid-header">
         {role === "admin" ? (
           <>
-            <Link to="/home">Home</Link>
+            <Link to="/admin">Home</Link>
             <Link to="/browse">Browse</Link>
             <Link to="/addPage">Add</Link>
           </>
