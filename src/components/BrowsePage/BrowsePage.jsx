@@ -161,6 +161,19 @@ export default function BrowsePage() {
                             setFilters(prev=> ({...prev, amenities: values}))
                         }
                     />
+                    
+                    {/* OPEN/CLOSED */}
+                    <DropdownFilter
+                        title="Open"
+                        options={[
+                            {label:"Open", value:"Open"},
+                            { label: "Closed", value: "Closed" }
+                        ]}
+                        selectedValues={filters.open}
+                        onChange={(values)=>
+                            setFilters(prev=> ({...prev, open: values}))
+                        }
+                    />
 
                     {/* CLEAR BUTTON */}
                     {hasActiveFilters && (
