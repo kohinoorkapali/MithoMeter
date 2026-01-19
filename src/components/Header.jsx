@@ -13,7 +13,7 @@ export function Header({ role }) {
         {role === "admin" ? (
           <>
             <Link to="/admin">Home</Link>
-            <Link to="/browse">Browse</Link>
+            <Link to="/activityPage">Activity</Link>
             <Link to="/addPage">Add</Link>
           </>
         ) : (
