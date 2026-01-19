@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import './RestaurantCard.css';
-
 import locationIcon from "../assets/location.png";
 import menuIcon from "../assets/menu.png";
 import priceIcon from "../assets/tag.png";
@@ -14,7 +13,7 @@ export function RestaurantCard({ item, currentUser, role }) {
     const isOpen = item.isOpen;
     const [isSaved, setIsSaved] = useState(false);
     const [showAdminMenu, setShowAdminMenu] = useState(false);
-
+    const [reviews, setReviews] = useState([]);
     const toggleSave = () => setIsSaved(!isSaved);
     const toggleAdminMenu = () => setShowAdminMenu(!showAdminMenu);
 
@@ -33,13 +32,33 @@ export function RestaurantCard({ item, currentUser, role }) {
     const priceRange = Array.isArray(item.priceRange) ? item.priceRange.join(", ") : item.priceRange || "Price N/A";
 
     // Open menu in new tab
-const openMenu = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  if (item.menuLink) {
-    window.open(item.menuLink, "_blank", "noopener,noreferrer");
-  }
-};
+        const openMenu = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (item.menuLink) {
+            window.open(item.menuLink, "_blank", "noopener,noreferrer");
+        }
+        };
+
+
+        useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+            const res = await fetch(`http://localhost:5000/api/reviews/restaurant/${item.restaurantId}`);
+            const data = await res.json();
+            setReviews(data.data || []);
+            } catch (err) {
+            console.error("Error fetching reviews:", err);
+            }
+        };
+
+        fetchReviews();
+        }, [item.restaurantId]);
+
+        const overallRating = reviews.length > 0
+        ? (reviews.reduce((sum, r) => sum + (Number(r.totalRating) || 0), 0) / reviews.length).toFixed(1)
+        : "N/A";
+
 
 
     return (
@@ -121,15 +140,15 @@ const openMenu = (e) => {
                                 e.preventDefault(); e.stopPropagation(); toggleSave();
                             }} >
                             {isSaved ? (
-                                <div className="saved-wrapper">
-                                    <img src={heartIcon} alt="saved" className="heart-big" />
-                                    <span className="rating-on-heart">{rating}</span>
-                                </div>
+                            <div className="saved-wrapper">
+                                <img src={heartIcon} alt="saved" className="heart-big" />
+                                <span className="rating-on-heart">{overallRating}</span>
+                            </div>
                             ) : (
-                                <div className="rating-circle">
-                                    <span className="rating">{rating}</span>
-                                    <span className="save-text">Click to save</span>
-                                </div>
+                            <div className="rating-circle">
+                                <span className="rating">{overallRating}</span>
+                                <span className="save-text">Click to save</span>
+                            </div>
                             )}
                         </div>
                     )}

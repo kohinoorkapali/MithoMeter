@@ -16,6 +16,7 @@ function ViewDetail() {
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -32,6 +33,21 @@ function ViewDetail() {
     };
     fetchRestaurant();
   }, [id]);
+
+  useEffect(() => {
+  const fetchReviews = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/reviews/restaurant/${id}`);
+      const data = await res.json();
+      setReviews(data.data || []);
+    } catch (err) {
+      console.error("Error fetching reviews:", err);
+    }
+  };
+
+  fetchReviews();
+}, [id]);
+
 
   if (loading) return <p>Loading...</p>;
   if (!restaurant) return <p>Restaurant not found</p>;
@@ -76,7 +92,12 @@ function ViewDetail() {
         <div className="overview-line">
           <div className="item rating">
             <span>
-              {restaurant.rating || "N/A"} ({restaurant.reviews || 0} reviews)
+              {reviews.length > 0
+                ? (
+                    (reviews.reduce((sum, r) => sum + (Number(r.totalRating) || 0), 0) / reviews.length).toFixed(1)
+                  )
+                : "N/A"} ({reviews.length} reviews)
+
             </span>
           </div>
 
