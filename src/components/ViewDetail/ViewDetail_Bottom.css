@@ -131,11 +131,11 @@
   align-items: center;
 }
 
-/* RIGHT SIDE (👍 0  ⋯) */
+
 .review-actions {
   display: flex;
   align-items: center;
-  gap: 10px;          /* spacing between 👍0 and ⋯ */
+  gap: 10px;          
   position: relative;
 }
 
@@ -225,4 +225,94 @@
   color: #777;
   margin-top: 2px;
 }
+.review-page {
+  background: black;
+  color: white;
+  padding: 40px;
+  font-family: Arial, sans-serif;
+}
 
+.review-summary {
+  display: flex; 
+  gap: 140px;    
+  margin-bottom: 30px;
+  background: #111;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+
+.overall-score-wrapper {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start;
+}
+
+
+.overall-score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.overall-score .score {
+  font-size: 3rem;
+  font-weight: bold;
+  color: orange;
+}
+
+.overall-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.overall-score .label {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.overall-score .count {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+
+.ratings-right {
+  display: flex;     
+  gap: 80px;          
+  flex-wrap: wrap;    
+}
+
+.rating-breakdown {
+  flex: 1;             
+  min-width: 200px;    
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.rating-row span:first-child {
+  width: 120px;
+  font-weight: 500;
+}
+
+.rating-row .bar {
+  width: 280px;
+  height: 10px;
+  background: #333;
+  margin: 0 12px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.rating-row .fill {
+  height: 100%;
+  background: orange;
+  border-radius: 6px;
+}

@@ -46,10 +46,103 @@ export default function ViewDetail_Bottom() {
     return new Date(dateStr).toLocaleDateString(undefined, options);
   };
 
+
+    const getAverage = (key) => {
+      if (reviews.length === 0) return 0;
+      const sum = reviews.reduce((acc, r) => {
+        const value = r.ratings ? Number(r.ratings[key]) || 0 : 0;
+        return acc + value;
+      }, 0);
+      return (sum / reviews.length).toFixed(1);
+    };
+
+    const overallRating = reviews.length
+      ? (
+          reviews.reduce((sum, r) => sum + (Number(r.totalRating) || 0), 0) /
+          reviews.length
+        ).toFixed(1)
+      : 0;
+
+    const categoryRatings = [
+      { label: "Location", score: getAverage("location") },
+      { label: "Ambience", score: getAverage("ambience") },
+      { label: "Food", score: getAverage("food") },
+      { label: "Service", score: getAverage("service") },
+      { label: "Value", score: getAverage("value") },
+    ];
+
+    const grading = {
+      Excellent: reviews.filter(r => r.totalRating >= 4.5).length,
+      Good: reviews.filter(r => r.totalRating >= 3.5 && r.totalRating < 4.5).length,
+      Average: reviews.filter(r => r.totalRating >= 2.5 && r.totalRating < 3.5).length,
+      Poor: reviews.filter(r => r.totalRating >= 1.5 && r.totalRating < 2.5).length,
+      Terrible: reviews.filter(r => r.totalRating < 1.5).length,
+    };
+
+const totalReviews = reviews.length;
+
   return (
     <div className="review-page">
-      <h3>Reviews</h3>
+      <div className="review-summary">
+        <div className="overall-score-wrapper">
+          <h2 className="summary-heading">Overall Rating</h2>
+          <div className="overall-score">
+            <div className="score">{overallRating}</div>
+            <div className="overall-meta">
+              <div className="label">
+                {overallRating >= 4.5
+                  ? "Excellent"
+                  : overallRating >= 3.5
+                  ? "Good"
+                  : overallRating >= 2.5
+                  ? "Average"
+                  : overallRating >= 1.5
+                  ? "Poor"
+                  : "Terrible"}
+              </div>
+              <div className="count">({totalReviews} reviews)</div>
+            </div>
+          </div>
+        </div>
 
+        <div className="ratings-right">
+          {/* Rating Descriptors */}
+          <div className="rating-breakdown">
+            <h4>Rating Descriptors</h4>
+            {Object.entries(grading).map(([label, count], i) => (
+              <div className="rating-row" key={i}>
+                <span>{label}</span>
+                <div className="bar">
+                  <div
+                    className="fill"
+                    style={{
+                      width: totalReviews ? `${(count / totalReviews) * 100}%` : "0%",
+                    }}
+                  />
+                </div>
+                <span>{count}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Rating Categories */}
+          <div className="rating-breakdown">
+            <h4>Rating Categories</h4>
+            {categoryRatings.map((item, i) => (
+              <div className="rating-row" key={i}>
+                <span>{item.label}</span>
+                <div className="bar">
+                  <div className="fill" style={{ width: `${item.score * 20}%` }}></div>
+                </div>
+                <span>{item.score}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <h3>Reviews</h3>
+      
       {/* FILTER + WRITE REVIEW */}
       <div className="filters">
         <div className="filter-group">

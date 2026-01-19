@@ -49,9 +49,9 @@ export default function OwnReviewsPage({ currentUser }) {
           <div className="d-flex flex-column gap-4">
             {reviews.map((review) => {
               const restaurantImage =
-                review.restaurantPhotos && review.restaurantPhotos.length > 0
-                  ? `http://localhost:5000/uploads/${review.restaurantPhotos[0]}`
-                  : "/placeholder.png";
+              review.restaurantPhotos && review.restaurantPhotos.length > 0
+                ? `http://localhost:5000/uploads/restaurants/${review.restaurantPhotos[0]}`
+                : "/placeholder.png";
 
               return (
                 <Link
@@ -68,10 +68,10 @@ export default function OwnReviewsPage({ currentUser }) {
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "center",
-                      maxWidth: "900px",
+                      maxWidth: "1300px",
                       padding: "20px",
                       gap: "20px",
-                      marginLeft: "50px",
+                      marginLeft: "10%",
                       marginBottom: "20px",
                     }}
                   >
@@ -80,10 +80,11 @@ export default function OwnReviewsPage({ currentUser }) {
                       src={restaurantImage}
                       alt={review.restaurantName}
                       style={{
-                        width: "120px",
-                        height: "120px",
+                        width: "200px",
+                        height: "200px",
                         objectFit: "cover",
                         borderRadius: "12px",
+                        gap:"40px"
                       }}
                     />
 
