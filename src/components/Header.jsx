@@ -20,7 +20,7 @@ export function Header({ role }) {
           <>
             <Link to="/browse">Browse</Link>
             <Link to="/review">Reviews</Link>
-            <Link to="/favourites">Favourites</Link>
+            <Link to="/favorite">Favourites</Link>
           </>
         )}
       </div>

@@ -7,7 +7,7 @@ const AddPage = React.lazy(() => import("../components/AddPage/AddPage.jsx"));
 const ProfilePage = React.lazy(() => import("../components/ProfilePage/ProfilePage"));
 const AddReviewPage = React.lazy(() => import("../components/AddReviewPage/AddReviewPage"));
 const ActivityPage = React.lazy(() => import("../components/ActivityPage/ActivityPage.jsx"));
-
+const FavouritesPage = React.lazy(() => import("../components/FavouritesPage/FavouritesPage.jsx"));
 const PrivateRoutes = ({ token, user, setToken }) => {
   if (!token || !user) return <Navigate to="/login" replace />;
 
@@ -34,6 +34,7 @@ const PrivateRoutes = ({ token, user, setToken }) => {
         <Route path="/profile" element={<ProfilePage setToken={setToken} />} />
         <Route path="/restaurant/:id" element={<ViewDetail user={user} />} />
         <Route path="/restaurant/:id/add-review" element={<AddReviewPage currentUser={user} />} />
+        <Route path="/favorite" element={<FavouritesPage/>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>

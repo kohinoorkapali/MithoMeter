@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../../schema/loginschema"; 
+import { loginSchema } from "../../schema/loginschema";
 import { Link } from "react-router-dom";
 import logo from "../../assets/Logo.png";
 import viewIcon from "../../assets/view.png";
@@ -10,8 +10,6 @@ import { apiRequest } from "../../utils/api.js";
 import "./Login.css";
 
 export default function Login({ setToken, setUser }) {
-
-  
   const [showPassword, setShowPassword] = useState(false);
   const [backendError, setBackendError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,31 +17,31 @@ export default function Login({ setToken, setUser }) {
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(loginSchema),
   });
- 
 
   const onSubmit = async (data) => {
     setLoading(true);
     setBackendError("");
 
     try {
+      // 👇 send email/username and password
       const res = await apiRequest("POST", "/auth/login", {
-        data: { email: data.email, password: data.password },
+        data: {
+          email: data.email, // or username
+          password: data.password,
+        },
       });
 
       if (res.access_token) {
-  // store token
-  setToken(res.access_token);
+        setToken(res.access_token);
 
-  // store full user info including role
-  setUser({
-    id: res.user.id,
-    username: res.user.username,
-    fullname: res.user.fullname,
-    role: res.user.role?.trim().toLowerCase(), // admin/user
-    email: res.user.email,
-  });
-}
- else {
+        setUser({
+          id: res.user.id,
+          username: res.user.username,
+          fullname: res.user.fullname,
+          role: res.user.role?.trim().toLowerCase(),
+          email: res.user.email,
+        });
+      } else {
         setBackendError(res.message || "Invalid credentials");
       }
     } catch (err) {
@@ -52,6 +50,7 @@ export default function Login({ setToken, setUser }) {
       setLoading(false);
     }
   };
+
   return (
     <div className="login-container">
       <div className="login-box">
@@ -104,7 +103,6 @@ export default function Login({ setToken, setUser }) {
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          {/* Register & Forget Password */}
           <div className="register-text">
             Don't have an account? <Link to="/register">Register here</Link>
           </div>
