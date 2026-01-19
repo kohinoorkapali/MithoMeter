@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./ViewDetail_Bottom.css";
 import personIcon from "../../assets/person.png";
+import likeIcon from "../../assets/like.png";        
+import likedIcon from "../../assets/liked.png"; 
 
-export default function ViewDetail_Bottom() {
+export default function ViewDetail_Bottom({ currentUser }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -25,20 +27,38 @@ export default function ViewDetail_Bottom() {
     fetchReviews();
   }, [id]);
 
-  const toggleLike = (reviewId) => {
-    setReviews((prev) =>
-      prev.map((review) => {
-        if (review.reviewId !== reviewId) return review;
+  
+const toggleLike = async (reviewId) => {
+  if (!currentUser || !currentUser.id) {
+    console.warn("No current user set");
+    return alert("Please login to like");
+  }
 
-        const currentLikes = Number(review.likes) || 0;
-        return {
-          ...review,
-          liked: !review.liked,
-          likes: review.liked ? currentLikes - 1 : currentLikes + 1,
-        };
-      })
+  try {
+    const res = await fetch(`http://localhost:5000/api/reviews/${reviewId}/like`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: currentUser.id }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Like failed:", data);
+      return;
+    }
+
+    // Update likes in state immediately
+    setReviews((prev) =>
+      prev.map((r) =>
+        r.reviewId === reviewId ? { ...r, likes: data.likes, liked: data.liked } : r
+      )
     );
-  };
+  } catch (err) {
+    console.error("Like error:", err);
+  }
+};
+
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
@@ -187,11 +207,17 @@ export default function ViewDetail_Bottom() {
 
                 <div className="review-actions">
                   <button
-                    className={`like-btn ${review.liked ? "liked" : ""}`}
+                    className="like-btn"
                     onClick={() => toggleLike(review.reviewId)}
                   >
-                    👍 {review.likes || 0}
+                    <img
+                      src={review.liked ? likedIcon : likeIcon}
+                      alt="like"
+                      style={{ width: "20px", height: "20px" }}
+                    />
+                    <span>{review.likes || 0}</span>
                   </button>
+
 
                   <div className="menu-wrapper">
                     <button

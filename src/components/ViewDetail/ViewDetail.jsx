@@ -11,7 +11,7 @@ import cuisineIcon from "../../assets/dish.png";
 import openIcon from "../../assets/open.png";
 import placeholderImg from "../../assets/Chyura.png";
 
-function ViewDetail() {
+function ViewDetail({ user }) {
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -220,7 +220,7 @@ function ViewDetail() {
           </ul>
         </section>
 
-        <ViewDetail_Bottom/>
+        <ViewDetail_Bottom currentUser={user} />
       </div>
     </>
   );

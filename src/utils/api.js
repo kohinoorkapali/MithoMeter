@@ -27,26 +27,28 @@ export const apiRequest = async (method, endpoint, options = {}) => {
     }
   }
 };
-
-export const apiUpload = async (endpoint, formData, extraHeaders = {}) => {
-  const token = localStorage.getItem("token");
+export const apiUpload = async (endpoint, formData, method = "POST", extraHeaders = {}) => {
+  const token = localStorage.getItem("token"); // get JWT token if available
 
   try {
-    const response = await axios.patch(`${BASE_URL}${endpoint}`, formData, {
+    const response = await axios({
+      url: `${BASE_URL}${endpoint}`,
+      method, // POST, PATCH, PUT, etc.
+      data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...extraHeaders,
       },
     });
+
     return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
+      // Return the message from backend if available
       throw new Error(error.response.data.message || "Something went wrong!");
     } else {
       throw new Error("Server not reachable!");
     }
   }
 };
-
-
