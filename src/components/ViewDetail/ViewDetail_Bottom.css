@@ -316,3 +316,12 @@
   background: orange;
   border-radius: 6px;
 }
+
+/* Make user profile images circular and smaller */
+.review-card .review-header .user img {
+  width: 40px;   
+  height: 40px;   
+  border-radius: 50%; 
+  object-fit: cover;   
+  border: 1px solid #ccc; 
+}

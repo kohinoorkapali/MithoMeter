@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./ViewDetail_Bottom.css";
+import personIcon from "../../assets/person.png";
 
 export default function ViewDetail_Bottom() {
   const { id } = useParams();
@@ -11,15 +12,14 @@ export default function ViewDetail_Bottom() {
 
   // Fetch reviews
   const fetchReviews = async () => {
-  try {
-    // NOTE: use /restaurant/:id
-    const res = await fetch(`http://localhost:5000/api/reviews/restaurant/${id}`);
-    const data = await res.json();
-    setReviews(data.data || []);
-  } catch (err) {
-    console.error("Error fetching reviews:", err);
-  }
-};
+    try {
+      const res = await fetch(`http://localhost:5000/api/reviews/restaurant/${id}`);
+      const data = await res.json();
+      setReviews(data.data || []);
+    } catch (err) {
+      console.error("Error fetching reviews:", err);
+    }
+  };
 
   useEffect(() => {
     fetchReviews();
@@ -46,40 +46,44 @@ export default function ViewDetail_Bottom() {
     return new Date(dateStr).toLocaleDateString(undefined, options);
   };
 
+  const getAverage = (key) => {
+    if (reviews.length === 0) return 0;
+    const sum = reviews.reduce((acc, r) => {
+      const value = r.ratings ? Number(r.ratings[key]) || 0 : 0;
+      return acc + value;
+    }, 0);
+    return (sum / reviews.length).toFixed(1);
+  };
 
-    const getAverage = (key) => {
-      if (reviews.length === 0) return 0;
-      const sum = reviews.reduce((acc, r) => {
-        const value = r.ratings ? Number(r.ratings[key]) || 0 : 0;
-        return acc + value;
-      }, 0);
-      return (sum / reviews.length).toFixed(1);
-    };
+  const overallRating = reviews.length
+    ? (
+        reviews.reduce((sum, r) => sum + (Number(r.totalRating) || 0), 0) /
+        reviews.length
+      ).toFixed(1)
+    : 0;
 
-    const overallRating = reviews.length
-      ? (
-          reviews.reduce((sum, r) => sum + (Number(r.totalRating) || 0), 0) /
-          reviews.length
-        ).toFixed(1)
-      : 0;
+  const categoryRatings = [
+    { label: "Location", score: getAverage("location") },
+    { label: "Ambience", score: getAverage("ambience") },
+    { label: "Food", score: getAverage("food") },
+    { label: "Service", score: getAverage("service") },
+    { label: "Value", score: getAverage("value") },
+  ];
 
-    const categoryRatings = [
-      { label: "Location", score: getAverage("location") },
-      { label: "Ambience", score: getAverage("ambience") },
-      { label: "Food", score: getAverage("food") },
-      { label: "Service", score: getAverage("service") },
-      { label: "Value", score: getAverage("value") },
-    ];
+  const grading = {
+    Excellent: reviews.filter((r) => r.totalRating >= 4.5).length,
+    Good: reviews.filter((r) => r.totalRating >= 3.5 && r.totalRating < 4.5).length,
+    Average: reviews.filter((r) => r.totalRating >= 2.5 && r.totalRating < 3.5).length,
+    Poor: reviews.filter((r) => r.totalRating >= 1.5 && r.totalRating < 2.5).length,
+    Terrible: reviews.filter((r) => r.totalRating < 1.5).length,
+  };
 
-    const grading = {
-      Excellent: reviews.filter(r => r.totalRating >= 4.5).length,
-      Good: reviews.filter(r => r.totalRating >= 3.5 && r.totalRating < 4.5).length,
-      Average: reviews.filter(r => r.totalRating >= 2.5 && r.totalRating < 3.5).length,
-      Poor: reviews.filter(r => r.totalRating >= 1.5 && r.totalRating < 2.5).length,
-      Terrible: reviews.filter(r => r.totalRating < 1.5).length,
-    };
+  const getProfileImage = (profile) => {
+    if (!profile) return personIcon; // fallback if empty
+    return `http://localhost:5000/uploads/profile/${profile}`;
+  };
 
-const totalReviews = reviews.length;
+  const totalReviews = reviews.length;
 
   return (
     <div className="review-page">
@@ -106,7 +110,6 @@ const totalReviews = reviews.length;
         </div>
 
         <div className="ratings-right">
-          {/* Rating Descriptors */}
           <div className="rating-breakdown">
             <h4>Rating Descriptors</h4>
             {Object.entries(grading).map(([label, count], i) => (
@@ -125,7 +128,6 @@ const totalReviews = reviews.length;
             ))}
           </div>
 
-          {/* Rating Categories */}
           <div className="rating-breakdown">
             <h4>Rating Categories</h4>
             {categoryRatings.map((item, i) => (
@@ -142,8 +144,7 @@ const totalReviews = reviews.length;
       </div>
 
       <h3>Reviews</h3>
-      
-      {/* FILTER + WRITE REVIEW */}
+
       <div className="filters">
         <div className="filter-group">
           <button>Traveller ▼</button>
@@ -159,78 +160,89 @@ const totalReviews = reviews.length;
         </button>
       </div>
 
-      {/* REVIEWS LIST */}
       {reviews.length === 0 ? (
         <p>No reviews yet. Be the first one!</p>
       ) : (
-        reviews.map((review) => (
-          <div className="review-card" key={review.reviewId}>
-            <div className="review-header">
-              <div className="user">
-                <img
-                  src={review.profile || "https://i.pravatar.cc/40"}
-                  alt={review.username}
-                />
-                <div>
-                  <strong>{review.username}</strong>
-                  <small>{review.contributions || 1} contributions</small>
+        reviews.map((review) => {
+          // <-- DEBUG LOGGING HERE
+          console.log("Review user:", review.username, "Profile filename:", review.profile);
+
+          return (
+            <div className="review-card" key={review.reviewId}>
+              <div className="review-header">
+                <div className="user">
+                  <img
+                    src={getProfileImage(review.profile)}
+                    alt={review.username}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = personIcon;
+                    }}
+                  />
+                  <div>
+                    <strong>{review.username}</strong>
+                    <small>{review.contributions || 1} contributions</small>
+                  </div>
                 </div>
-              </div>
 
-              <div className="review-actions">
-                <button
-                  className={`like-btn ${review.liked ? "liked" : ""}`}
-                  onClick={() => toggleLike(review.reviewId)}
-                >
-                  👍 {review.likes || 0}
-                </button>
-
-                <div className="menu-wrapper">
+                <div className="review-actions">
                   <button
-                    className="menu-btn"
-                    onClick={() =>
-                      setOpenMenuId(openMenuId === review.reviewId ? null : review.reviewId)
-                    }
+                    className={`like-btn ${review.liked ? "liked" : ""}`}
+                    onClick={() => toggleLike(review.reviewId)}
                   >
-                    ⋯
+                    👍 {review.likes || 0}
                   </button>
 
-                  {openMenuId === review.reviewId && (
-                    <div className="menu-dropdown">
-                      <button>✏️ Edit</button>
-                      <button>🗑 Delete</button>
-                      <button>🚩 Report</button>
-                    </div>
-                  )}
+                  <div className="menu-wrapper">
+                    <button
+                      className="menu-btn"
+                      onClick={() =>
+                        setOpenMenuId(
+                          openMenuId === review.reviewId ? null : review.reviewId
+                        )
+                      }
+                    >
+                      ⋯
+                    </button>
+
+                    {openMenuId === review.reviewId && (
+                      <div className="menu-dropdown">
+                        <button>✏️ Edit</button>
+                        <button>🗑 Delete</button>
+                        <button>🚩 Report</button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="review-body">
-              <span className="stars">
-                {"★".repeat(Math.round(review.totalRating)) + "☆".repeat(5 - Math.round(review.totalRating))}
-              </span>
-              <h4>{review.title}</h4>
-              <small>
-                {formatDate(review.visitDate)}{" "}
-                {review.visitCompany ? `• ${review.visitCompany}` : ""}
-              </small>
-              <p>{review.text}</p>
+              <div className="review-body">
+                <span className="stars">
+                  {"★".repeat(Math.round(review.totalRating)) +
+                    "☆".repeat(5 - Math.round(review.totalRating))}
+                </span>
+                <h4>{review.title}</h4>
+                <small>
+                  {formatDate(review.visitDate)}{" "}
+                  {review.visitCompany ? `• ${review.visitCompany}` : ""}
+                </small>
+                <p>{review.text}</p>
 
-              {review.photos && review.photos.length > 0 && (
-                <div className="review-images">
-                  {review.photos.map((img, i) => (
-                    <img
-                      key={i}
-                      src={`http://localhost:5000/uploads/reviewPhotos/${img}`} // correct path
-                      alt={`review-${i}`}
-                    />
-                  ))}
-                </div>
-              )}
+                {review.photos && review.photos.length > 0 && (
+                  <div className="review-images">
+                    {review.photos.map((img, i) => (
+                      <img
+                        key={i}
+                        src={`http://localhost:5000/uploads/reviewPhotos/${img}`}
+                        alt={`review-${i}`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))
+          );
+        })
       )}
     </div>
   );
