@@ -11,14 +11,15 @@ export default function ViewDetail_Bottom() {
 
   // Fetch reviews
   const fetchReviews = async () => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/reviews/${id}`);
-      const data = await res.json();
-      setReviews(data.data || []);
-    } catch (err) {
-      console.error("Error fetching reviews:", err);
-    }
-  };
+  try {
+    // NOTE: use /restaurant/:id
+    const res = await fetch(`http://localhost:5000/api/reviews/restaurant/${id}`);
+    const data = await res.json();
+    setReviews(data.data || []);
+  } catch (err) {
+    console.error("Error fetching reviews:", err);
+  }
+};
 
   useEffect(() => {
     fetchReviews();

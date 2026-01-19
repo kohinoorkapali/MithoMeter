@@ -7,6 +7,7 @@ const AddPage = React.lazy(() => import("../components/AddPage/AddPage.jsx"));
 const ProfilePage = React.lazy(() => import("../components/ProfilePage/ProfilePage"));
 const AddReviewPage = React.lazy(() => import("../components/AddReviewPage/AddReviewPage"));
 const ActivityPage = React.lazy(() => import("../components/ActivityPage/ActivityPage.jsx"));
+const OwnReviewsPage = React.lazy(() => import("../components/OwnReviewPage/OwnReviewPage")); 
 
 const PrivateRoutes = ({ token, user, setToken }) => {
   if (!token || !user) return <Navigate to="/login" replace />;
@@ -31,18 +32,23 @@ const PrivateRoutes = ({ token, user, setToken }) => {
         />
 
         <Route path="/browse" element={<BrowsePage currentUser={user} />} />
+
         <Route
-  path="/profile"
-  element={
-    <ProfilePage 
-      setToken={setToken} 
-      currentUser={user}        // <--- pass current user
-      setUser={() => {}}         // optional if you want to allow updating user
-    />
-  }
-/>
+          path="/profile"
+          element={
+            <ProfilePage 
+              setToken={setToken} 
+              currentUser={user}        // pass current user
+              setUser={() => {}}        // optional
+            />
+          }
+        />
+
+        <Route path="/own-reviews" element={<OwnReviewsPage currentUser={user} />} />
+
         <Route path="/restaurant/:id" element={<ViewDetail user={user} />} />
         <Route path="/restaurant/:id/add-review" element={<AddReviewPage currentUser={user} />} />
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
