@@ -18,9 +18,13 @@ export function RestaurantCard({ item, currentUser, role }) {
     const toggleAdminMenu = () => setShowAdminMenu(!showAdminMenu);
 
     // Determine image to display
-    const restaurantImage =
-  item.photos && item.photos.length > 0
-    ? `http://localhost:5000${item.photos[0]}`
+    const photo = item.photos?.[0];
+    const restaurantImage = photo
+    ? photo.startsWith("http")
+        ? photo
+        : photo.startsWith("/uploads")
+        ? `http://localhost:5000${photo}`
+        : `http://localhost:5000/uploads/restaurants/${photo}`
     : "/placeholder.png";
 
 
@@ -63,17 +67,17 @@ export function RestaurantCard({ item, currentUser, role }) {
 
     return (
         <Link 
-           to={`/restaurant/${item.restaurantId}`}
+        to={`/restaurant/${item.restaurantId}`}
             state={{ currentUser }} // <-- pass the user here
             className="restaurant-card"
             style={{ textDecoration: 'none', color: 'inherit' }}
         >
-
-
                 {/* LEFT IMAGE */}
                 <div className="card-image">
                     <img src={restaurantImage} alt={item.name || "Restaurant"} />
                 </div>
+                
+                
 
                 {/* MIDDLE CONTENT */}
                 <div className="card-content">
@@ -117,8 +121,7 @@ export function RestaurantCard({ item, currentUser, role }) {
                             <p className="review">“Amazing food! Fresh and flavorful.”</p>
                             <p className="review">“Cozy place and quick service.”</p>
                         </div>
-                        </div>
-
+                </div>
 
                 {/* RIGHT SIDE: Rating / Heart / Admin */}
                 <div className="card-right">

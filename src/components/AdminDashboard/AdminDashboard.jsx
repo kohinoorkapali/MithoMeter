@@ -6,7 +6,7 @@ import ViewUser from './ViewUser/ViewUser.jsx';
 import { Header } from '../Header.jsx';
 
 
-export function AdminDashboard(){
+export default function AdminDashboard(){
     return(
         <>
         <Header role = "admin"/>
