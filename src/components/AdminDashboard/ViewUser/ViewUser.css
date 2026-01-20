@@ -43,12 +43,6 @@
   color: #1c1c1c;
 }
 
-/* Navigation buttons */
-.nav-buttons {
-  display: flex;
-  gap: 15px;
-}
-
 .circle-btn {
   width: 45px;
   height: 45px;

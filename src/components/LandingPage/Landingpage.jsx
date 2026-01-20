@@ -12,15 +12,19 @@ export default function LandingPage() {
           <img src={Logo} alt="logo" className="logo" />
         </div>
 
+        <div className="nav-center">
+          {/* nav links OR empty div */}
+        </div>
 
-        <div className="nav-buttons">
-          <Link to="/login">
-          <button className="landing-login-btn">Login</button>
-          </Link>
-          <Link to= "/register">
-          <button className="landing-signin-btn">Sign in</button>
-          </Link>
-          
+        <div className="nav-right">
+          <div className="nav-buttons">
+            <Link to="/login">
+            <button className="landing-login-btn">Login</button>
+            </Link>
+            <Link to= "/register">
+            <button className="landing-signin-btn">Sign in</button>
+            </Link>
+          </div>
         </div>
       </nav>
 

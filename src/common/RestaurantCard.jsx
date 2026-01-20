@@ -106,7 +106,7 @@ const openMenu = (e) => {
 
                 {/* RIGHT SIDE: Rating / Heart / Admin */}
                 <div className="card-right">
-                    {role === "admin" ? (
+                  
                         <div className="admin-menu-wrapper" onClick={(e) => {
                                 e.preventDefault(); e.stopPropagation(); }} >
                             <span className="admin-menu-icon" onClick={toggleAdminMenu}>
@@ -119,23 +119,7 @@ const openMenu = (e) => {
                                 </div>
                             )}
                         </div>
-                    ) : (
-                        <div className="user-toggle" onClick={(e) => {
-                                e.preventDefault(); e.stopPropagation(); toggleSave();
-                            }} >
-                            {isSaved ? (
-                                <div className="saved-wrapper">
-                                    <img src={heartIcon} alt="saved" className="heart-big" />
-                                    <span className="rating-on-heart">{rating}</span>
-                                </div>
-                            ) : (
-                                <div className="rating-circle">
-                                    <span className="rating">{rating}</span>
-                                    <span className="save-text">Click to save</span>
-                                </div>
-                            )}
-                        </div>
-                    )}
+                    
                 </div>
         </Link>
     );

@@ -8,7 +8,7 @@ import { Header } from '../Header.jsx';
 
 export default function AdminDashboard(){
     return(
-        <>
+        <div classname ="dashboard-page">
         <Header role = "admin"/>
         <div className='dashboard-container'>
             <Analytics/>
@@ -19,6 +19,6 @@ export default function AdminDashboard(){
 
         </div>
         
-        </>
+        </div>
     );
 }

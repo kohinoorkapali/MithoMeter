@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { apiRequest } from "../../utils/api";
 import "./ViewDetail_Bottom.css";
 
 export default function ViewDetail_Bottom() {
@@ -44,6 +46,16 @@ export default function ViewDetail_Bottom() {
     const options = { month: "short", year: "numeric" };
     return new Date(dateStr).toLocaleDateString(undefined, options);
   };
+
+  //REPORT BUTTON
+  const reportReview = async (reviewId) =>{
+    try{
+      await apiRequest("POST", `/reviews/${reviewId}/report`);
+      alert("Review reported")
+    }catch(err){
+      toast.error(err.message || "Failed to load reports");
+    }
+  }
 
   return (
     <div className="review-page">
@@ -105,7 +117,7 @@ export default function ViewDetail_Bottom() {
                     <div className="menu-dropdown">
                       <button>✏️ Edit</button>
                       <button>🗑 Delete</button>
-                      <button>🚩 Report</button>
+                      <button onClick={() => reportReview(review.reviewId)}>🚩 Report </button>
                     </div>
                   )}
                 </div>
