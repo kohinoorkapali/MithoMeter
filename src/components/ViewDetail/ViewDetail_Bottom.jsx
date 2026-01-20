@@ -185,8 +185,7 @@ const toggleLike = async (reviewId) => {
       ) : (
         reviews.map((review) => {
           // <-- DEBUG LOGGING HERE
-          console.log("Review user:", review.username, "Profile filename:", review.profile);
-
+           console.log("Full Review Data:", review);
           return (
             <div className="review-card" key={review.reviewId}>
               <div className="review-header">
@@ -231,13 +230,20 @@ const toggleLike = async (reviewId) => {
                       ⋯
                     </button>
 
-                    {openMenuId === review.reviewId && (
-                      <div className="menu-dropdown">
-                        <button>✏️ Edit</button>
-                        <button>🗑 Delete</button>
-                        <button>🚩 Report</button>
+                   {openMenuId === review.reviewId && (
+                     <div className="menu-dropdown">
+                         {/* Case 1: The person logged in IS the author */}
+                         {currentUser?.id === review.userId ? (
+                             <>
+                               <button>✏️ Edit</button>
+                               <button>🗑 Delete</button>
+                             </>
+                            ) : (
+                                /* Case 2: The person logged in is NOT the author */
+                             <button>🚩 Report</button>
+                           )}
                       </div>
-                    )}
+                      )}
                   </div>
                 </div>
               </div>
