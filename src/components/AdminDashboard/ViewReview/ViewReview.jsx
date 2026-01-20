@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./ViewReview.css";
-import { apiRequest } from "../../../utils/api"; 
+import { apiRequest } from "../../../utils/api";
 
 export default function ViewReview() {
   const [reviews, setReviews] = useState([]);
+  const [selectedReview, setSelectedReview] = useState(null);
 
   useEffect(() => {
     fetchReportedReviews();
@@ -12,66 +13,71 @@ export default function ViewReview() {
   const fetchReportedReviews = async () => {
     try {
       const res = await apiRequest("GET", "/admin/reported-reviews");
-      setReviews(res); 
+      setReviews(res || []);
     } catch (err) {
       console.error("Failed to fetch reported reviews", err);
     }
   };
-  
+
+  const closeModal = () => {
+    setSelectedReview(null);
+  };
 
   return (
     <div className="reviews-page">
       {/* Header */}
       <div className="reviews-header">
-        <div className="header-left">
-          <div>
-            <h2>Reported Reviews</h2>
-            <p>{reviews.length} reported</p>
-          </div>
-
-          <div className="status-dropdown">
-            <button className="dropdown-btn">Reported ▼</button>
-          </div>
-        </div>
+        <h2>Reported Reviews</h2>
+        <p>{reviews.length} reported</p>
       </div>
 
       <div className="reviews-list">
         {reviews.length === 0 && <p>No reported reviews</p>}
 
         {reviews.map((item) => (
-          <div className="review-card" key={item.reviewId}>
-            <div className="review-info">
-              <img
-                src="/images/user.png"
-                alt="profile"
-                className="profile-img"
-              />
-              <div>
-                <h3>{item.username}</h3>
-                <p>{item.title}</p>
-                <small>
-                  Reported on:{" "}
-                  {new Date(item.reportedAt).toLocaleString()}
-                </small>
-              </div>
-            </div>
-
-            <div className="review-actions">
-              <button
-                className="accept-btn"
-              >
-                Accept
-              </button>
-
-              <button
-                className="remove-btn"
-              >
-                Remove
-              </button>
+          <div
+            className="review-card"
+            key={item.reviewId}
+            onClick={() => setSelectedReview(item)}
+          >
+            <img src="/images/user.png" alt="profile" className="profile-img" />
+            <div>
+              <h3>{item.username}</h3>
+              <small>
+                Reported on: {new Date(item.reportedAt).toLocaleString()}
+              </small>
             </div>
           </div>
         ))}
+
       </div>
+
+      {/* Modal */}
+      {selectedReview && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+            <h3>Reported Review</h3>
+
+            <p><strong>User:</strong> {selectedReview.username}</p>
+
+            <p><strong>Review:</strong></p>
+            <p className="review-text">{selectedReview.text}</p>
+
+            <p>
+              <strong>Reported at:</strong>{" "}
+              {new Date(selectedReview.reportedAt).toLocaleString()}
+            </p>
+
+            <div className="modal-actions">
+              <button className="accept-btn">Accept</button>
+              <button className="remove-btn">Remove</button>
+              <button className="close-btn" onClick={closeModal}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

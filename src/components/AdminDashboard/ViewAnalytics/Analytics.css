@@ -17,7 +17,9 @@
 }
 
 .stat-box:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(240, 237, 237, 0.18);
+
 }
 
 .stat-number {
