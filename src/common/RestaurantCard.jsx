@@ -11,8 +11,7 @@ import heartIcon from "../assets/heart.png";
 import { useApi } from "../hooks/useAPI.js";
 
 
-export function RestaurantCard({ item, currentUser, role, onToggleFavorite }) {
-
+export function RestaurantCard({ item, currentUser, role }) {
   const { callApi } = useApi();
   const [isSaved, setIsSaved] = useState(false);
     const [showAdminMenu, setShowAdminMenu] = useState(false);
@@ -65,23 +64,18 @@ export function RestaurantCard({ item, currentUser, role, onToggleFavorite }) {
 
           // Check if favorite already
         useEffect(() => {
-  if (!currentUser?.id) return;
-
-  const checkFavorite = async () => {
-    try {
-      const favorites = await callApi("GET", `/favorites/${currentUser.id}`);
-      const exists = favorites.some(
-        fav => Number(fav.restaurantId) === Number(item.restaurantId)
-      );
-      setIsSaved(exists);
-    } catch (err) {
-      console.error("Error checking favorites:", err.message);
-    }
-  };
-
-  checkFavorite();
-}, [currentUser?.id, item.restaurantId]);
-
+            const checkFavorite = async () => {
+            if (!currentUser) return;
+            try {
+                const favorites = await callApi("GET", `/favorites/${currentUser.id}`);
+                const exists = favorites.some(fav => Number(fav.restaurantId) === Number(item.restaurantId));
+                setIsSaved(exists);
+            } catch (err) {
+                console.error("Error checking favorites:", err.message);
+            }
+            };
+            checkFavorite();
+        }, [currentUser, item.restaurantId, callApi]);
 
         // Toggle favorite directly inside card (no redirect)
         const toggleSave = async () => {

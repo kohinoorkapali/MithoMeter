@@ -47,7 +47,8 @@ const PrivateRoutes = ({ token, user, setToken }) => {
 
         <Route path="/own-reviews" element={<OwnReviewsPage currentUser={user} />} />
 
-        <Route path="/restaurant/:id" element={<ViewDetail user={user} />} />
+        <Route path="/restaurant/:id" element={<ViewDetail currentUser={user} />} />
+
         <Route path="/restaurant/:id/add-review" element={<AddReviewPage currentUser={user} />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
