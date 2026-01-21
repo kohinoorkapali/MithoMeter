@@ -28,7 +28,6 @@
 
 /* Center container */
 .register-container {
-    
     margin: 0 200px;
     width: 500px;
     background: black;
@@ -39,7 +38,6 @@
     box-shadow:
     0 0 40px rgba(0, 0, 0, 0.9),
     0 0 20px rgba(0, 0, 0, 0.7);
-
 
     text-align: center;
 }
@@ -58,13 +56,11 @@ h2 {
 /* Change this section */
 .input-group {
     display: flex;
-    flex-direction: column; /* Stack Label and the Input-Area vertically */
+    flex-direction: column;
     align-items: flex-start;
     margin-bottom: 15px;
 }
 
-/* Create a row for just the Label and Input if you want them side-by-side */
-/* OR, if you want the label above the input: */
 .input-group label {
     margin-bottom: 5px;
     color: #f3f3f3;
@@ -73,21 +69,21 @@ h2 {
 }
 
 .input-group input {
-    width: 100%; /* Make input take full container width */
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    box-sizing: border-box; /* Ensures padding doesn't break width */
+    box-sizing: border-box;
 }
 
 /* Style the error message specifically */
 .invalid-feedback {
-    color: #ff4d4d; /* Bright red for visibility on black bg */
+    color: #ff4d4d;
     font-size: 12px;
     margin-top: 4px;
     text-align: left;
     width: 100%;
-    min-height: 15px; /* Keeps layout stable when error appears */
+    min-height: 15px;
 }
 
 /* Button */
@@ -119,3 +115,53 @@ h2 {
     text-decoration: none;
 }
 
+/* ------------------- MEDIA QUERIES ------------------- */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .register-container {
+        margin: 0 80px;
+        width: 450px;
+        padding: 35px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .register-container {
+        width: 90%;
+        margin: 20px;
+        padding: 30px;
+        border-radius: 12px;
+    }
+
+    .logo img {
+        width: 100px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+}
+
+/* Very Small Mobile */
+@media (max-width: 480px) {
+    .register-container {
+        width: 95%;
+        margin: 10px;
+        padding: 25px;
+    }
+
+    .input-group input {
+        padding: 12px;
+    }
+
+    .btn {
+        padding: 14px;
+        font-size: 15px;
+    }
+}
