@@ -1,11 +1,11 @@
-
 * {
   box-sizing: border-box;
 }
 
+/* ================= Desktop (default) ================= */
 
 .landing-container {
-  width: 98vw;
+  width: 100%;
   height: 100vh;
 
   background-image: url("../../assets/Dashboard.png");
@@ -80,4 +80,54 @@
   margin-top: 10px;
   font-size: 18px;
   color: #ccc;
+}
+
+/* ================= Mobile Responsive ================= */
+
+@media (max-width: 768px) {
+
+  .landing-container {
+    padding: 15px;
+    height: auto;
+  }
+
+  /* Navbar */
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .nav-buttons {
+    margin-right: 0;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    margin: 0;
+    margin-top: 40px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  .hero-text p {
+    font-size: 14px;
+  }
+
+  .landing-login-btn,
+  .landing-signin-btn {
+    width: 100%;
+  }
 }
