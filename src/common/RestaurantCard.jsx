@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import './RestaurantCard.css';
 import locationIcon from "../assets/location.png";
 import menuIcon from "../assets/menu.png";
@@ -8,14 +8,18 @@ import cuisineIcon from "../assets/dish.png";
 import openIcon from "../assets/open.png";
 import closedIcon from "../assets/closed.png";
 import heartIcon from "../assets/heart.png";
+import { useApi } from "../hooks/useAPI.js";
 
-export function RestaurantCard({ item, currentUser, role }) {
-    const isOpen = item.isOpen;
-    const [isSaved, setIsSaved] = useState(false);
+
+export function RestaurantCard({ item, currentUser, role, onToggleFavorite }) {
+
+  const { callApi } = useApi();
+  const [isSaved, setIsSaved] = useState(false);
     const [showAdminMenu, setShowAdminMenu] = useState(false);
     const [reviews, setReviews] = useState([]);
-    const toggleSave = () => setIsSaved(!isSaved);
     const toggleAdminMenu = () => setShowAdminMenu(!showAdminMenu);
+    const navigate = useNavigate();
+
 
     // Determine image to display
     const restaurantImage =
@@ -58,6 +62,65 @@ export function RestaurantCard({ item, currentUser, role }) {
         const overallRating = reviews.length > 0
         ? (reviews.reduce((sum, r) => sum + (Number(r.totalRating) || 0), 0) / reviews.length).toFixed(1)
         : "N/A";
+
+          // Check if favorite already
+        useEffect(() => {
+  if (!currentUser?.id) return;
+
+  const checkFavorite = async () => {
+    try {
+      const favorites = await callApi("GET", `/favorites/${currentUser.id}`);
+      const exists = favorites.some(
+        fav => Number(fav.restaurantId) === Number(item.restaurantId)
+      );
+      setIsSaved(exists);
+    } catch (err) {
+      console.error("Error checking favorites:", err.message);
+    }
+  };
+
+  checkFavorite();
+}, [currentUser?.id, item.restaurantId]);
+
+
+        // Toggle favorite directly inside card (no redirect)
+        const toggleSave = async () => {
+        if (!currentUser) {
+            alert("Please login to save restaurants");
+            return;
+        }
+
+        try {
+            if (isSaved) {
+            // remove from favorites
+            await callApi("DELETE", `/favorites/${currentUser.id}/${item.restaurantId}`);
+            setIsSaved(false);
+            } else {
+            // save to favorites
+            await callApi("POST", "/favorites/save", {
+                data: { userId: currentUser.id, restaurantId: item.restaurantId },
+            });
+            setIsSaved(true);
+            }
+
+            // ✅ Call parent callback if provided
+            if (onToggleFavorite) {
+            onToggleFavorite(item.restaurantId);
+            }
+        } catch (err) {
+            console.error("Favorite toggle error:", err.message);
+        }
+        };
+
+        
+
+
+
+
+
+
+
+
 
 
 
