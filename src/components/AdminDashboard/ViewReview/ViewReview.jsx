@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import "./ViewReview.css";
 import { apiRequest } from "../../../utils/api";
 
 export default function ViewReview() {
   const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     fetchReportedReviews();
@@ -19,6 +22,30 @@ export default function ViewReview() {
     }
   };
 
+  const handleApprove = async () => {
+    try {
+      setLoading(true);
+  
+      await apiRequest(
+        "PATCH",
+        `/admin/reported-reviews/${selectedReview.reviewId}/approve`
+      );
+  
+      setReviews((prev) =>
+        prev.filter((r) => r.reviewId !== selectedReview.reviewId)
+      );
+  
+      toast.success("Review approved successfully");
+      closeModal();
+    } catch (err) {
+      toast.error("Failed to approve review");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
   const closeModal = () => {
     setSelectedReview(null);
   };
@@ -69,7 +96,11 @@ export default function ViewReview() {
             </p>
 
             <div className="modal-actions">
-              <button className="accept-btn">Accept</button>
+              <button className="accept-btn" 
+                onClick={handleApprove} 
+                disabled={loading}> 
+                {loading ? "Approving..." : "Approve"}
+              </button>
               <button className="remove-btn">Remove</button>
               <button className="close-btn" onClick={closeModal}>
                 Close
