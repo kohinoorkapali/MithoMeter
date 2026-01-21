@@ -3,7 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./ViewDetail_Bottom.css";
 import personIcon from "../../assets/person.png";
 import likeIcon from "../../assets/like.png";        
-import likedIcon from "../../assets/liked.png"; 
+import likedIcon from "../../assets/liked.png";
+import { toast } from "react-hot-toast"; 
 
 export default function ViewDetail_Bottom({ currentUser }) {
   const { id } = useParams();
@@ -104,6 +105,37 @@ const toggleLike = async (reviewId) => {
   };
 
   const totalReviews = reviews.length;
+
+  async function handleDelete(reviewId) {
+  if (!window.confirm("Are you sure you want to delete this review?")) return;
+
+  // Optional: Show a "Loading" toast
+  const loadingToast = toast.loading("Deleting review...");
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/reviews/${reviewId}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: currentUser.id }),
+    });
+
+    if (res.ok) {
+      // Dismiss loading and show success
+      toast.dismiss(loadingToast);
+      toast.success("Review deleted successfully!");
+      
+      setReviews((prev) => prev.filter((r) => r.reviewId !== reviewId));
+      setOpenMenuId(null);
+    } else {
+      toast.dismiss(loadingToast);
+      const errorData = await res.json();
+      toast.error(errorData.message || "Failed to delete");
+    }
+  } catch (err) {
+    toast.dismiss(loadingToast);
+    toast.error("Network error. Please try again.");
+  }
+}
 
   return (
     <div className="review-page">
@@ -235,9 +267,11 @@ const toggleLike = async (reviewId) => {
                          {/* Case 1: The person logged in IS the author */}
                          {currentUser?.id === review.userId ? (
                              <>
-                               <button>✏️ Edit</button>
-                               <button>🗑 Delete</button>
-                             </>
+                               <button>✏️ Edit</button>                
+                               <button onClick={() => handleDelete(review.reviewId)}>
+                                  🗑 Delete
+                                </button>                           
+                                  </>
                             ) : (
                                 /* Case 2: The person logged in is NOT the author */
                              <button>🚩 Report</button>
