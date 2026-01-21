@@ -28,7 +28,7 @@ export default function ViewReview() {
   
       await apiRequest(
         "PATCH",
-        `/admin/reported-reviews/${selectedReview.reviewId}/approve`
+        `/admin/reported-reviews/${selectedReview.reviewId}`
       );
   
       setReviews((prev) =>
@@ -46,25 +46,34 @@ export default function ViewReview() {
   };
   
   const handleDelete = async () => {
+    if (!selectedReview) return;
+  
     if (!window.confirm("Are you sure you want to delete this review?")) return;
   
     try {
       setLoading(true);
   
-      await apiRequest(
+      const res = await apiRequest(
         "DELETE",
         `/admin/reported-reviews/${selectedReview.reviewId}`
       );
   
+      // Remove from UI list
       setReviews((prev) =>
         prev.filter((r) => r.reviewId !== selectedReview.reviewId)
       );
   
-      toast.success("Review deleted successfully");
+      toast.success(
+        res?.message || "Review deleted and user notified successfully"
+      );
+  
       closeModal();
     } catch (err) {
-      toast.error("Failed to delete review");
-      console.error(err);
+      const msg =
+        err?.response?.data?.message || "Failed to delete review";
+  
+      toast.error(msg);
+      console.error("Delete review error:", err);
     } finally {
       setLoading(false);
     }
