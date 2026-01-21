@@ -45,6 +45,31 @@ export default function ViewReview() {
     }
   };
   
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this review?")) return;
+  
+    try {
+      setLoading(true);
+  
+      await apiRequest(
+        "DELETE",
+        `/admin/reported-reviews/${selectedReview.reviewId}`
+      );
+  
+      setReviews((prev) =>
+        prev.filter((r) => r.reviewId !== selectedReview.reviewId)
+      );
+  
+      toast.success("Review deleted successfully");
+      closeModal();
+    } catch (err) {
+      toast.error("Failed to delete review");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   
   const closeModal = () => {
     setSelectedReview(null);
@@ -101,7 +126,14 @@ export default function ViewReview() {
                 disabled={loading}> 
                 {loading ? "Approving..." : "Approve"}
               </button>
-              <button className="remove-btn">Remove</button>
+              
+              <button
+                className="remove-btn"
+                onClick={handleDelete}
+                disabled={loading}>
+                {loading ? "Deleting..." : "Delete"}
+              </button>
+
               <button className="close-btn" onClick={closeModal}>
                 Close
               </button>
