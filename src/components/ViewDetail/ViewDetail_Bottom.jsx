@@ -230,7 +230,7 @@ const toggleLike = async (reviewId) => {
 
             {showTraveller && (
              <div className="dropdown-menu">
-             {["Friends", "Solo", "Business", "Family"].map(type => (
+             {["All", "Friends", "Solo", "Business", "Family"].map(type => (
              <div
                key={type}
                className="dropdown-item"
