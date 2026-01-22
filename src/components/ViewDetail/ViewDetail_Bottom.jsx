@@ -277,7 +277,12 @@ const toggleLike = async (reviewId) => {
                          {/* Case 1: The person logged in IS the author */}
                          {currentUser?.id === review.userId ? (
                              <>
-                               <button>✏️ Edit</button>                
+                               <button
+                                  onClick={() => navigate(`/restaurant/${id}/add-review?edit=${review.reviewId}`)}
+                                >
+                                  ✏️ Edit
+                                </button>
+             
                                <button onClick={() => handleDelete(review.reviewId)}>
                                   🗑 Delete
                                 </button>                           
