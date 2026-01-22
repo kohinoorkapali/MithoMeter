@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { apiRequest } from "../../utils/api";
 import "./ViewDetail_Bottom.css";
 import personIcon from "../../assets/person.png";
 import likeIcon from "../../assets/like.png";        
@@ -104,6 +106,15 @@ const toggleLike = async (reviewId) => {
   };
 
   const totalReviews = reviews.length;
+  //REPORT BUTTON
+  const reportReview = async (reviewId) =>{
+    try{
+      await apiRequest("POST", `/reviews/${reviewId}/report`);
+      alert("Review reported")
+    }catch(err){
+      toast.error(err.message || "Failed to load reports");
+    }
+  }
 
   return (
     <div className="review-page">
@@ -218,27 +229,13 @@ const toggleLike = async (reviewId) => {
                     <span>{review.likes || 0}</span>
                   </button>
 
-
-                  <div className="menu-wrapper">
-                    <button
-                      className="menu-btn"
-                      onClick={() =>
-                        setOpenMenuId(
-                          openMenuId === review.reviewId ? null : review.reviewId
-                        )
-                      }
-                    >
-                      ⋯
-                    </button>
-
-                    {openMenuId === review.reviewId && (
-                      <div className="menu-dropdown">
-                        <button>✏️ Edit</button>
-                        <button>🗑 Delete</button>
-                        <button>🚩 Report</button>
-                      </div>
-                    )}
-                  </div>
+                  {openMenuId === review.reviewId && (
+                    <div className="menu-dropdown">
+                      <button>✏️ Edit</button>
+                      <button>🗑 Delete</button>
+                      <button onClick={() => reportReview(review.reviewId)}>🚩 Report </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
