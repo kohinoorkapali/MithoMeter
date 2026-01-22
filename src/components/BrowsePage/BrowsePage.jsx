@@ -124,91 +124,78 @@ const fetchFilteredRestaurants = useCallback(async () => {
                 {/* Dropdowns */}
                 <div className="dropdown-line">
 
-                    {/* CUISINE */}
+                   {/* CUISINE */}
                     <DropdownFilter
-                        title="Cuisine"
-                        options={[
-                            { label: "Nepali", value: "Nepali" },
-                            { label: "Indian", value: "Indian" },
-                            { label: "Chinese", value: "Chinese" },
-                            { label: "Continental", value: "Continental" }
-                        ]}
-                        selectedValues = {filters.cuisine}
-                        onChange={(values)=>
-                            setFilters(prev=>({...prev, cuisine:values}))
-                        }
+                    title="Cuisine"
+                    options={[
+                        { label: "Nepali", value: "Nepali" },
+                        { label: "Indian", value: "Indian" },
+                        { label: "Chinese", value: "Chinese" },
+                        { label: "Continental", value: "Continental" }
+                    ]}
+                    selectedValues={filters.cuisine}
+                    onChange={(values) =>
+                        setFilters(prev => ({ ...prev, cuisine: values }))
+                    }
                     />
-                    
 
                     {/* RATINGS */}
                     <DropdownFilter
-                        title="Ratings"
-                        options={[5,4,3,2,1].map(r => ({
-                            label: "⭐".repeat(r),
-                            value: r
-                        }))}
-                        selectedValues={filters.ratings}
-                        onChange={(values) =>
-                            setFilters(prev => ({ ...prev, ratings: values }))
-                        }
+                    title="Ratings"
+                    options={[5, 4, 3, 2, 1].map(r => ({
+                        label: "⭐".repeat(r),
+                        value: r
+                    }))}
+                    selectedValues={filters.ratings}
+                    onChange={(values) =>
+                        setFilters(prev => ({ ...prev, ratings: values }))
+                    }
                     />
 
                     {/* PRICE */}
                     <DropdownFilter
-                        title="Price"
-                        options={[
-                            {label:"Budget", value:"cheap"},
-                            { label: "Moderate", value: "mid" },
-                            { label: "Premium", value: "expensive" }
-                        ]}
-                        selectedValues={filters.price}
-                        onChange={(values)=>
-                            setFilters(prev=> ({...prev, price: values}))
-                        }
+                    title="Price"
+                    options={[
+                        { label: "Budget", value: "cheap" },
+                        { label: "Moderate", value: "mid" },
+                        { label: "Premium", value: "expensive" }
+                    ]}
+                    selectedValues={filters.price}
+                    onChange={(values) =>
+                        setFilters(prev => ({ ...prev, price: values }))
+                    }
                     />
 
                     {/* MOOD */}
                     <DropdownFilter
-                        title="Mood"
-                        options={[
-                            {label:"Cozy", value:"Cozy"},
-                            { label: "Romantic", value: "Romantic" },
-                            { label: "Family", value: "Family" },
-                            { label: "Friends", value: "Friends" }
-                        ]}
-                        selectedValues={filters.mood}
-                        onChange={(values)=>
-                            setFilters(prev=> ({...prev, mood: values}))
-                        }
+                    title="Mood"
+                    options={[
+                        { label: "Cozy", value: "Cozy" },
+                        { label: "Romantic", value: "Romantic" },
+                        { label: "Family", value: "Family" },
+                        { label: "Friends", value: "Friends" }
+                    ]}
+                    selectedValues={filters.mood}
+                    onChange={(values) =>
+                        setFilters(prev => ({ ...prev, mood: values }))
+                    }
                     />
 
                     {/* AMENITIES */}
                     <DropdownFilter
-                        title="Amenities"
-                        options={[
-                            {label:"Parking", value:"Parking"},
-                            { label: "Wi-Fi", value: "Wi-Fi" },
-                            { label: "Outdoor Seating", value: "Outdoor Seating" },
-                            { label: "Live Music", value: "Live Music" }
-                        ]}
-                        selectedValues={filters.amenities}
-                        onChange={(values)=>
-                            setFilters(prev=> ({...prev, amenities: values}))
-                        }
+                    title="Amenities"
+                    options={[
+                        { label: "Parking", value: "Parking" },
+                        { label: "Wi-Fi", value: "Wi-Fi" },
+                        { label: "Outdoor Seating", value: "Outdoor Seating" },
+                        { label: "Live Music", value: "Live Music" }
+                    ]}
+                    selectedValues={filters.amenities}
+                    onChange={(values) =>
+                        setFilters(prev => ({ ...prev, amenities: values }))
+                    }
                     />
-
-                    {/* OPEN/CLOSED */}
-                    <DropdownFilter
-                        title="Open"
-                        options={[
-                            {label:"Open", value:"Open"},
-                            { label: "Closed", value: "Closed" }
-                        ]}
-                        selectedValues={filters.open}
-                        onChange={(values)=>
-                            setFilters(prev=> ({...prev, open: values}))
-                        }
-                    />
+                        
 
                     {/* CLEAR BUTTON */}
                     {hasActiveFilters && (
