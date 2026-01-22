@@ -80,14 +80,15 @@ export default function ViewUser() {
               >
                 <div className="user-info">
                   <img
-                    src={
-                      u.profileImage
-                        ? `http://localhost:5000/${u.profileImage}`
-                        : "/images/user.png"
-                    }
-                    alt="user"
-                    className="profile-img"
-                  />
+                  src={
+                    u.profile_image
+                      ? `http://localhost:5000/uploads/profile/${u.profile_image}`
+                      : "/images/user.png"
+                  }
+                  alt="user"
+                  className="profile-img"
+                />
+
 
                   <div>
                     <h3>{u.username}</h3>
