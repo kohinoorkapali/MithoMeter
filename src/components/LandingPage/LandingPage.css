@@ -1,8 +1,8 @@
-
 * {
   box-sizing: border-box;
 }
 
+/* ================= Desktop (default) ================= */
 
 .landing-container {
   width: 100%;
@@ -28,19 +28,6 @@
 
 .logo {
   width: 100px;
-}
-.nav-left {
-  flex: 1;
-}
-.nav-center {
-  flex: 2;
-  display: flex;
-  justify-content: center;
-}
-.nav-right {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
 }
 
 .nav-menu {
@@ -93,4 +80,60 @@
   margin-top: 10px;
   font-size: 18px;
   color: #ccc;
+}
+
+/* ================= Mobile Responsive ================= */
+@media (max-width: 768px) {
+
+  .landing-container {
+    padding: 15px;
+    min-height: 100vh; /* ensures container always fills viewport height */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* Navbar */
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* center nav items on mobile */
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .nav-buttons {
+    margin-right: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    margin: 0;
+    margin-top: 40px;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px; /* add spacing between image/hero text if needed */
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  .hero-text p {
+    font-size: 14px;
+  }
+
+  .landing-login-btn,
+  .landing-signin-btn {
+    width: 100%;
+  }
 }
