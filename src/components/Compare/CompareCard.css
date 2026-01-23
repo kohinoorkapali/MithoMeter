@@ -1,9 +1,10 @@
 
 .compare-card {
-  width: 350px;
+  width: 100%;
+  max-width: 420px;
   padding: 16px;
   border-radius: 10px;
-  background: transparent;
+  background: olive;
   border: 2px solid transparent;
   flex: 1 1 calc(50% - 15px); /* 50% width minus half gap */
 }
@@ -16,30 +17,41 @@
   border: 2px solid #1da1f2;
 }
 
+.compare-card .line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  margin: 6px 0;
+}
+
+.compare-card .icon {
+  width: 24px;
+  height: 24px;
+}
+
 .rank {
-  font-size: 13px;
+  font-size: 18px;
   margin-bottom: 8px;
 }
-
-/* IMAGES */
-.image-row {
-  display: flex;
-  gap: 6px;
+/* IMAGE CONTAINER */
+.compare-image {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 12px;
 }
 
-.image-row img {
-  width: 50%;
-  height: 140px;
+.compare-image img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 6px;
 }
 
 /* TEXT */
-.rating,
-.price,
-.cuisine,
-.location {
-  font-size: 14px;
+.rating {
+  font-size: 16px;
   margin: 4px 0;
 }
 

@@ -1,7 +1,32 @@
+.compare-page {
+  max-width: 1100px;
+  margin: auto;
+  padding: 30px 20px;
+  text-align: center;
+}
 
-/* CARDS */
-.cards-container {
+/* GRID FOR SIDE-BY-SIDE */
+.compare-grid {
   display: flex;
   gap: 30px;
-  padding: 40px 80px;
+  justify-content: center;
+  align-items: stretch;
+  margin: 30px 0;
+  flex-wrap: wrap; /* mobile support */
+}
+
+/* BUTTON */
+.back-to-browse {
+  padding: 12px 25px;
+  background: #ff7a00;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.back-to-browse:hover {
+  background: #e56d00;
 }

@@ -1,19 +1,38 @@
-import { Header } from '../Header.jsx';
-import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { CompareCard } from "../Compare/CompareCard.jsx";
 import "./Compare.css";
-import { CompareCard } from './CompareCard.jsx';
+import { Header } from "../Header.jsx";
 
+export default function ComparePage() {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-export default function Compare() {
+  const { selectedRestaurants } = location.state || {};
+
+  if (!selectedRestaurants || selectedRestaurants.length !== 2) {
+    return <p>Please select 2 restaurants to compare.</p>;
+  }
+
   return (
     <>
-      <Header />
+      <Header/>
+      <div className="compare-page">
 
-      {/* CARD CONTAINER */}
-      <div className="cards-container">
-        <CompareCard />
-        <CompareCard />
+      {/* Cards Row */}
+      <div className="compare-grid">
+        <CompareCard item={selectedRestaurants[0]} />
+        <CompareCard item={selectedRestaurants[1]} />
       </div>
+
+      {/* Back Button */}
+      <button
+        className="back-to-browse"
+        onClick={() => navigate("/browse")}
+      >
+        Compare Other Restaurants
+      </button>
+
+    </div>
     </>
   );
 }

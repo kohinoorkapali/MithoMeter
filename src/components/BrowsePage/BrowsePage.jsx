@@ -217,9 +217,21 @@ const currentItems = filteredItems.slice(startIndex, endIndex);
                 {selected.length === 2 && (
                 <div className="compare-bar">
                     <button
-                    onClick={() =>
-                        navigate(`/compare/${selected[0]}/${selected[1]}`)
-                    }
+                    type="button"   // ✅ VERY IMPORTANT
+                    onClick={(e) => {
+                        e.preventDefault(); // stop reload
+                        e.stopPropagation(); // stop bubbling
+
+                        const selectedData = currentItems.filter((item) =>
+                        selected.includes(item.restaurantId)
+                        );
+
+                        navigate("/compare", {
+                        state: {
+                            selectedRestaurants: selectedData,
+                        },
+                        });
+                    }}
                     >
                     Compare Restaurants
                     </button>

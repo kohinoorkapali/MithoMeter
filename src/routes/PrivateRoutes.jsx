@@ -40,7 +40,7 @@ const PrivateRoutes = ({ token, user, setToken }) => {
 
         <Route path="/browse" element={<BrowsePage currentUser={user} />} />
         <Route
-          path="/compare/:restaurantId1/:restaurantId2"
+          path="/compare"
           element={<ComparePage currentUser={user} />}
         />
 
