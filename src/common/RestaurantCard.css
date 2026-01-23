@@ -1,14 +1,15 @@
 .restaurant-card {
-    display: flex;
-    background: linear-gradient(to right, #FFF7EC 0%, #FFE2C6 100%);
-    width: 95%;
-    border-radius: 16px 200px 200px 16px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    gap: 20px;
-    align-items: flex-start; /* align top of card */
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
+  position: relative;   /* REQUIRED */
+  display: flex;
+  background: linear-gradient(to right, #FFF7EC 0%, #FFE2C6 100%);
+  width: 95%;
+  border-radius: 16px 200px 200px 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
 }
 
 /* Left Image */
@@ -19,6 +20,34 @@
     border-radius: 12px;
     transition: all 0.3s ease;
 }
+.compare-select {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: white;
+  border: 2px solid #ff7a00;
+  color: #ff7a00;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+}
+.compare-select.selected {
+  background: #ff7a00;
+  color: white;
+}
+
+.compare-select:hover {
+  background: #ff7a00;
+  color: white;
+}
+
 
 /* Middle Content */
 .card-content {

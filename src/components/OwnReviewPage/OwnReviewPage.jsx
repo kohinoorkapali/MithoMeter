@@ -4,8 +4,12 @@ import { apiRequest } from "../../utils/api.js";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { Spinner, Card } from "react-bootstrap";
+import useNotifications from '../../hooks/useNotifications.js';
 
 export default function OwnReviewsPage({ currentUser }) {
+  //Notification
+  useNotifications();
+
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 

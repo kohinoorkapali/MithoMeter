@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./RestaurantCard.css";
 import locationIcon from "../assets/location.png";
 import menuIcon from "../assets/menu.png";
@@ -8,12 +8,14 @@ import cuisineIcon from "../assets/dish.png";
 import heartIcon from "../assets/heart.png";
 import { useApi } from "../hooks/useAPI.js";
 
-export function RestaurantCard({ item, currentUser, role, onToggleFavorite }) {
+export function RestaurantCard({
+   item, currentUser, role, 
+   onToggleFavorite, isSelected, onSelect 
+  }) {
   const { callApi } = useApi();
   const [isSaved, setIsSaved] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [reviews, setReviews] = useState([]);
-  const navigate = useNavigate();
 
   const toggleAdminMenu = () => setShowAdminMenu(!showAdminMenu);
 
@@ -133,6 +135,15 @@ export function RestaurantCard({ item, currentUser, role, onToggleFavorite }) {
           src={restaurantImage}
           alt={item.name || "Restaurant"}
         />
+      </div>
+      <div
+        className={`compare-select ${isSelected ? "selected" : ""}`}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onSelect(item.restaurantId);
+        }}>
+        {isSelected ? "✔" : "○"}
       </div>
 
       {/* MIDDLE CONTENT */}
