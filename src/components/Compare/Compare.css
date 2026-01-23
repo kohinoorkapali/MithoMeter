@@ -1,32 +1,76 @@
+/* Page */
 .compare-page {
-  max-width: 1100px;
-  margin: auto;
-  padding: 30px 20px;
-  text-align: center;
+  background: black;
+  min-height: 100vh;
+  padding: 50px 20px;
+  color: white;
 }
 
-/* GRID FOR SIDE-BY-SIDE */
-.compare-grid {
+/* Wrapper */
+.compare-wrapper {
+  position: relative;
+
   display: flex;
-  gap: 30px;
   justify-content: center;
   align-items: stretch;
-  margin: 30px 0;
-  flex-wrap: wrap; /* mobile support */
+
+  gap: 80px; 
+  margin-top: 50px;
+}
+.compare-card:first-child {
+  margin-right: -25px; /* smaller overlap */
 }
 
-/* BUTTON */
+.compare-card:last-child {
+  margin-left: -25px;
+}
+/* 
+/* VS TEXT */
+.vs-text {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-size: 100px;
+  font-weight: 900;
+  letter-spacing: 10px;
+
+  color: #e60000; /* Clean red */
+
+  text-transform: uppercase;
+
+  z-index: 10;
+
+  text-shadow:
+    2px 2px 6px rgba(0,0,0,0.6); /* soft depth */
+
+  pointer-events: none;
+}
+ */
+
+/* Back Button */
 .back-to-browse {
-  padding: 12px 25px;
-  background: #ff7a00;
-  color: white;
-  border: none;
+  margin: 50px auto 0;
+  display: block;
+
+  background: #ff6600;
+  color: black;
+
+  padding: 12px 28px;
   border-radius: 10px;
-  font-size: 16px;
+
+  font-weight: bold;
+  font-size: 15px;
+
+  border: none;
   cursor: pointer;
+
   transition: 0.3s;
 }
 
 .back-to-browse:hover {
-  background: #e56d00;
+  background: #ffa733;
+  transform: translateY(-2px);
 }

@@ -19,10 +19,19 @@ export default function ComparePage() {
       <div className="compare-page">
 
       {/* Cards Row */}
-      <div className="compare-grid">
+      <div className="compare-wrapper">
+
+        {/* Left Card */}
         <CompareCard item={selectedRestaurants[0]} />
+
+        {/* VS Badge
+        <div className="vs-text">VS</div> */}
+
+        {/* Right Card */}
         <CompareCard item={selectedRestaurants[1]} />
+
       </div>
+
 
       {/* Back Button */}
       <button
