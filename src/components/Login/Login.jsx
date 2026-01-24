@@ -109,8 +109,9 @@ export default function Login({ setToken, setUser }) {
             Don't have an account? <Link to="/register">Register here</Link>
           </div>
           <div className="forget">
-            <span>Forget Password?</span>
+            <Link to="/forgot-password">Forgot Password?</Link>
           </div>
+
         </form>
       </div>
     </div>
