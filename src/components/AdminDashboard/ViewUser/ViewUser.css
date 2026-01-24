@@ -28,21 +28,6 @@
   margin: 4px 0 0;
 }
 
-/* Dropdown */
-.status-dropdown {
-  margin-top: 10px;
-}
-
-.dropdown-btn {
-  background: transparent;
-  border: 2px solid #ffcc80;
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-size: 16px;
-  cursor: pointer;
-  color: #1c1c1c;
-}
-
 .circle-btn {
   width: 45px;
   height: 45px;
@@ -84,18 +69,27 @@
 }
 
 /* User info */
-.user-info {
-  display: flex;
-  gap: 15px;
-  align-items: center;
+.user-card .user-info {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
 }
 
-/* Profile image */
-.profile-img {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  object-fit: cover;
+/* Stack username + joined date vertically */
+.user-card .user-info > div {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+/* Profile image size */
+.user-card .user-info .profile-img {
+  width: 45px !important;
+  height: 45px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  flex-shrink: 0 !important;
 }
 
 /* Name */
@@ -108,9 +102,9 @@
 
 /* Date */
 .user-info p {
-  margin: 12px 0 0;
+  margin: 2px 0 0;
   color: #777;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 /* Ban button */

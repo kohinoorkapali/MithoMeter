@@ -28,11 +28,7 @@ export default function ViewUser() {
     }
   };
 
-  // TOGGLE ban / unban (local to this page)
-  const toggleUserStatus = (id) => {
-    return apiRequest("PATCH", `/users/${id}/toggle-status`);
-  };
-
+  // TOGGLE ban / unban 
   const handleToggleBan = async (id) => {
     const toastId = toast.loading("Updating user status...");
   
@@ -107,8 +103,6 @@ export default function ViewUser() {
                   alt="user"
                   className="profile-img"
                 />
-
-
                   <div>
                     <h3>{u.username}</h3>
                     <p>
