@@ -1,4 +1,5 @@
 import { Header } from '../Header.jsx';
+import { useNavigate} from "react-router-dom";
 import { RestaurantCard } from '../../common/RestaurantCard.jsx';
 import { DropdownFilter } from "../../common/DropdownFilter.jsx";
 import { Pagination } from "../../common/Pagination.jsx";
@@ -10,15 +11,13 @@ import search from "../../assets/search.png";
 
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import useNotifications from '../../hooks/useNotifications.js';
 
 export default function BrowsePage({ currentUser })  {
-    //Notification
-    useNotifications();
-
-    const [items, setItems] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1); 
-    const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selected, setSelected] = useState([]);
 
   const ITEMS_PER_PAGE = 10;
 
@@ -58,6 +57,19 @@ const currentItems = filteredItems.slice(startIndex, endIndex);
   function clearAllFilters() {
     setFilters(initialFilters);
   }
+
+  const toggleSelect = (id) => {
+    setSelected((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((x) => x !== id);
+      }
+  
+      if (prev.length === 2) return prev;
+  
+      return [...prev, id];
+    });
+  };
+  
 
   return (
     <>
@@ -194,11 +206,38 @@ const currentItems = filteredItems.slice(startIndex, endIndex);
                         item={item}
                         role={currentUser?.role}      
                         currentUser={currentUser}
+                        isSelected={selected.includes(item.restaurantId)}
+                        onSelect={toggleSelect}
                         />
                     ))
                     : <p>No restaurants available</p>
                 }
                 </div>
+
+                {selected.length === 2 && (
+                <div className="compare-bar">
+                    <button
+                    type="button"   // ✅ VERY IMPORTANT
+                    onClick={(e) => {
+                        e.preventDefault(); // stop reload
+                        e.stopPropagation(); // stop bubbling
+
+                        const selectedData = currentItems.filter((item) =>
+                        selected.includes(item.restaurantId)
+                        );
+
+                        navigate("/compare", {
+                        state: {
+                            selectedRestaurants: selectedData,
+                        },
+                        });
+                    }}
+                    >
+                    Compare Restaurants
+                    </button>
+                </div>
+                )}
+
 
                 {/* Pagination */}
                 <Pagination

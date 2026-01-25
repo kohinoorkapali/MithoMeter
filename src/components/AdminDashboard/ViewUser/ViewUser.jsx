@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./ViewUser.css";
 import toast from "react-hot-toast";
-import { apiRequest } from "../../../utils/api";
+import { apiRequest } from "../../../utils/api.js";
+import { DropdownFilter } from "../../../common/DropdownFilter.jsx";
 
 export default function ViewUser() {
   const [users, setUsers] = useState([]);
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const statusOptions = [
+    { label: "Active", value: "active" },
+    { label: "Banned", value: "banned" },
+  ];
+  
 
   // GET all users (local to this page)
   const getAllUsers = async () => {
@@ -20,11 +28,7 @@ export default function ViewUser() {
     }
   };
 
-  // TOGGLE ban / unban (local to this page)
-  const toggleUserStatus = (id) => {
-    return apiRequest("PATCH", `/users/${id}/toggle-status`);
-  };
-
+  // TOGGLE ban / unban 
   const handleToggleBan = async (id) => {
     const toastId = toast.loading("Updating user status...");
   
@@ -61,16 +65,27 @@ export default function ViewUser() {
           <p>{users.length} users</p>
         </div>
 
-        <div className="status-dropdown">
-          <button className="dropdown-btn">Status ▼</button>
-        </div>
+        <DropdownFilter
+          title="Status"
+          options={statusOptions}
+          selectedValues={selectedStatuses}
+          onChange={setSelectedStatuses}
+        />
       </div>
 
       <div className="user-list">
         {loading && <p>Loading users...</p>}
 
         {!loading &&
-          users.map((u) => {
+          users
+          .filter((u) => {
+            // If nothing selected → show all
+            if (selectedStatuses.length === 0) return true;
+        
+            return selectedStatuses.includes(u.status);
+          })
+          .map((u) => {
+        
             const isBanned = u.status === "banned";
 
             return (
@@ -88,8 +103,6 @@ export default function ViewUser() {
                   alt="user"
                   className="profile-img"
                 />
-
-
                   <div>
                     <h3>{u.username}</h3>
                     <p>

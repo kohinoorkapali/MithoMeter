@@ -2,13 +2,20 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import "./ViewReview.css";
 import { apiRequest } from "../../../utils/api";
+import { DropdownFilter } from "../../../common/DropdownFilter.jsx";
 
 export default function ViewReview() {
   const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
 
-
+  const statusOptions = [
+    { label: "Pending", value: "pending" },   // reported, not resolved
+    { label: "Approved", value: "approved" }, // approved/visible
+    { label: "Hidden", value: "hidden" },     // removed
+  ];
+  
   useEffect(() => {
     fetchReportedReviews();
   }, []);
@@ -31,11 +38,20 @@ export default function ViewReview() {
         `/admin/reported-reviews/${selectedReview.reviewId}`
       );
   
+      // Update flags in UI (instead of removing)
       setReviews((prev) =>
-        prev.filter((r) => r.reviewId !== selectedReview.reviewId)
+        prev.map((r) =>
+          r.reviewId === selectedReview.reviewId
+            ? {
+                ...r,
+                isReported: false,
+                isHidden: false,
+              }
+            : r
+        )
       );
   
-      toast.success("Review approved successfully");
+      toast.success("Review approved");
       closeModal();
     } catch (err) {
       toast.error("Failed to approve review");
@@ -48,62 +64,117 @@ export default function ViewReview() {
   const handleDelete = async () => {
     if (!selectedReview) return;
   
-    if (!window.confirm("Are you sure you want to delete this review?")) return;
+    if (!window.confirm("Hide this review?")) return;
   
     try {
       setLoading(true);
   
-      const res = await apiRequest(
+      await apiRequest(
         "DELETE",
         `/admin/reported-reviews/${selectedReview.reviewId}`
       );
   
-      // Remove from UI list
+      // Update flags in UI
       setReviews((prev) =>
-        prev.filter((r) => r.reviewId !== selectedReview.reviewId)
+        prev.map((r) =>
+          r.reviewId === selectedReview.reviewId
+            ? {
+                ...r,
+                isHidden: true,
+                isReported: false,
+              }
+            : r
+        )
       );
   
-      toast.success(
-        res?.message || "Review deleted and user notified successfully"
-      );
-  
+      toast.success("Review hidden");
       closeModal();
     } catch (err) {
-      const msg =
-        err?.response?.data?.message || "Failed to delete review";
-  
-      toast.error(msg);
-      console.error("Delete review error:", err);
+      toast.error("Failed to hide review");
+      console.error(err);
     } finally {
       setLoading(false);
     }
-  };
-  
+  };  
   
   const closeModal = () => {
     setSelectedReview(null);
   };
 
   return (
-    <div className="reviews-page">
+    <div className="view-reviews-page">
       {/* Header */}
       <div className="reviews-header">
-        <h2>Reported Reviews</h2>
-        <p>{reviews.length} reported</p>
+        <div>
+          <h2>Reported Reviews</h2>
+          <p>{reviews.length} reported</p>
+        </div>
+        <DropdownFilter
+          title="Status"
+          options={statusOptions}
+          selectedValues={selectedStatuses}
+          onChange={setSelectedStatuses}
+        />
       </div>
+
 
       <div className="reviews-list">
         {reviews.length === 0 && <p>No reported reviews</p>}
 
-        {reviews.map((item) => (
+        {reviews
+        .filter((r) => {
+          // No filter → show all
+          if (selectedStatuses.length === 0) return true;
+
+          return selectedStatuses.some((status) => {
+            if (status === "pending") {
+              return r.isReported === true && r.isHidden === false;
+            }
+
+            if (status === "approved") {
+              return r.isReported === false && r.isHidden === false;
+            }
+
+            if (status === "hidden") {
+              return r.isHidden === true;
+            }
+
+            return false;
+          });
+        })
+        .map((item) => (
           <div
             className="review-card"
             key={item.reviewId}
             onClick={() => setSelectedReview(item)}
           >
-            <img src="/images/user.png" alt="profile" className="profile-img" />
+            <img
+              src={
+                item.user?.profile_image
+                  ? `http://localhost:5000/uploads/profile/${item.user.profile_image}`
+                  : "/images/user.png"
+              }
+              alt={item.user?.username || "User"}
+              className="profile-img"
+            />
+
+            <h3>{item.user?.username}</h3>
+            
             <div>
               <h3>{item.username}</h3>
+              <span className={`status-badge ${
+                item.isHidden
+                  ? "hidden"
+                  : item.isReported
+                  ? "pending"
+                  : "approved"
+              }`}>
+                {item.isHidden
+                  ? "Hidden"
+                  : item.isReported
+                  ? "Pending"
+                  : "Approved"}
+              </span>
               <small>
                 Reported on: {new Date(item.reportedAt).toLocaleString()}
               </small>

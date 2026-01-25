@@ -1,7 +1,76 @@
+/* Page */
+.compare-page {
+  background: black;
+  min-height: 100vh;
+  padding: 50px 20px;
+  color: white;
+}
 
-/* CARDS */
-.cards-container {
+/* Wrapper */
+.compare-wrapper {
+  position: relative;
+
   display: flex;
-  gap: 30px;
-  padding: 40px 80px;
+  justify-content: center;
+  align-items: stretch;
+
+  gap: 80px; 
+  margin-top: 50px;
+}
+.compare-card:first-child {
+  margin-right: -25px; /* smaller overlap */
+}
+
+.compare-card:last-child {
+  margin-left: -25px;
+}
+/* 
+/* VS TEXT */
+.vs-text {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-size: 100px;
+  font-weight: 900;
+  letter-spacing: 10px;
+
+  color: #e60000; /* Clean red */
+
+  text-transform: uppercase;
+
+  z-index: 10;
+
+  text-shadow:
+    2px 2px 6px rgba(0,0,0,0.6); /* soft depth */
+
+  pointer-events: none;
+}
+ */
+
+/* Back Button */
+.back-to-browse {
+  margin: 50px auto 0;
+  display: block;
+
+  background: #ff6600;
+  color: black;
+
+  padding: 12px 28px;
+  border-radius: 10px;
+
+  font-weight: bold;
+  font-size: 15px;
+
+  border: none;
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.back-to-browse:hover {
+  background: #ffa733;
+  transform: translateY(-2px);
 }
