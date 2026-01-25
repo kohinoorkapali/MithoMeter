@@ -13,6 +13,15 @@ export default function ViewDetail_Bottom({ currentUser }) {
 
   const [openMenuId, setOpenMenuId] = useState(null);
   const [reviews, setReviews] = useState([]);
+  
+  const [showTraveller, setShowTraveller] = useState(false);
+const [showRating, setShowRating] = useState(false);
+const [showTime, setShowTime] = useState(false);
+
+const [travellerFilter, setTravellerFilter] = useState("All");
+const [ratingSort, setRatingSort] = useState("");
+const [timeSort, setTimeSort] = useState("");
+
 
   // Fetch reviews
   const fetchReviews = async () => {
@@ -126,7 +135,7 @@ const toggleLike = async (reviewId) => {
     const res = await fetch(`http://localhost:5000/api/reviews/${reviewId}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: currentUser.id }),
+      body: JSON.stringify({ userId: currentUser.id }),m
     });
 
     if (res.ok) {
@@ -146,6 +155,21 @@ const toggleLike = async (reviewId) => {
     toast.error("Network error. Please try again.");
   }
 }
+ const filteredReviews = [...reviews]
+  .filter((r) => {
+    if (travellerFilter === "All") return true;
+    return r.visitCompany === travellerFilter;
+  })
+  .sort((a, b) => {
+    if (ratingSort === "Highest") return b.totalRating - a.totalRating;
+    if (ratingSort === "Lowest") return a.totalRating - b.totalRating;
+
+    if (timeSort === "Newest") return new Date(b.visitDate) - new Date(a.visitDate);
+    if (timeSort === "Oldest") return new Date(a.visitDate) - new Date(b.visitDate);
+
+    return 0;
+  });
+
 
   return (
     <div className="review-page">
@@ -208,11 +232,63 @@ const toggleLike = async (reviewId) => {
       <h3>Reviews</h3>
 
       <div className="filters">
-        <div className="filter-group">
-          <button>Traveller ▼</button>
-          <button>Ratings ▼</button>
-          <button>Time ▼</button>
-        </div>
+       <div className="filter-group">
+
+         {/* Traveller */}
+          <div className="dropdown-wrapper">
+           <button onClick={() => setShowTraveller(!showTraveller)}>Traveller ▼</button>
+
+            {showTraveller && (
+             <div className="dropdown-menu">
+             {["All", "Friends", "Solo", "Business", "Family"].map(type => (
+             <div
+               key={type}
+               className="dropdown-item"
+               onClick={() => {
+                  setTravellerFilter(type);
+                  setShowTraveller(false);
+                }}
+              >
+                {type}
+              </div>
+            ))}
+          </div>
+        )}
+       </div>
+
+       {/* Ratings */}
+       <div className="dropdown-wrapper">
+         <button onClick={() => setShowRating(!showRating)}>Ratings ▼</button>
+
+         {showRating && (
+           <div className="dropdown-menu">
+            <div className="dropdown-item" onClick={() => { setRatingSort("Highest"); setShowRating(false); }}>
+              Highest rating
+            </div>
+            <div className="dropdown-item" onClick={() => { setRatingSort("Lowest"); setShowRating(false); }}>
+              Lowest rating
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Time */}
+       <div className="dropdown-wrapper">
+       <button onClick={() => setShowTime(!showTime)}>Time ▼</button>
+
+        {showTime && (
+          <div className="dropdown-menu">
+            <div className="dropdown-item" onClick={() => { setTimeSort("Newest"); setShowTime(false); }}>
+              Newest
+            </div>
+            <div className="dropdown-item" onClick={() => { setTimeSort("Oldest"); setShowTime(false); }}>
+              Oldest
+            </div>
+          </div>
+        )}
+       </div>
+
+       </div>
 
         <button
           className="write-review"
@@ -225,8 +301,7 @@ const toggleLike = async (reviewId) => {
       {reviews.length === 0 ? (
         <p>No reviews yet. Be the first one!</p>
       ) : (
-        reviews.map((review) => {
-          // <-- DEBUG LOGGING HERE
+        filteredReviews.map((review) => {
            console.log("Full Review Data:", review);
           return (
             <div className="review-card" key={review.reviewId}>
@@ -288,7 +363,6 @@ const toggleLike = async (reviewId) => {
                                 </button>                           
                                   </>
                             ) : (
-                                /* Case 2: The person logged in is NOT the author */
                              <button>🚩 Report</button>
                            )}
                       </div>
