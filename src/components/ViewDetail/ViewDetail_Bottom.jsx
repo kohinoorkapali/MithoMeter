@@ -135,7 +135,7 @@ const toggleLike = async (reviewId) => {
     const res = await fetch(`http://localhost:5000/api/reviews/${reviewId}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: currentUser.id }),m
+      body: JSON.stringify({ userId: currentUser.id }),
     });
 
     if (res.ok) {
@@ -155,20 +155,20 @@ const toggleLike = async (reviewId) => {
     toast.error("Network error. Please try again.");
   }
 }
- const filteredReviews = [...reviews]
-  .filter((r) => {
-    if (travellerFilter === "All") return true;
-    return r.visitCompany === travellerFilter;
-  })
+const filteredReviews = [...reviews]
+  .filter(r => travellerFilter === "All" || r.visitCompany === travellerFilter)
   .sort((a, b) => {
     if (ratingSort === "Highest") return b.totalRating - a.totalRating;
     if (ratingSort === "Lowest") return a.totalRating - b.totalRating;
-
     if (timeSort === "Newest") return new Date(b.visitDate) - new Date(a.visitDate);
     if (timeSort === "Oldest") return new Date(a.visitDate) - new Date(b.visitDate);
 
-    return 0;
+    // default newest first
+    return new Date(b.visitDate) - new Date(a.visitDate);
   });
+
+
+
 
 
   return (
@@ -256,37 +256,50 @@ const toggleLike = async (reviewId) => {
         )}
        </div>
 
-       {/* Ratings */}
-       <div className="dropdown-wrapper">
-         <button onClick={() => setShowRating(!showRating)}>Ratings ▼</button>
+        {/* Ratings */}
+        <div className="dropdown-wrapper">
+          <button onClick={() => setShowRating(!showRating)}>Ratings ▼</button>
+          {showRating && (
+            <div className="dropdown-menu">
+              <div
+                className="dropdown-item"
+                onClick={() => { setRatingSort("Highest"); setTimeSort(""); setShowRating(false); }}
+              >
+                Highest rating
+              </div>
+              <div
+                className="dropdown-item"
+                onClick={() => { setRatingSort("Lowest"); setTimeSort(""); setShowRating(false);
+                }}
+              >
+                Lowest rating
+              </div>
+            </div>
+          )}
+        </div>
 
-         {showRating && (
-           <div className="dropdown-menu">
-            <div className="dropdown-item" onClick={() => { setRatingSort("Highest"); setShowRating(false); }}>
-              Highest rating
+        {/* Time */}
+        <div className="dropdown-wrapper">
+          <button onClick={() => setShowTime(!showTime)}>Time ▼</button>
+          {showTime && (
+            <div className="dropdown-menu">
+              <div
+                className="dropdown-item"
+                onClick={() => {setTimeSort("Newest"); setRatingSort(""); setShowTime(false);
+                }}
+              >
+                Newest
+              </div>
+              <div
+                className="dropdown-item"
+                onClick={() => { setTimeSort("Oldest"); setRatingSort(""); setShowTime(false);
+                }}
+              >
+                Oldest
+              </div>
             </div>
-            <div className="dropdown-item" onClick={() => { setRatingSort("Lowest"); setShowRating(false); }}>
-              Lowest rating
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Time */}
-       <div className="dropdown-wrapper">
-       <button onClick={() => setShowTime(!showTime)}>Time ▼</button>
-
-        {showTime && (
-          <div className="dropdown-menu">
-            <div className="dropdown-item" onClick={() => { setTimeSort("Newest"); setShowTime(false); }}>
-              Newest
-            </div>
-            <div className="dropdown-item" onClick={() => { setTimeSort("Oldest"); setShowTime(false); }}>
-              Oldest
-            </div>
-          </div>
-        )}
-       </div>
+          )}
+        </div>
 
        </div>
 
