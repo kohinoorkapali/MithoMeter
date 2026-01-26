@@ -440,4 +440,74 @@
   transform: scale(1.2); /* Slight grow on hover */
 }
 
+/* Add these media queries to your existing CSS to fix responsiveness for rating descriptor and categories */
 
+@media (max-width: 480px) {
+  .ViewDetail-container {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px;
+  }
+
+  .ViewDetail-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .overview-line {
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .overview-line .item {
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  .overview-line .dish-img,
+  .icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .image-carousel {
+    height: 250px;
+    margin: 10px auto 15px;
+  }
+
+  .nav-btn {
+    font-size: 20px;
+    padding: 4px 10px;
+  }
+
+  .image-counter {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .overlay {
+    font-size: 10px;
+    padding: 4px 6px;
+  }
+
+  .left-section,
+  .overview-left {
+    padding: 10px;
+  }
+
+  .left-section h2,
+  .overview-left h2 {
+    font-size: 20px;
+  }
+
+  .overview-item,
+  .overview-link {
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .features-list {
+    padding-left: 12px;
+  }
+
+}

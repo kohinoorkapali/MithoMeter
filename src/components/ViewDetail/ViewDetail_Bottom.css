@@ -361,3 +361,119 @@
 .dropdown-item:hover {
   background: rgba(255, 165, 0, 0.15);
 }
+/* ===== MOBILE / SMALL SCREENS ===== */
+@media screen and (max-width: 480px) {
+  /* PAGE PADDING */
+  .review-page {
+    padding: 15px;
+  }
+
+  /* SUMMARY BOX */
+  .review-summary {
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .ratings-right {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* RATING ROWS */
+  .rating-row span:first-child {
+    width: 80px;
+    font-size: 0.8rem;
+  }
+
+  .rating-row .bar {
+    width: 140px;
+    height: 6px;
+  }
+
+  .rating-row .fill {
+    border-radius: 4px;
+  }
+
+  /* OVERALL SCORE */
+  .overall-score .score {
+    font-size: 1.8rem;
+  }
+
+  .overall-score .label {
+    font-size: 0.9rem;
+  }
+
+  .overall-score .count {
+    font-size: 0.7rem;
+  }
+
+  /* REVIEW CARD */
+  .review-card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  /* USER IMAGE */
+  .review-card .review-header .user img {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* FILTERS */
+  .filters {
+    flex-direction: column;
+    gap: 12px;  /* extra spacing between filter row and write-review button */
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 12px; /* <-- increase space between Traveller / Ratings / Time */
+    flex-wrap: wrap;
+  }
+
+  .filter-group button,
+  .write-review {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  /* STARS */
+  .stars {
+    font-size: 20px;
+  }
+
+  /* REVIEW IMAGES */
+  .images .img-box {
+    width: 60px;
+    height: 50px;
+  }
+
+  /* REVIEW ACTIONS (Like + Menu stacked vertically) */
+  .review-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* LIKE BUTTON */
+  .like-btn {
+    font-size: 14px;
+  }
+
+  /* MENU BUTTON */
+  .menu-btn {
+    font-size: 18px;
+  }
+
+  /* DROPDOWN MENU */
+  .menu-dropdown {
+    position: absolute;
+    top: auto;
+    bottom: -10px;      /* show below menu button */
+    right: 0;
+    width: 100%;         /* full width for easier tapping */
+    max-width: 150px;    /* optional max width */
+    z-index: 200;
+  }
+}
