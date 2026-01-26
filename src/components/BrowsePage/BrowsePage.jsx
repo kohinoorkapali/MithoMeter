@@ -27,8 +27,9 @@ export default function BrowsePage({ currentUser })  {
     const [currentPage, setCurrentPage] = useState(1); 
     const [searchTerm, setSearchTerm] = useState("");
     const [filtersVisible, setFiltersVisible] = useState(false);
+    const [restaurants, setRestaurants] = useState([]);
 
-  const ITEMS_PER_PAGE = 10;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     axios.get("http://localhost:5000/api/restaurants")
@@ -43,21 +44,30 @@ export default function BrowsePage({ currentUser })  {
   const filteredItems = items.filter(item =>
   item.name?.toLowerCase().includes(searchTerm.toLowerCase())
 );
+const initialFilters = {
+  cuisine: [],
+  ratings: [],
+  price: [],
+  mood: [],
+  amenities: []
+};
 
-const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-const currentItems = filteredItems.slice(startIndex, endIndex);
+const [filters, setFilters] = useState(initialFilters);
 
-  const initialFilters = {
-    cuisine: [],
-    ratings: [],
-    price: [],
-    mood: [],
-    amenities: []
-  };
+// 1️⃣ Filter restaurants
+const filteredRestaurants = items.filter((r) => {
+  if (filters.cuisine.length && !filters.cuisine.some(c => r.cuisines.includes(c))) return false;
+  if (filters.price.length && !filters.price.includes(r.priceRange)) return false;
+  if (filters.mood.length && !filters.mood.some(m => r.moods.includes(m))) return false;
+  if (filters.amenities.length && !filters.amenities.some(a => r.features.includes(a))) return false;
+  if (filters.ratings.length && !filters.ratings.includes(Math.floor(r.rating))) return false;
+  return true;
+});
 
-  const [filters, setFilters] = useState(initialFilters);
+// 2️⃣ Pagination slice
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = filteredRestaurants.slice(indexOfFirstItem, indexOfLastItem);
 
   const hasActiveFilters = Object.values(filters).some(
     filterArray => filterArray.length > 0
@@ -118,78 +128,44 @@ const currentItems = filteredItems.slice(startIndex, endIndex);
                 <div 
                     className={`dropdown-line ${filtersVisible ? "show" : ""}`}
                 >
-
                     {/* CUISINE */}
                     <DropdownFilter
-                        title="Cuisine"
-                        options={[
-                            { label: "Nepali", value: "Nepali" },
-                            { label: "Indian", value: "Indian" },
-                            { label: "Chinese", value: "Chinese" },
-                            { label: "Continental", value: "Continental" }
-                        ]}
-                        selectedValues = {filters.cuisine}
-                        onChange={(values)=>
-                            setFilters(prev=>({...prev, cuisine:values}))
-                        }
-                    />
-                    
-
-                    {/* RATINGS */}
-                    <DropdownFilter
-                        title="Ratings"
-                        options={[5,4,3,2,1].map(r => ({
-                            label: "⭐".repeat(r),
-                            value: r
-                        }))}
-                        selectedValues={filters.ratings}
-                        onChange={(values) =>
-                            setFilters(prev => ({ ...prev, ratings: values }))
-                        }
+                    title="Cuisine"
+                    options={cuisineOptions}
+                    selectedValues={filters.cuisine}
+                    onChange={(values) =>
+                        setFilters(prev => ({ ...prev, cuisine: values }))
+                    }
                     />
 
                     {/* PRICE */}
                     <DropdownFilter
-                        title="Price"
-                        options={[
-                            {label:"Budget", value:"cheap"},
-                            { label: "Moderate", value: "mid" },
-                            { label: "Premium", value: "expensive" }
-                        ]}
-                        selectedValues={filters.price}
-                        onChange={(values)=>
-                            setFilters(prev=> ({...prev, price: values}))
-                        }
+                    title="Price"
+                    options={priceOptions}
+                    selectedValues={filters.price}
+                    onChange={(values) =>
+                        setFilters(prev => ({ ...prev, price: values }))
+                    }
                     />
 
                     {/* MOOD */}
                     <DropdownFilter
-                        title="Mood"
-                        options={[
-                            {label:"Cozy", value:"Cozy"},
-                            { label: "Romantic", value: "Romantic" },
-                            { label: "Family", value: "Family" },
-                            { label: "Friends", value: "Friends" }
-                        ]}
-                        selectedValues={filters.mood}
-                        onChange={(values)=>
-                            setFilters(prev=> ({...prev, mood: values}))
-                        }
+                    title="Mood"
+                    options={moodOptions}
+                    selectedValues={filters.mood}
+                    onChange={(values) =>
+                        setFilters(prev => ({ ...prev, mood: values }))
+                    }
                     />
 
                     {/* AMENITIES */}
                     <DropdownFilter
-                        title="Amenities"
-                        options={[
-                            {label:"Parking", value:"Parking"},
-                            { label: "Wi-Fi", value: "Wi-Fi" },
-                            { label: "Outdoor Seating", value: "Outdoor Seating" },
-                            { label: "Live Music", value: "Live Music" }
-                        ]}
-                        selectedValues={filters.amenities}
-                        onChange={(values)=>
-                            setFilters(prev=> ({...prev, amenities: values}))
-                        }
+                    title="Amenities"
+                    options={featureOptions}
+                    selectedValues={filters.amenities}
+                    onChange={(values) =>
+                        setFilters(prev => ({ ...prev, amenities: values }))
+                    }
                     />
 
                     {/* CLEAR BUTTON */}
@@ -208,23 +184,25 @@ const currentItems = filteredItems.slice(startIndex, endIndex);
 
                 {/* Cards */}
                 <div className="items-grid">
-                {currentItems.length > 0
-                    ? currentItems.map((item) => (
-                        <RestaurantCard 
-                        key={item.restaurantId}
-                        item={item}
-                        role={currentUser?.role}      
-                        currentUser={currentUser}
+                    {currentItems.length > 0 ? (
+                        currentItems.map((item) => (
+                        <RestaurantCard
+                            key={item.restaurantId}
+                            item={item}
+                            role={currentUser?.role}      
+                            currentUser={currentUser}
                         />
-                    ))
-                    : <p>No restaurants available</p>
-                }
+                        ))
+                    ) : (
+                        <p>No restaurants available</p>
+                    )}
                 </div>
+
+
 
                 {/* Pagination */}
                 <Pagination
                     currentPage={currentPage}
-                    totalPages={totalPages}
                     onPageChange={setCurrentPage}
                 />
 
