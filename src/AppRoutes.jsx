@@ -41,7 +41,7 @@ const AppRoutes = ({ token, user, setToken, setUser }) => {
           <Route path="/browse" element={<BrowsePage currentUser={user} />} />
           <Route path="/restaurant/:id" element={<ViewDetail currentUser={user} />} />
           <Route path="/restaurant/:id/add-review" element={<AddReviewPage currentUser={user} />} />
-          <Route path="/profile" element={<ProfilePage currentUser={user} setToken={setToken} />} />
+          <Route path="/profile" element={<ProfilePage currentUser={user} setToken={setToken} setUser={setUser} />} />
           <Route path="/own-reviews" element={<OwnReviewsPage currentUser={user} />} />
           <Route path="/favorites" element={<FavoritesPage currentUser={user} />} />
           <Route path="/compare" element={<ComparePage currentUser={user} />} />
