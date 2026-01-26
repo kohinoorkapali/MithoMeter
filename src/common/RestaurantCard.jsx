@@ -1,14 +1,15 @@
-import { useState } from 'react';
-import { Link } from "react-router-dom";
-import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-import './RestaurantCard.css';
+import "./RestaurantCard.css";
 
 import locationIcon from "../assets/location.png";
 import menuIcon from "../assets/menu.png";
 import priceIcon from "../assets/tag.png";
 import cuisineIcon from "../assets/dish.png";
+import openIcon from "../assets/open.png";
+import closedIcon from "../assets/closed.png";
 import heartIcon from "../assets/heart.png";
 
 import { useApi } from "../hooks/useAPI.js";
@@ -26,32 +27,31 @@ export function RestaurantCard({
   const navigate = useNavigate();
 
   const [isSaved, setIsSaved] = useState(false);
+  const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [reviews, setReviews] = useState([]);
 
-  /* ---------------- IMAGE ---------------- */
-
+  /* ----------------------------------
+     IMAGE
+  ---------------------------------- */
   const restaurantImage =
-    item.photos && item.photos.length > 0
-      ? `http://localhost:5000/${item.photos[0].replace(/\\/g, "/")}`
-      : "/placeholder.png";
+  item.photos && item.photos.length > 0
+    ? `http://localhost:5000/uploads/${item.photos[0]}`
+    : "/placeholder.png";
 
-  /* ---------------- ADMIN ---------------- */
+  /* ----------------------------------
+     ADMIN ACTIONS
+  ---------------------------------- */
 
-  const handleEdit = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleEdit = () => {
     navigate(`/restaurants/edit/${item.restaurantId}`);
   };
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const confirm = window.confirm(
-      `Delete ${item.name}?`
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete ${item.name}?`
     );
 
-    if (!confirm) return;
+    if (!confirmDelete) return;
 
     try {
       await axios.delete(
@@ -59,23 +59,15 @@ export function RestaurantCard({
       );
 
       onDelete?.(item.restaurantId);
-    } catch (err) {
-      console.error(err);
-      alert("Delete failed");
+    } catch (error) {
+      console.error("Delete failed", error);
+      alert("Failed to delete restaurant");
     }
   };
 
-  /* ---------------- DATA ---------------- */
-
-  const cuisines = Array.isArray(item.cuisines)
-    ? item.cuisines.join(", ")
-    : item.cuisines || "No cuisines";
-
-  const priceRange = Array.isArray(item.priceRange)
-    ? item.priceRange.join(", ")
-    : item.priceRange || "Price N/A";
-
-  /* ---------------- REVIEWS ---------------- */
+  /* ----------------------------------
+     REVIEWS
+  ---------------------------------- */
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -83,11 +75,10 @@ export function RestaurantCard({
         const res = await fetch(
           `http://localhost:5000/api/reviews/restaurant/${item.restaurantId}`
         );
-
         const data = await res.json();
         setReviews(data.data || []);
       } catch (err) {
-        console.error(err);
+        console.error("Review fetch error:", err);
       }
     };
 
@@ -98,45 +89,44 @@ export function RestaurantCard({
     reviews.length > 0
       ? (
           reviews.reduce(
-            (s, r) => s + Number(r.totalRating || 0),
+            (sum, r) => sum + (Number(r.totalRating) || 0),
             0
           ) / reviews.length
         ).toFixed(1)
       : "N/A";
 
-  /* ---------------- FAVORITES ---------------- */
+  /* ----------------------------------
+     FAVORITES
+  ---------------------------------- */
 
   useEffect(() => {
-    const checkFav = async () => {
+    const checkFavorite = async () => {
       if (!currentUser) return;
 
       try {
-        const favs = await callApi(
+        const favorites = await callApi(
           "GET",
           `/favorites/${currentUser.id}`
         );
 
-        const exists = favs.some(
-          (f) =>
-            Number(f.restaurantId) ===
+        const exists = favorites.some(
+          (fav) =>
+            Number(fav.restaurantId) ===
             Number(item.restaurantId)
         );
 
         setIsSaved(exists);
       } catch (err) {
-        console.error(err);
+        console.error("Favorite check error:", err);
       }
     };
 
-    checkFav();
+    checkFavorite();
   }, [currentUser, item.restaurantId, callApi]);
 
-  const toggleSave = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  const toggleSave = async () => {
     if (!currentUser) {
-      alert("Login first");
+      alert("Please login first");
       return;
     }
 
@@ -154,22 +144,40 @@ export function RestaurantCard({
             restaurantId: item.restaurantId,
           },
         });
+
         setIsSaved(true);
       }
 
       onToggleFavorite?.(item.restaurantId);
     } catch (err) {
-      console.error(err);
+      console.error("Favorite toggle error:", err);
     }
   };
 
-  /* ================= RENDER ================= */
+  /* ----------------------------------
+     DATA
+  ---------------------------------- */
+
+  const cuisines = Array.isArray(item.cuisines)
+    ? item.cuisines.join(", ")
+    : item.cuisines || "No Cuisines";
+
+  const priceRange = Array.isArray(item.priceRange)
+    ? item.priceRange.join(", ")
+    : item.priceRange || "Price N/A";
+
+  const isOpen = item.isOpen;
+
+  /* ----------------------------------
+     RENDER
+  ---------------------------------- */
 
   return (
     <Link
       to={`/restaurant/${item.restaurantId}`}
       state={{ currentUser }}
       className="restaurant-card"
+      style={{ textDecoration: "none", color: "inherit" }}
     >
       {/* IMAGE */}
       <div className="card-image">
@@ -178,9 +186,7 @@ export function RestaurantCard({
 
       {/* COMPARE */}
       <div
-        className={`compare-select ${
-          isSelected ? "selected" : ""
-        }`}
+        className={`compare-select ${isSelected ? "selected" : ""}`}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -194,34 +200,51 @@ export function RestaurantCard({
       <div className="card-content">
         <h2 className="res-name">{item.name}</h2>
 
-        <p className="line">
-          <img src={locationIcon} className="icon" />
-          {item.location || "Unknown"}
-        </p>
+        {/* Location + Status */}
+        <div className="line location-status">
+          <p className="line res-location">
+            <img src={locationIcon} className="icon" />
+            {item.location || "Unknown"}
+          </p>
 
+          <img
+            src={isOpen ? openIcon : closedIcon}
+            className="status-icon"
+          />
+        </div>
+
+        {/* Cuisine */}
         <p className="line">
           <img src={cuisineIcon} className="icon" />
           {cuisines}
         </p>
 
+        {/* Price */}
         <p className="line">
           <img src={priceIcon} className="icon" />
           {priceRange}
         </p>
 
+        {/* Menu */}
         {item.menuLink && (
           <button
             className="menu-link-btn"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              window.open(item.menuLink);
+              window.open(item.menuLink, "_blank");
             }}
           >
             <img src={menuIcon} className="icon" />
             Menu
           </button>
         )}
+
+        {/* Reviews */}
+        <div className="reviews">
+          <p className="review">“Amazing food!”</p>
+          <p className="review">“Cozy place.”</p>
+        </div>
       </div>
 
       {/* RIGHT SIDE */}
@@ -229,32 +252,48 @@ export function RestaurantCard({
 
         {/* ADMIN */}
         {role === "admin" && (
-          <div className="admin-actions">
-            <button
-              className="edit-btn"
-              onClick={handleEdit}
-            >
-              Edit
-            </button>
+          <div className="card-right admin">
+            <div className="admin-actions">
 
-            <button
-              className="delete-btn"
-              onClick={handleDelete}
-            >
-              Delete
-            </button>
+              <button
+                className="edit-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleEdit();
+                }}
+              >
+                Edit
+              </button>
+
+              <button
+                className="delete-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleDelete();
+                }}
+              >
+                Delete
+              </button>
+
+            </div>
           </div>
         )}
 
         {/* USER */}
         {role !== "admin" && (
-          <div className="user-toggle" onClick={toggleSave}>
+          <div
+            className="user-toggle"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleSave();
+            }}
+          >
             {isSaved ? (
               <div className="saved-wrapper">
-                <img
-                  src={heartIcon}
-                  className="heart-big"
-                />
+                <img src={heartIcon} className="heart-big" />
                 <span className="rating-on-heart">
                   {overallRating}
                 </span>

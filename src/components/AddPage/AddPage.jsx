@@ -2,10 +2,10 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createRestaurantSchema, editRestaurantSchema } from "../../schema/restaurant.schema.js";
+import { restaurantSchema  } from "../../schema/restaurant.schema.js";
 import { apiRequest, apiUpload } from "../../utils/api.js";
 import { useParams } from "react-router-dom";
-
+import toast from "react-hot-toast";
 
 import { Header } from "../Header.jsx";
 import { DropdownFilter } from "../../common/DropdownFilter.jsx";
@@ -36,9 +36,7 @@ export default function AddPage() {
     reset,
     formState: { errors, isValid },
   } = useForm({
-    resolver: zodResolver(
-      isEdit ? editRestaurantSchema : createRestaurantSchema
-    ),
+    resolver: zodResolver(restaurantSchema),
     mode: "onChange",
     defaultValues: {
       moods: [],
@@ -104,15 +102,6 @@ useEffect(() => {
   setValue("priceRange", selectedPrices, { shouldValidate: true });
 }, [selectedPrices, setValue]);
 
-
-  const toggleChip = (value, selectedList, setSelectedList) => {
-    if (selectedList.includes(value)) {
-      setSelectedList(selectedList.filter((item) => item !== value));
-    } else {
-      setSelectedList([...selectedList, value]);
-    }
-  };
-
   const handlePhotoUpload = (e) => {
     const files = Array.from(e.target.files); 
     const oversized = files.find(file => file.size > 5 * 1024 * 1024);
@@ -167,6 +156,7 @@ useEffect(() => {
   ];
 
   const onSubmit = async (data) => {
+    console.log("SUBMIT DATA:", data);
     const formData = new FormData();
   
     formData.append("name", data.name);
@@ -182,20 +172,43 @@ useEffect(() => {
     formData.append("moods", JSON.stringify(selectedMoods));
     formData.append("features", JSON.stringify(selectedFeatures));
   
-    //  tell backend which existing images to keep
     formData.append("existingPhotos", JSON.stringify(existingPhotos));
   
-    //  upload only NEW files
-    newPhotos.forEach(photo => {
+    newPhotos.forEach((photo) => {
       formData.append("photos", photo);
     });
   
-    if (isEdit) {
-      await apiUpload("PATCH", `/restaurants/${id}`, formData);
-    } else {
-      await apiUpload("POST", "/restaurants", formData);
+    try {
+      if (isEdit) {
+        await apiUpload("PATCH", `/restaurants/${id}`, formData);
+  
+        toast.success("Restaurant updated successfully ✅");
+      } else {
+        await apiUpload("POST", "/restaurants", formData);
+  
+        toast.success("Restaurant added successfully 🎉");
+      }
+  
+      // Optional: Reset after success (for create only)
+      if (!isEdit) {
+        reset();
+        setNewPhotos([]);
+        setExistingPhotos([]);
+        setSelectedCuisines([]);
+        setSelectedPrices([]);
+        setSelectedMoods([]);
+        setSelectedFeatures([]);
+      }
+  
+    } catch (err) {
+      console.error("Submit error:", err);
+  
+      toast.error(
+        err?.response?.data?.message || "Something went wrong ❌"
+      );
     }
   };
+  
   
   return (
     <>

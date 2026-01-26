@@ -31,6 +31,9 @@ export default function ActivityPage({ currentUser }) {
                 item={item}
                 currentUser={currentUser}
                 role={currentUser?.role}
+                onDelete={(id) =>
+                  setItems((prev) => prev.filter((r) => r.restaurantId !== id)) 
+              }
               />
             ))
           ) : (
