@@ -1,13 +1,12 @@
-// src/hooks/useApi.js
-import { useState } from "react";
-import { apiRequest } from "../api/api.js"; // make sure this path is correct
+
+import { useState, useCallback } from "react";
+import { apiRequest } from "../utils/api.js";
 
 export const useApi = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  
-  const callApi = async (method, endpoint, options = {}) => {
+  const callApi = useCallback(async (method, endpoint, options = {}) => {
     setLoading(true);
     setError("");
     try {
@@ -19,7 +18,7 @@ export const useApi = () => {
       setError(err.message);
       throw err;
     }
-  };
+  }, []);
 
   return { loading, error, callApi };
 };

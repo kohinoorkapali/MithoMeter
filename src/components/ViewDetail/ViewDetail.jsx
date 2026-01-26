@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useApi } from "../../hooks/useAPI";
 import { Header } from "../Header.jsx";
 import "./ViewDetail.css";
-import  ViewDetail_Bottom  from "./ViewDetail_Bottom.jsx";
+import ViewDetail_Bottom from "./ViewDetail_Bottom.jsx";
 import websiteIcon from "../../assets/website.png";
 import locationIcon from "../../assets/location.png";
 import menuIcon from "../../assets/menu.png";
@@ -10,49 +11,87 @@ import priceIcon from "../../assets/tag.png";
 import cuisineIcon from "../../assets/dish.png";
 import openIcon from "../../assets/open.png";
 import placeholderImg from "../../assets/Chyura.png";
+import heartEmptyIcon from "../../assets/heart-empty.png";
+import heartFilledIcon from "../../assets/heart-filled.png";
 
-function ViewDetail({ user }) {
+function ViewDetail({ currentUser }) {
   const { id } = useParams();
-  const [restaurant, setRestaurant] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [reviews, setReviews] = useState([]);
+  const { callApi } = useApi();
 
+  const [restaurant, setRestaurant] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Fetch restaurant
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/restaurants/${id}`);
-        const json = await res.json();
-        console.log("Fetched Restaurant:", json.data);
-        setRestaurant(json.data);
-        setLoading(false);
+        const data = await callApi("GET", `/restaurants/${id}`);
+        setRestaurant(data.data);
       } catch (err) {
-        console.error(err);
-        setLoading(false);
+        // handle error silently
       }
     };
     fetchRestaurant();
   }, [id]);
 
+  // Fetch reviews
   useEffect(() => {
-  const fetchReviews = async () => {
+    const fetchReviews = async () => {
+      try {
+        const data = await callApi("GET", `/reviews/restaurant/${id}`);
+        setReviews(data.data || []);
+      } catch (err) {
+        // handle error silently
+      }
+    };
+    fetchReviews();
+  }, [id]);
+
+  // Fetch favorite status
+  useEffect(() => {
+    if (!currentUser?.id || !restaurant?.restaurantId) return;
+
+    const fetchFavorite = async () => {
+      try {
+        const data = await callApi("GET", `/favorites/${currentUser.id}`);
+        const exists = data.some(
+          (fav) => Number(fav.restaurantId) === Number(restaurant.restaurantId)
+        );
+        setIsFavorite(exists);
+      } catch (err) {
+        // handle error silently
+      }
+    };
+
+    fetchFavorite();
+  }, [currentUser, restaurant]);
+
+  // Toggle favorite
+  const toggleFavorite = async () => {
+    if (!currentUser || !restaurant?.restaurantId) return;
+
+    const userIdNum = Number(currentUser.id);
+    const restaurantIdNum = Number(restaurant.restaurantId);
+
     try {
-      const res = await fetch(`http://localhost:5000/api/reviews/restaurant/${id}`);
-      const data = await res.json();
-      setReviews(data.data || []);
+      if (isFavorite) {
+        await callApi("DELETE", `/favorites/${userIdNum}/${restaurantIdNum}`);
+        setIsFavorite(false);
+      } else {
+        await callApi("POST", `/favorites/save`, {
+          data: { userId: userIdNum, restaurantId: restaurantIdNum },
+        });
+        setIsFavorite(true);
+      }
     } catch (err) {
-      console.error("Error fetching reviews:", err);
+      // handle error silently
     }
   };
 
-  fetchReviews();
-}, [id]);
+  if (!restaurant) return <p>Loading...</p>;
 
-
-  if (loading) return <p>Loading...</p>;
-  if (!restaurant) return <p>Restaurant not found</p>;
-
-  // Safe helpers
   const cuisines = Array.isArray(restaurant.cuisines)
     ? restaurant.cuisines.join(", ")
     : restaurant.cuisines || "N/A";
@@ -72,14 +111,10 @@ function ViewDetail({ user }) {
       : [];
 
   const totalImages = images.length;
-
-  const nextImage = () => {
+  const nextImage = () =>
     setCurrentIndex((prev) => (prev + 1) % totalImages);
-  };
-
-  const prevImage = () => {
+  const prevImage = () =>
     setCurrentIndex((prev) => (prev - 1 + totalImages) % totalImages);
-  };
 
   return (
     <>
@@ -88,23 +123,18 @@ function ViewDetail({ user }) {
       <div className="ViewDetail-container">
         <h1 className="ViewDetail-title">{restaurant.name || "No Name"}</h1>
 
-        {/* Overview line */}
         <div className="overview-line">
           <div className="item rating">
             <span>
               {reviews.length > 0
                 ? (
-                    (reviews.reduce((sum, r) => sum + (Number(r.totalRating) || 0), 0) / reviews.length).toFixed(1)
-                  )
-                : "N/A"} ({reviews.length} reviews)
-
-            </span>
-          </div>
-
-          <div className="item rank">
-            <span>
-              #{restaurant.rank || "-"} among{" "}
-              {restaurant.totalRestaurants || "-"} {cuisines}
+                    reviews.reduce(
+                      (sum, r) => sum + (Number(r.totalRating) || 0),
+                      0
+                    ) / reviews.length
+                  ).toFixed(1)
+                : "N/A"}{" "}
+              ({reviews.length} reviews)
             </span>
           </div>
 
@@ -117,42 +147,46 @@ function ViewDetail({ user }) {
             <img src={priceIcon} alt="Price" className="icon" />
             <span>{priceRange}</span>
           </div>
+
+          <div
+            className="item favorite"
+            onClick={toggleFavorite}
+            style={{ cursor: restaurant ? "pointer" : "not-allowed" }}
+          >
+            <img
+              src={isFavorite ? heartFilledIcon : heartEmptyIcon}
+              alt="Favorite"
+              className="heart-icon"
+            />
+          </div>
         </div>
 
-        {/* Image Carousel */}
+        {/* Image carousel */}
         <div className="image-carousel">
           {totalImages > 0 ? (
             <>
               <button className="nav-btn left" onClick={prevImage}>
                 ‹
               </button>
-
               <img
-  src={`http://localhost:5000${images[currentIndex]}`}
-  alt={`Restaurant ${currentIndex}`}
-  className="carousel-img"
-  onError={(e) => { e.target.src = placeholderImg; }}
-/>
-
-
+                src={`http://localhost:5000${images[currentIndex]}`}
+                alt={`Restaurant ${currentIndex}`}
+                className="carousel-img"
+                onError={(e) => (e.target.src = placeholderImg)}
+              />
               <button className="nav-btn right" onClick={nextImage}>
                 ›
               </button>
-
               <div className="image-counter">
                 {currentIndex + 1} / {totalImages}
               </div>
             </>
           ) : (
-            <img
-              src={placeholderImg}
-              alt="No Restaurant"
-              className="carousel-img"
-            />
+            <img src={placeholderImg} alt="No Restaurant" className="carousel-img" />
           )}
         </div>
 
-        {/* Overview Section */}
+        {/* Overview */}
         <section className="overview-left">
           <h2>Overview</h2>
           <ul className="overview-list">
@@ -163,22 +197,18 @@ function ViewDetail({ user }) {
                 ? `${restaurant.openTime} - ${restaurant.closeTime}`
                 : "N/A"}
             </li>
-
             <li className="overview-item">
               <img src={locationIcon} alt="Location" className="icon" />
               <strong>Location:</strong> {restaurant.location || "N/A"}
             </li>
-
             <li className="overview-item">
               <img src={cuisineIcon} alt="Dish" className="icon" />
               <strong>Cuisines:</strong> {cuisines}
             </li>
-
             <li className="overview-item">
               <img src={priceIcon} alt="Price" className="icon" />
               <strong>Price Range:</strong> {priceRange}
             </li>
-
             <li className="overview-link">
               <img src={menuIcon} alt="Menu" className="icon" />
               <strong>
@@ -191,7 +221,6 @@ function ViewDetail({ user }) {
                 </a>
               </strong>
             </li>
-
             <li className="overview-link">
               <img src={websiteIcon} alt="Website" className="icon" />
               <strong>
@@ -207,20 +236,19 @@ function ViewDetail({ user }) {
           </ul>
         </section>
 
-        {/* About & Features */}
         <section className="left-section">
           <h2>About</h2>
           <p>{restaurant.description || "No description available."}</p>
 
           <h2>Features</h2>
           <ul className="features-list">
-            {features.map((f, index) => (
-              <li key={index}>{f}</li>
+            {features.map((f, i) => (
+              <li key={i}>{f}</li>
             ))}
           </ul>
         </section>
 
-        <ViewDetail_Bottom currentUser={user} />
+        <ViewDetail_Bottom currentUser={currentUser} />
       </div>
     </>
   );

@@ -12,7 +12,7 @@ export function Header({ role }) {
       <div className="mid-header">
         {role === "admin" ? (
           <>
-            <Link to="/home">Home</Link>
+            <Link to="/admin">Home</Link>
             <Link to="/activityPage">Activity</Link>
             <Link to="/addPage">Add</Link>
           </>
@@ -20,7 +20,7 @@ export function Header({ role }) {
           <>
             <Link to="/browse">Browse</Link>
             <Link to="/own-reviews">Reviews</Link>
-            <Link to="/favourites">Favourites</Link>
+            <Link to="/favorites">Favourites</Link>
           </>
         )}
       </div>

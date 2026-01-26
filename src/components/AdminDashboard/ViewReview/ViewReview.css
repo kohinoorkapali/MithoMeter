@@ -1,5 +1,5 @@
 .reviews-page {
-  width: 97%;
+  width: 100%;
   min-height: 80vh;
   background: linear-gradient(180deg, #ff8600, #ff6a00);
   padding: 30px;
@@ -7,10 +7,13 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* Header */
 .reviews-header {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .reviews-header h2 {
@@ -20,63 +23,53 @@
 
 .reviews-header p {
   margin-top: 3px;
-  opacity: 0.8;
+  opacity: 0.85;
+  font-size: 14px;
 }
 
-/* Dropdown */
-.dropdown-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  color: white;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-/* Navigation buttons */
-.nav-buttons {
-  display: flex;
-  gap: 10px;
-  margin-right: 50%;
-}
-
-.circle-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 2px solid white;
-  background: transparent;
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-/* Review cards list */
+/* Review list */
 .reviews-list {
-  margin-top: 30px;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-/* Individual review card */
+/* Review card (FIXED) */
 .review-card {
-  width: 50%;
+  width: 100%;
+  max-width: 750px;
   background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: space-between;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  align-items: center;
-}
-
-/* Profile */
-.review-info {
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.review-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
+}
+
+/* Review info */
+.review-card h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #fff;
+}
+
+.review-card small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Profile image */
 .profile-img {
   width: 55px;
   height: 55px;
@@ -84,39 +77,85 @@
   object-fit: cover;
 }
 
-/* Text */
-.review-info h3 {
-  margin: 0;
-  font-size: 18px;
-  color: white;
-}
-
-.review-info p {
-  margin: 2px 0 0;
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-/* Review buttons */
-.review-actions {
-  display: flex;
-  gap: 12px;
-}
-
+/* Buttons */
 .accept-btn,
-.remove-btn {
-  padding: 10px 20px;
-  border-radius: 12px;
+.remove-btn,
+.close-btn {
+  padding: 9px 18px;
+  border-radius: 10px;
   font-size: 14px;
   border: none;
   cursor: pointer;
   color: white;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .accept-btn {
-  background-color: #2d2e63;
+  background-color: #1e7e34;
 }
 
 .remove-btn {
-  background-color: #1b1c38;
+  background-color: #b11226;
+}
+
+.close-btn {
+  background-color: #343a40;
+}
+
+.accept-btn:hover,
+.remove-btn:hover,
+.close-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 14px;
+  width: 420px;
+  max-width: 90%;
+  color: #333;
+}
+
+.modal-box h3 {
+  margin-top: 0;
+  color: #ff6a00;
+}
+
+.review-text {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .review-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

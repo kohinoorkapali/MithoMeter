@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { apiRequest } from "../../utils/api";
 import "./ViewDetail_Bottom.css";
 import personIcon from "../../assets/person.png";
 import likeIcon from "../../assets/like.png";        
@@ -114,6 +115,15 @@ const toggleLike = async (reviewId) => {
   };
 
   const totalReviews = reviews.length;
+  //REPORT BUTTON
+  const reportReview = async (reviewId) =>{
+    try{
+      await apiRequest("POST", `/reviews/${reviewId}/report`);
+      alert("Review reported")
+    }catch(err){
+      toast.error(err.message || "Failed to load reports");
+    }
+  }
 
   async function handleDelete(reviewId) {
   if (!window.confirm("Are you sure you want to delete this review?")) return;
@@ -342,7 +352,12 @@ const toggleLike = async (reviewId) => {
                          {/* Case 1: The person logged in IS the author */}
                          {currentUser?.id === review.userId ? (
                              <>
-                               <button>✏️ Edit</button>                
+                               <button
+                                  onClick={() => navigate(`/restaurant/${id}/add-review?edit=${review.reviewId}`)}
+                                >
+                                  ✏️ Edit
+                                </button>
+             
                                <button onClick={() => handleDelete(review.reviewId)}>
                                   🗑 Delete
                                 </button>                           

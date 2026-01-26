@@ -10,8 +10,12 @@ import search from "../../assets/search.png";
 
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import useNotifications from '../../hooks/useNotifications.js';
 
 export default function BrowsePage({ currentUser })  {
+    //Notification
+    useNotifications();
+
     const [items, setItems] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); 
     const [searchTerm, setSearchTerm] = useState("");

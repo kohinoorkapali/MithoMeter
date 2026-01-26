@@ -1,33 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ViewUser.css";
-
-const initialUsers = [
-  { id: 1, name: "Meera", date: "2025/01/03", image: "/images/user.png" },
-  { id: 2, name: "Meera", date: "2025/01/03", image: "/images/user.png" },
-  { id: 3, name: "Meera", date: "2025/01/03", image: "/images/user.png" },
-  { id: 4, name: "Meera", date: "2025/01/03", image: "/images/user.png" },
-  { id: 5, name: "Meera", date: "2025/01/03", image: "/images/user.png" },
-  { id: 6, name: "Meera", date: "2025/01/03", image: "/images/user.png" },
-];
+import toast from "react-hot-toast";
+import { apiRequest } from "../../../utils/api";
 
 export default function ViewUser() {
-  const [bannedUsers, setBannedUsers] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const toggleBan = (id) => {
-    setBannedUsers((prev) =>
-      prev.includes(id)
-        ? prev.filter((uid) => uid !== id)
-        : [...prev, id]
-    );
+  // GET all users (local to this page)
+  const getAllUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await apiRequest("GET", "/users");
+      setUsers(res.data);
+    } catch (err) {
+      toast.error(err.message || "Failed to load users");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  // TOGGLE ban / unban (local to this page)
+  const toggleUserStatus = (id) => {
+    return apiRequest("PATCH", `/users/${id}/toggle-status`);
+  };
+
+  const handleToggleBan = async (id) => {
+    const toastId = toast.loading("Updating user status...");
+  
+    try {
+      const res = await apiRequest("PATCH", `/users/${id}/status`);
+      // res === { message, status }
+  
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === id ? { ...u, status: res.status } : u
+        )
+      );
+  
+      toast.success(
+        `User ${res.status === "banned" ? "banned" : "unbanned"} successfully`,
+        { id: toastId }
+      );
+    } catch (err) {
+      toast.error(err.message || "Action failed", { id: toastId });
+    }
+  };
+  
+
+  // 🔥 Load users ONCE when page opens
+  useEffect(() => {
+    getAllUsers();
+  }, []);
 
   return (
     <div className="user-page">
-
       <div className="user-header">
         <div>
           <h2>Users</h2>
-          <p>5 of 200</p>
+          <p>{users.length} users</p>
         </div>
 
         <div className="status-dropdown">
@@ -36,30 +67,48 @@ export default function ViewUser() {
       </div>
 
       <div className="user-list">
-        {initialUsers.map((u) => {
-          const isBanned = bannedUsers.includes(u.id);
+        {loading && <p>Loading users...</p>}
 
-          return (
-            <div key={u.id} className="user-card">
-              <div className="user-info">
-                <img src={u.image} alt="user" className="profile-img" />
-                <div>
-                  <h3>{u.name}</h3>
-                  <p>Joined: {u.date}</p>
-                </div>
-              </div>
+        {!loading &&
+          users.map((u) => {
+            const isBanned = u.status === "banned";
 
-              <button
-                className="ban-btn"
-                onClick={() => toggleBan(u.id)}
+            return (
+              <div
+                key={u.id}
+                className={`user-card ${isBanned ? "banned" : ""}`}
               >
-                {isBanned ? "Unban" : "Ban"}
-              </button>
-            </div>
-          );
-        })}
-      </div>
+                <div className="user-info">
+                  <img
+                  src={
+                    u.profile_image
+                      ? `http://localhost:5000/uploads/profile/${u.profile_image}`
+                      : "/images/user.png"
+                  }
+                  alt="user"
+                  className="profile-img"
+                />
 
+
+                  <div>
+                    <h3>{u.username}</h3>
+                    <p>
+                      Joined:{" "}
+                      {new Date(u.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  className="ban-btn"
+                  onClick={() => handleToggleBan(u.id)}
+                >
+                  {isBanned ? "Unban" : "Ban"}
+                </button>
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 }
