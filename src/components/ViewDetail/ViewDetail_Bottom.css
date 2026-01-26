@@ -12,26 +12,26 @@
   margin-bottom: 30px;
 }
 
-.rating-left h1 {
+.review-page .rating-left h1 {
   font-size: 48px;
   margin: 10px 0;
 }
 
-.excellent {
+.review-page .excellent {
   color: orange;
   font-weight: bold;
 }
 
-.count {
+.review-page .count {
   color: #ccc;
 }
 
 /* BARS */
-.rating-bars {
+.review-page .rating-bars {
   flex: 1;
 }
 
-.bar-row {
+.review-page .bar-row {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -39,21 +39,21 @@
   font-size: 14px;
 }
 
-.bar {
+.review-page .bar {
   flex: 1;
   height: 10px;
   background: #333;
   border-radius: 10px;
 }
 
-.fill {
+.review-page .fill {
   height: 100%;
   background: orange;
   border-radius: 10px;
 }
 
 /* SEARCH */
-.search {
+.review-page .search {
   width: 100%;
   padding: 14px;
   border-radius: 30px;
@@ -62,13 +62,13 @@
 }
 
 /* FILTERS */
-.filters {
+.review-page .filters {
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
 }
 
-.filter-group button {
+.review-page .filter-group button {
   background: orange;
   border: none;
   padding: 10px 16px;
@@ -78,7 +78,7 @@
   cursor: pointer;
 }
 
-.write-review {
+.review-page .write-review {
   background: #d35400;
   border: none;
   padding: 10px 20px;
@@ -88,7 +88,7 @@
 }
 
 /* REVIEW CARD */
-.review-card {
+.review-page .review-card {
   background: #fff4e6;
   color: black;
   border-radius: 16px;
@@ -96,43 +96,43 @@
   margin-bottom: 20px;
 }
 
-.review-header {
+.review-page .review-header {
   display: flex;
   justify-content: space-between;
 }
 
-.stars {
+.review-page .stars {
   color: orange;
   margin: 8px 0;
   font-size: 30px;
 }
 
-.date {
+.review-page .date {
   color: gray;
   font-size: 13px;
 }
 
-.images {
+.review-page .images {
   display: flex;
   gap: 10px;
   margin-top: 10px;
 }
 
-.img-box {
+.review-page .img-box {
   width: 100px;
   height: 70px;
   background: #ddd;
   border-radius: 10px;
 }
 
-.review-header {
+.review-page .review-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 
-.review-actions {
+.review-page .review-actions {
   display: flex;
   align-items: center;
   gap: 10px;          
@@ -140,13 +140,13 @@
 }
 
 /* like text */
-.like {
+.review-page .like {
   font-size: 14px;
   white-space: nowrap;
 }
 
 /* three dots button */
-.menu-btn {
+.review-page .menu-btn {
   background: none;
   border: none;
   font-size: 20px;
@@ -156,7 +156,7 @@
 }
 
 /* dropdown menu */
-.menu-dropdown {
+.review-page .menu-dropdown {
   position: absolute;
   top: 24px;
   right: 0;
@@ -168,7 +168,7 @@
   width: 130px;
 }
 
-.menu-dropdown button {
+.review-page .menu-dropdown button {
   display: block;
   width: 100%;
   padding: 8px 12px;
@@ -179,11 +179,11 @@
   font-size: 14px;
 }
 
-.menu-dropdown button:hover {
+.review-page .menu-dropdown button:hover {
   background: #f2f2f2;
 }
 
-.like-btn {
+.review-page .like-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -194,7 +194,7 @@
   gap: 4px;
 }
 
-.like-btn.liked {
+.review-page .like-btn.liked {
   color: #f5b400; /* yellow */
   font-weight: 600;
 }
@@ -203,24 +203,24 @@
   transform: scale(1.1);
 }
 
-.user {
+.review-page .user {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.user div {
+.review-page .user div {
   display: flex;
   flex-direction: column;
 }
 
-.user strong {
+.review-page .user strong {
   font-size: 22px;
   font-weight: 600;
   line-height: 1.2;
 }
 
-.user small {
+.review-page .user small {
   font-size: 12px;
   color: #777;
   margin-top: 2px;
@@ -232,7 +232,7 @@
   font-family: Arial, sans-serif;
 }
 
-.review-summary {
+.review-page .review-summary {
   display: flex; 
   gap: 140px;    
   margin-bottom: 30px;
@@ -243,14 +243,14 @@
 }
 
 
-.overall-score-wrapper {
+.review-page .overall-score-wrapper {
   display: flex;
   flex-direction: column; 
   align-items: flex-start;
 }
 
 
-.overall-score {
+.review-page .overall-score {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -263,46 +263,46 @@
   color: orange;
 }
 
-.overall-meta {
+.review-page .overall-meta {
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
 
-.overall-score .label {
+.review-page .overall-score .label {
   font-size: 1.2rem;
   font-weight: 500;
 }
 
-.overall-score .count {
+.review-page .overall-score .count {
   font-size: 0.9rem;
   opacity: 0.7;
 }
 
 
-.ratings-right {
+.review-page .ratings-right {
   display: flex;     
   gap: 80px;          
   flex-wrap: wrap;    
 }
 
-.rating-breakdown {
+.review-page .rating-breakdown {
   flex: 1;             
   min-width: 200px;    
 }
 
-.rating-row {
+.review-page .rating-row {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.rating-row span:first-child {
+.review-page .rating-row span:first-child {
   width: 120px;
   font-weight: 500;
 }
 
-.rating-row .bar {
+.review-page .rating-row .bar {
   width: 280px;
   height: 10px;
   background: #333;
@@ -311,14 +311,13 @@
   overflow: hidden;
 }
 
-.rating-row .fill {
+.review-page .rating-row .fill {
   height: 100%;
   background: orange;
   border-radius: 6px;
 }
 
-/* Make user profile images circular and smaller */
-.review-card .review-header .user img {
+.review-page .review-card .review-header .user img {
   width: 40px;   
   height: 40px;   
   border-radius: 50%; 
@@ -326,17 +325,17 @@
   border: 1px solid #ccc; 
 }
 
-.filter-group {
+.review-page .filter-group {
   display: flex;
   gap: 12px; /* space between buttons */
   align-items: center;
 }
 
-.dropdown-wrapper {
+.review-page .dropdown-wrapper {
   position: relative; /* allows dropdown to open below button */
 }
 
-.dropdown-menu {
+.review-page .dropdown-menu {
   position: absolute;
   top: 110%;
   left: 0;
@@ -351,14 +350,14 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
 }
 
-.dropdown-item {
+.review-page .dropdown-item {
   padding: 10px 14px;
   cursor: pointer;
   color: white;
   font-size: 14px;
 }
 
-.dropdown-item:hover {
+.review-page .dropdown-item:hover {
   background: rgba(255, 165, 0, 0.15);
 }
 /* ===== MOBILE / SMALL SCREENS ===== */
