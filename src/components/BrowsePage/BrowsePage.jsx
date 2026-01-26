@@ -11,6 +11,7 @@ import search from "../../assets/search.png";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import useNotifications from '../../hooks/useNotifications.js';
+import { FaFilter } from "react-icons/fa";
 
 export default function BrowsePage({ currentUser })  {
     //Notification
@@ -19,6 +20,7 @@ export default function BrowsePage({ currentUser })  {
     const [items, setItems] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); 
     const [searchTerm, setSearchTerm] = useState("");
+    const [filtersVisible, setFiltersVisible] = useState(false);
 
   const ITEMS_PER_PAGE = 10;
 
@@ -95,8 +97,21 @@ const currentItems = filteredItems.slice(startIndex, endIndex);
                 </div>
                 </div>
 
+                        {/* MOBILE FILTER TOGGLE */}
+                <div className="mobile-filter-toggle d-md-none">
+                <button 
+  style={{ backgroundColor: "#FF8A00", color: "#fff" }}
+  onClick={() => setFiltersVisible(prev => !prev)}
+>
+  <FaFilter /> Filters
+</button>
+
+                </div>
+
                 {/* Dropdowns */}
-                <div className="dropdown-line">
+                <div 
+                    className={`dropdown-line ${filtersVisible ? "show" : ""}`}
+                >
 
                     {/* CUISINE */}
                     <DropdownFilter
