@@ -36,7 +36,6 @@ export const apiUpload = async (endpoint, formData, method = "POST", extraHeader
       method, // POST, PATCH, PUT, etc.
       data: formData,
       headers: {
-        "Content-Type": "multipart/form-data",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...extraHeaders,
       },
@@ -52,3 +51,4 @@ export const apiUpload = async (endpoint, formData, method = "POST", extraHeader
     }
   }
 };
+

@@ -50,6 +50,10 @@ const PrivateRoutes = ({ token, user, setToken }) => {
           path="/compare"
           element={<ComparePage currentUser={user} />}
         />
+          <Route
+    path="/restaurants/edit/:id"
+    element={userRole === "admin" ? <AddPage /> : <Navigate to="/browse" replace />}
+  />
 
 
         <Route
