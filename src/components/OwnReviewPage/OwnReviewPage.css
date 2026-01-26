@@ -1,0 +1,69 @@
+/* Base desktop layout (row) */
+.review-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  background-color: #FFF7EC;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 1300px;
+  margin: 0 auto 20px auto; /* center horizontally */
+}
+
+/* Image */
+.review-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Content */
+.review-content {
+  flex: 1;
+}
+
+.review-content h3 {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.review-content h5 {
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.review-content p {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* MOBILE: stack image above content */
+@media (max-width: 576px) {
+  .review-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .review-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+  }
+
+  .review-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .review-content h5 {
+    font-size: 1rem;
+  }
+
+  .review-content p {
+    font-size: 0.95rem;
+  }
+}

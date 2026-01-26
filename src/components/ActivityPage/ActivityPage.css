@@ -1,14 +1,44 @@
+/* MOBILE */
 .activity-container {
-    max-width: 1200px;
-    margin: 0 auto;            /* center container */
-  }
-  
+  max-width: 1200px;
+  margin: 0;          /* IMPORTANT: no auto here */
+  padding: 10px;
+}
+
+/* GRID */
 .items-grid {
-    display: flex;           /* arrange cards in a row */
-    flex-wrap: wrap;         /* wrap to next line if too long */
-    gap: 20px;               /* space between cards */
-    justify-content: center; /* align to left */
-    padding: 20px;           /* some spacing around */
-    grid-template-columns: 1fr; 
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* MOBILE – 1 card */
+.items-grid > * {
+  flex: 1 1 100%;
+}
+
+/* TABLET */
+@media (min-width: 600px) {
+  .activity-container {
+    margin-left: 200px;
+    margin-right: 200px;
   }
-  
+
+  .items-grid > * {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+/* DESKTOP */
+@media (min-width: 1024px) {
+  .activity-container {
+    margin-left: 200px;
+    margin-right: 200px;
+  }
+
+  .items-grid > * {
+    flex: 1 1 calc(33.333% - 20px);
+  }
+}

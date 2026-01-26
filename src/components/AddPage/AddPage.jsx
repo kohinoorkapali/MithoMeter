@@ -8,6 +8,7 @@ import { apiUpload } from "../../utils/api.js";
 import { Header } from "../Header.jsx";
 import { DropdownFilter } from "../../common/DropdownFilter.jsx";
 import "./AddPage.css";
+import { EditableChips } from "../../common/EditableChips.jsx";
 
 export default function AddPage() {
   // react-hook-form with Zod
@@ -86,6 +87,7 @@ useEffect(() => {
     { label: "Business", value: "Business" },
   ];
 
+
   const featureOptions = [
     { label: "WiFi", value: "WiFi" },
     { label: "Parking", value: "Parking" },
@@ -94,6 +96,7 @@ useEffect(() => {
     { label: "Air Conditioned", value: "Air Conditioned" },
     { label: "Wheelchair Accessibility", value: "Wheelchair Accessibility" },
   ];
+
 
   const cuisineOptions = [
     { label: "Nepali", value: "Nepali" },
@@ -196,6 +199,7 @@ useEffect(() => {
               <input type="text" {...register("name")} />
               {errors.name && <small className="error">{errors.name.message}</small>}
             </div>
+            
 
             <div className="location">
               <label>Add the location</label>
@@ -244,30 +248,25 @@ useEffect(() => {
               {errors.menuLink && <small className="error">{errors.menuLink.message}</small>}
             </div>
 
-            <div className="moods">
-              <label>Add moods</label>
-              <div className="chip-list">
-                {moodOptions.map((mood) => (
-                  <div key={mood.value} className={`chip ${selectedMoods.includes(mood.value) ? "selected" : ""}`} onClick={() => toggleChip(mood.value, selectedMoods, setSelectedMoods)}>
-                    {mood.label}
-                  </div>
-                ))}
-              </div>
-              {errors.moods && <small className="error">{errors.moods.message}</small>}
-            </div>
+           <EditableChips
+            name="moods"
+            label="Add moods"
+            options={moodOptions}
+            register={register}
+            setValue={setValue}
+            error={errors.moods}
+          />
 
-            <div className="features">
-              <label>Add features</label>
-              <div className="chip-list">
-                {featureOptions.map((feature) => (
-                  <div key={feature.value} className={`chip ${selectedFeatures.includes(feature.value) ? "selected" : ""}`} onClick={() => toggleChip(feature.value, selectedFeatures, setSelectedFeatures)}>
-                    {feature.label}
-                  </div>
-                ))}
-              </div>
-              {errors.features && <small className="error">{errors.features.message}</small>}
-            </div>
+           <EditableChips
 
+            name="features"
+            label="Add features"
+            options={featureOptions}
+            register={register}
+            setValue={setValue}
+            error={errors.features}
+          />
+          
             {backendError && (
   <div className="backend-error" style={{ color: "red", margin: "10px 0" }}>
     {backendError}
