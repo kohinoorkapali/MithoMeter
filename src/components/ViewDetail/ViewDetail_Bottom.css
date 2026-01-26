@@ -12,26 +12,26 @@
   margin-bottom: 30px;
 }
 
-.rating-left h1 {
+.review-page .rating-left h1 {
   font-size: 48px;
   margin: 10px 0;
 }
 
-.excellent {
+.review-page .excellent {
   color: orange;
   font-weight: bold;
 }
 
-.count {
+.review-page .count {
   color: #ccc;
 }
 
 /* BARS */
-.rating-bars {
+.review-page .rating-bars {
   flex: 1;
 }
 
-.bar-row {
+.review-page .bar-row {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -39,21 +39,21 @@
   font-size: 14px;
 }
 
-.bar {
+.review-page .bar {
   flex: 1;
   height: 10px;
   background: #333;
   border-radius: 10px;
 }
 
-.fill {
+.review-page .fill {
   height: 100%;
   background: orange;
   border-radius: 10px;
 }
 
 /* SEARCH */
-.search {
+.review-page .search {
   width: 100%;
   padding: 14px;
   border-radius: 30px;
@@ -62,13 +62,13 @@
 }
 
 /* FILTERS */
-.filters {
+.review-page .filters {
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
 }
 
-.filter-group button {
+.review-page .filter-group button {
   background: orange;
   border: none;
   padding: 10px 16px;
@@ -78,7 +78,7 @@
   cursor: pointer;
 }
 
-.write-review {
+.review-page .write-review {
   background: #d35400;
   border: none;
   padding: 10px 20px;
@@ -88,7 +88,7 @@
 }
 
 /* REVIEW CARD */
-.review-card {
+.review-page .review-card {
   background: #fff4e6;
   color: black;
   border-radius: 16px;
@@ -96,12 +96,12 @@
   margin-bottom: 20px;
 }
 
-.review-header {
+.review-page .review-header {
   display: flex;
   justify-content: space-between;
 }
 
-.stars {
+.review-page .stars {
   color: orange;
   margin: 8px 0;
   font-size: 30px;
