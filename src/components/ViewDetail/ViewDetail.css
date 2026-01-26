@@ -450,4 +450,14 @@
   .reviews-page {
     padding: 20px;
   }
+
+  .overview-line {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .overview-line .item {
+    font-size: 13px;
+  }
 }
