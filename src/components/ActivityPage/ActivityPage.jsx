@@ -1,6 +1,6 @@
 import { Header } from '../Header.jsx';
 import { RestaurantCard } from '../../common/RestaurantCard.jsx';
-
+import './ActivityPage.css';
 import { useEffect, useState } from "react";
 import axios from 'axios';
 

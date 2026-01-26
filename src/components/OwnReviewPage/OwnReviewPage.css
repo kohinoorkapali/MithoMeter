@@ -1,0 +1,66 @@
+/* CARD BASE */
+.review-card {
+  background-color: #FFF7EC;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  max-width: 1300px;
+  margin: 0 auto 20px auto; /* centered */
+}
+
+/* IMAGE */
+.review-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* CONTENT */
+.review-content {
+  flex: 1;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 576px) {
+  .review-card {
+    flex-direction: column;   /* stack vertically */
+    padding: 15px;
+  }
+
+  .review-image {
+    width: 100%;
+    height: 180px;
+  }
+
+  .review-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .review-content h5 {
+    font-size: 1rem;
+  }
+
+  .review-content p {
+    font-size: 0.95rem;
+  }
+}
+
+/* 📱➡️ TABLET */
+@media (min-width: 577px) and (max-width: 991px) {
+  .review-card {
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+}
+
+/* 💻 DESKTOP */
+@media (min-width: 992px) {
+  .review-card {
+    margin-left: 100px;
+    margin-right: 100px;
+  }
+}

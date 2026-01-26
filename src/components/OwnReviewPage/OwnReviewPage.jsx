@@ -5,6 +5,9 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { Spinner, Card } from "react-bootstrap";
 
+import "./OwnReviewPage.css";
+
+
 export default function OwnReviewsPage({ currentUser }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
