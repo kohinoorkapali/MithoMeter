@@ -54,40 +54,40 @@ export default function BrowsePage({ currentUser }) {
   const filteredItems = items.filter(item =>
   item.name?.toLowerCase().includes(searchTerm.toLowerCase())
 );
-const initialFilters = {
-  cuisine: [],
-  ratings: [],
-  price: [],
-  mood: [],
-  amenities: []
-};
+    const initialFilters = {
+    cuisine: [],
+    ratings: [],
+    price: [],
+    mood: [],
+    amenities: []
+    };
 
-const [filters, setFilters] = useState(initialFilters);
+    const [filters, setFilters] = useState(initialFilters);
 
-// 1️⃣ Filter restaurants
-const filteredRestaurants = items.filter((r) => {
-  if (filters.cuisine.length && !filters.cuisine.some(c => r.cuisines.includes(c))) return false;if (filters.price.length) {
-    const priceMatches = r.priceRange.some(p => filters.price.includes(p));
-    if (!priceMatches) return false;
-  }
-  if (filters.mood.length && !filters.mood.some(m => r.moods.includes(m))) return false;
-  if (filters.amenities.length && !filters.amenities.some(a => r.features.includes(a))) return false;
-  if (filters.ratings.length && !filters.ratings.includes(Math.floor(r.rating))) return false;
-  return true;
-});
+    // 1️⃣ Filter restaurants
+    const filteredRestaurants = items.filter((r) => {
+    if (filters.cuisine.length && !filters.cuisine.some(c => r.cuisines.includes(c))) return false;if (filters.price.length) {
+        const priceMatches = r.priceRange.some(p => filters.price.includes(p));
+        if (!priceMatches) return false;
+    }
+    if (filters.mood.length && !filters.mood.some(m => r.moods.includes(m))) return false;
+    if (filters.amenities.length && !filters.amenities.some(a => r.features.includes(a))) return false;
+    if (filters.ratings.length && !filters.ratings.includes(Math.floor(r.rating))) return false;
+    return true;
+    });
 
-// 2️⃣ Pagination slice
-const indexOfLastItem = currentPage * itemsPerPage;
-const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-const currentItems = filteredRestaurants.slice(indexOfFirstItem, indexOfLastItem);
+    // 2️⃣ Pagination slice
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredRestaurants.slice(indexOfFirstItem, indexOfLastItem);
 
-  const hasActiveFilters = Object.values(filters).some(
-    filterArray => filterArray.length > 0
-  );
+    const hasActiveFilters = Object.values(filters).some(
+        filterArray => filterArray.length > 0
+    );
 
-  function clearAllFilters() {
-    setFilters(initialFilters);
-  }
+    function clearAllFilters() {
+        setFilters(initialFilters);
+    }
 
   const toggleSelect = (id) => {
     setSelected((prev) => {
