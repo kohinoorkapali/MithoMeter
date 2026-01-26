@@ -325,7 +325,6 @@
   object-fit: cover;   
   border: 1px solid #ccc; 
 }
-
 /* ===== MOBILE / SMALL SCREENS ===== */
 @media screen and (max-width: 480px) {
   /* PAGE PADDING */
@@ -386,6 +385,17 @@
   }
 
   /* FILTERS */
+  .filters {
+    flex-direction: column;
+    gap: 12px;  /* extra spacing between filter row and write-review button */
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 12px; /* <-- increase space between Traveller / Ratings / Time */
+    flex-wrap: wrap;
+  }
+
   .filter-group button,
   .write-review {
     padding: 6px 10px;
