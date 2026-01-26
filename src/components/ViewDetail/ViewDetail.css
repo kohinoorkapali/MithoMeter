@@ -460,4 +460,18 @@
   .overview-line .item {
     font-size: 13px;
   }
+
+  .image-carousel {
+    height: 240px;
+    border-radius: 10px;
+  }
+
+  .nav-btn {
+    font-size: 22px;
+    padding: 4px 10px;
+  }
+
+  .image-counter {
+    font-size: 11px;
+  }
 }
