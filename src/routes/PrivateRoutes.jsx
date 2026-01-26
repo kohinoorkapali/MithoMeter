@@ -30,9 +30,16 @@ const PrivateRoutes = ({ token, user, setToken }) => {
           element={userRole === "admin" ? <AddPage /> : <Navigate to="/browse" replace />}
         />
         <Route
-          path="/activityPage"
-          element={userRole === "admin" ? <ActivityPage /> : <Navigate to="/browse" replace />}
-        />
+  path="/activityPage"
+  element={
+    userRole === "admin" ? (
+      <ActivityPage currentUser={user} />
+    ) : (
+      <Navigate to="/browse" replace />
+    )
+  }
+/>
+
         <Route
         path="/admin"
         element={userRole === "admin" ? <AdminPage/> : <Navigate to="/browse" replace />}
