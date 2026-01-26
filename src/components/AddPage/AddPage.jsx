@@ -34,6 +34,7 @@ export default function AddPage() {
     handleSubmit,
     setValue,
     reset,
+    control,
     formState: { errors, isValid },
   } = useForm({
     resolver: zodResolver(restaurantSchema),
@@ -57,7 +58,7 @@ export default function AddPage() {
   
         console.log("EDIT FETCH RESPONSE:", res);
   
-        const restaurant = res.data; // ✅ THIS IS THE KEY
+        const restaurant = res.data; 
   
         reset({
           name: restaurant.name ?? "",
@@ -350,6 +351,7 @@ useEffect(() => {
             options={moodOptions}
             register={register}
             setValue={setValue}
+            control={control} 
             error={errors.moods}
           />
 
@@ -360,6 +362,7 @@ useEffect(() => {
             options={featureOptions}
             register={register}
             setValue={setValue}
+            control={control} 
             error={errors.features}
           />
           

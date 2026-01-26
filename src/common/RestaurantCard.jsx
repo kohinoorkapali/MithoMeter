@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 import "./RestaurantCard.css";
 
@@ -50,20 +51,26 @@ export function RestaurantCard({
     const confirmDelete = window.confirm(
       `Are you sure you want to delete ${item.name}?`
     );
-
+  
     if (!confirmDelete) return;
-
+  
     try {
       await axios.delete(
         `http://localhost:5000/api/restaurants/${item.restaurantId}`
       );
-
+  
+      toast.success("Restaurant deleted successfully 🗑️");
+  
       onDelete?.(item.restaurantId);
     } catch (error) {
       console.error("Delete failed", error);
-      alert("Failed to delete restaurant");
+  
+      toast.error(
+        error?.response?.data?.message || "Failed to delete restaurant ❌"
+      );
     }
   };
+  
 
   /* ----------------------------------
      REVIEWS
