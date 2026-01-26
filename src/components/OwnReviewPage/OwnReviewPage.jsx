@@ -39,8 +39,6 @@ export default function OwnReviewsPage({ currentUser }) {
     <>
       <Header />
       <div className="container mt-4">
-        <h1 className="text-center mb-4">My Reviews</h1>
-
         {loading ? (
           <div className="text-center">
             <Spinner animation="border" variant="primary" />
@@ -63,70 +61,33 @@ export default function OwnReviewsPage({ currentUser }) {
                   state={{ currentUser }}
                   style={{ textDecoration: "none", color: "black" }}
                 >
-                  <Card
-                    className="shadow-sm"
-                    style={{
-                      backgroundColor: "#FFF7EC",
-                      borderRadius: "12px",
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      maxWidth: "1300px",
-                      padding: "20px",
-                      gap: "20px",
-                      marginLeft: "10%",
-                      marginBottom: "20px",
-                    }}
-                  >
+                  <Card className="review-card shadow-sm">
                     {/* Restaurant Image */}
                     <img
                       src={restaurantImage}
                       alt={review.restaurantName}
-                      style={{
-                        width: "200px",
-                        height: "200px",
-                        objectFit: "cover",
-                        borderRadius: "12px",
-                        gap:"40px"
-                      }}
+                      className="review-image"
                     />
 
                     {/* Review Info */}
-                    <div style={{ flex: 1 }}>
-                      <h3
-                        style={{
-                          fontWeight: 700,
-                          fontSize: "1.5rem",
-                          marginBottom: "10px",
-                        }}
-                      >
-                        {review.restaurantName}
-                      </h3>
-                      <h5
-                        style={{
-                          fontWeight: 500,
-                          fontSize: "1.2rem",
-                          marginBottom: "8px",
-                        }}
-                      >
-                        {review.title}
-                      </h5>
-                      <p style={{ fontSize: "1rem", color: "#333" }}>
-                        {review.text}
-                      </p>
+                    <div className="review-content">
+                      <h3>{review.restaurantName}</h3>
+                      <h5>{review.title}</h5>
+                      <p>{review.text}</p>
                       {review.visitDate && (
-                        <p style={{ fontSize: "0.9rem", color: "#333" }}>
+                        <p>
                           <strong>Visited on:</strong>{" "}
                           {new Date(review.visitDate).toLocaleDateString()}
                         </p>
                       )}
                       {review.visitCompany && (
-                        <p style={{ fontSize: "0.9rem", color: "#333" }}>
+                        <p>
                           <strong>Went with:</strong> {review.visitCompany}
                         </p>
                       )}
                     </div>
                   </Card>
+
                 </Link>
               );
             })}
