@@ -31,3 +31,20 @@
   transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
+
+/* MOBILE: 1 column layout for screens <= 768px */
+@media (max-width: 768px) {
+  .favorites-page .restaurant-grid {
+    grid-template-columns: 1fr; /* stack cards vertically */
+    gap: 15px;                  /* slightly smaller gap for mobile */
+    padding: 0 10px;            /* optional horizontal padding */
+  }
+
+  .favorites-page h1 {
+    font-size: 22px; /* smaller title on mobile */
+  }
+
+  .favorites-page p {
+    font-size: 14px; /* smaller text for mobile */
+  }
+}

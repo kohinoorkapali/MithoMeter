@@ -100,11 +100,11 @@ const currentItems = filteredItems.slice(startIndex, endIndex);
                         {/* MOBILE FILTER TOGGLE */}
                 <div className="mobile-filter-toggle d-md-none">
                 <button 
-  style={{ backgroundColor: "#FF8A00", color: "#fff" }}
-  onClick={() => setFiltersVisible(prev => !prev)}
->
-  <FaFilter /> Filters
-</button>
+                    style={{ backgroundColor: "#FF8A00", color: "#fff" }}
+                    onClick={() => setFiltersVisible(prev => !prev)}
+                    >
+                    <FaFilter /> Filters
+                </button>
 
                 </div>
 

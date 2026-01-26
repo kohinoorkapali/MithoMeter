@@ -93,12 +93,6 @@ export default function OwnReviewsPage({ currentUser }) {
             })}
           </div>
         )}
-
-        <div className="text-center mt-4">
-          <Link to="/profile" className="btn btn-secondary">
-            Back to Profile
-          </Link>
-        </div>
       </div>
     </>
   );
