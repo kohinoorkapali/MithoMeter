@@ -2,6 +2,12 @@ import { Header } from '../Header.jsx';
 import { RestaurantCard } from '../../common/RestaurantCard.jsx';
 import { DropdownFilter } from "../../common/DropdownFilter.jsx";
 import { Pagination } from "../../common/Pagination.jsx";
+import {
+  cuisineOptions,
+  moodOptions,
+  featureOptions,
+  priceOptions
+} from "../../common/filterOptions";
 
 import './BrowsePage.css';
 
