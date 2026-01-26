@@ -441,3 +441,13 @@
 }
 
 
+@media (max-width: 768px) {
+  .ViewDetail-container {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
+  .reviews-page {
+    padding: 20px;
+  }
+}
