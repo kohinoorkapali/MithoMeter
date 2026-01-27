@@ -50,6 +50,10 @@ const AppRoutes = ({ token, user, setToken, setUser }) => {
           <Route path="/addPage" element={user?.role === "admin" ? <AddPage /> : <Navigate to="/browse" replace />} />
           <Route path="/activityPage" element={user?.role === "admin" ? <ActivityPage currentUser={user} /> : <Navigate to="/browse" replace />} />
           <Route path="/admin" element={user?.role === "admin" ? <AdminPage /> : <Navigate to="/browse" replace />} />
+          <Route
+  path="/restaurants/edit/:id"
+  element={user?.role === "admin" ? <AddPage /> : <Navigate to="/browse" replace />}
+/>
         </Route>
 
         {/* Redirect unknown paths */}

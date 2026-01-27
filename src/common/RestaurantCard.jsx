@@ -1,44 +1,81 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
+
 import "./RestaurantCard.css";
+
 import locationIcon from "../assets/location.png";
 import menuIcon from "../assets/menu.png";
 import priceIcon from "../assets/tag.png";
 import cuisineIcon from "../assets/dish.png";
+import openIcon from "../assets/open.png";
+import closedIcon from "../assets/closed.png";
 import heartIcon from "../assets/heart.png";
+
 import { useApi } from "../hooks/useAPI.js";
 
 export function RestaurantCard({
-   item, currentUser, role, 
-   onToggleFavorite, isSelected, onSelect 
-  }) {
+  item,
+  currentUser,
+  role,
+  onToggleFavorite,
+  isSelected,
+  onSelect,
+  onDelete,
+}) {
   const { callApi } = useApi();
+  const navigate = useNavigate();
+
   const [isSaved, setIsSaved] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [reviews, setReviews] = useState([]);
 
-  const toggleAdminMenu = () => setShowAdminMenu(!showAdminMenu);
-
-  // Determine image to display
+  /* ----------------------------------
+     IMAGE
+  ---------------------------------- */
   const restaurantImage =
-    item.photos && item.photos.length > 0
-      ? `http://localhost:5000${item.photos[0]}`
-      : "/placeholder.png";
+  item.photos && item.photos.length > 0
+    ? `http://localhost:5000/uploads/${item.photos[0]}`
+    : "/placeholder.png";
 
-  const rating =
-    typeof item.rating === "number" || typeof item.rating === "string"
-      ? item.rating
-      : "N/A";
+  /* ----------------------------------
+     ADMIN ACTIONS
+  ---------------------------------- */
 
-  const cuisines = Array.isArray(item.cuisines)
-    ? item.cuisines.join(", ")
-    : item.cuisines || "No Cuisines";
+  const handleEdit = () => {
+    navigate(`/restaurants/edit/${item.restaurantId}`);
+  };
 
-  const priceRange = Array.isArray(item.priceRange)
-    ? item.priceRange.join(", ")
-    : item.priceRange || "Price N/A";
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete ${item.name}?`
+    );
+  
+    if (!confirmDelete) return;
+  
+    try {
+      await axios.delete(
+        `http://localhost:5000/api/restaurants/${item.restaurantId}`
+      );
+  
+      toast.success("Restaurant deleted successfully 🗑️");
+  
+      onDelete?.(item.restaurantId);
+    } catch (error) {
+      console.error("Delete failed", error);
+  
+      toast.error(
+        error?.response?.data?.message || "Failed to delete restaurant ❌"
+      );
+    }
+  };
+  
 
-  // Fetch reviews
+  /* ----------------------------------
+     REVIEWS
+  ---------------------------------- */
+
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -48,7 +85,7 @@ export function RestaurantCard({
         const data = await res.json();
         setReviews(data.data || []);
       } catch (err) {
-        console.error("Error fetching reviews:", err);
+        console.error("Review fetch error:", err);
       }
     };
 
@@ -65,62 +102,82 @@ export function RestaurantCard({
         ).toFixed(1)
       : "N/A";
 
-  // Check if already favorite
+  /* ----------------------------------
+     FAVORITES
+  ---------------------------------- */
+
   useEffect(() => {
     const checkFavorite = async () => {
       if (!currentUser) return;
+
       try {
         const favorites = await callApi(
           "GET",
           `/favorites/${currentUser.id}`
         );
+
         const exists = favorites.some(
           (fav) =>
-            Number(fav.restaurantId) === Number(item.restaurantId)
+            Number(fav.restaurantId) ===
+            Number(item.restaurantId)
         );
+
         setIsSaved(exists);
       } catch (err) {
-        console.error("Error checking favorites:", err.message);
+        console.error("Favorite check error:", err);
       }
     };
 
     checkFavorite();
   }, [currentUser, item.restaurantId, callApi]);
 
-  // Toggle favorite
   const toggleSave = async () => {
     if (!currentUser) {
-      alert("Please login to save restaurants");
+      alert("Please login first");
       return;
     }
 
     try {
       if (isSaved) {
-        // Remove from favorites
         await callApi(
           "DELETE",
           `/favorites/${currentUser.id}/${item.restaurantId}`
         );
         setIsSaved(false);
       } else {
-        // Save to favorites
         await callApi("POST", "/favorites/save", {
           data: {
             userId: currentUser.id,
             restaurantId: item.restaurantId,
           },
         });
+
         setIsSaved(true);
       }
 
-      // Notify parent if provided
-      if (onToggleFavorite) {
-        onToggleFavorite(item.restaurantId);
-      }
+      onToggleFavorite?.(item.restaurantId);
     } catch (err) {
-      console.error("Favorite toggle error:", err.message);
+      console.error("Favorite toggle error:", err);
     }
   };
+
+  /* ----------------------------------
+     DATA
+  ---------------------------------- */
+
+  const cuisines = Array.isArray(item.cuisines)
+    ? item.cuisines.join(", ")
+    : item.cuisines || "No Cuisines";
+
+  const priceRange = Array.isArray(item.priceRange)
+    ? item.priceRange.join(", ")
+    : item.priceRange || "Price N/A";
+
+  const isOpen = item.isOpen;
+
+  /* ----------------------------------
+     RENDER
+  ---------------------------------- */
 
   return (
     <Link
@@ -129,125 +186,110 @@ export function RestaurantCard({
       className="restaurant-card"
       style={{ textDecoration: "none", color: "inherit" }}
     >
-      {/* LEFT IMAGE */}
+      {/* IMAGE */}
       <div className="card-image">
-        <img
-          src={restaurantImage}
-          alt={item.name || "Restaurant"}
-        />
+        <img src={restaurantImage} alt={item.name} />
       </div>
+
+      {/* COMPARE */}
       <div
         className={`compare-select ${isSelected ? "selected" : ""}`}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
           onSelect(item.restaurantId);
-        }}>
+        }}
+      >
         {isSelected ? "✔" : "○"}
       </div>
 
-      {/* MIDDLE CONTENT */}
+      {/* CONTENT */}
       <div className="card-content">
         <h2 className="res-name">{item.name}</h2>
 
-        <p className="line res-location">
-          <img
-            src={locationIcon}
-            className="icon"
-            alt="Location"
-          />
-          {item.location || "Unknown Location"}
-        </p>
+        {/* Location + Status */}
+        <div className="line location-status">
+          <p className="line res-location">
+            <img src={locationIcon} className="icon" />
+            {item.location || "Unknown"}
+          </p>
 
-        <p className="line res-details">
           <img
-            src={cuisineIcon}
-            className="icon"
-            alt="Cuisine"
+            src={isOpen ? openIcon : closedIcon}
+            className="status-icon"
           />
+        </div>
+
+        {/* Cuisine */}
+        <p className="line">
+          <img src={cuisineIcon} className="icon" />
           {cuisines}
         </p>
 
-        <p className="line res-price">
-          <img
-            src={priceIcon}
-            className="icon"
-            alt="Price"
-          />
+        {/* Price */}
+        <p className="line">
+          <img src={priceIcon} className="icon" />
           {priceRange}
         </p>
 
-        {/* Menu button */}
+        {/* Menu */}
         {item.menuLink && (
           <button
             className="menu-link-btn"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              window.open(
-                item.menuLink,
-                "_blank",
-                "noopener,noreferrer"
-              );
+              window.open(item.menuLink, "_blank");
             }}
           >
-            <img
-              src={menuIcon}
-              className="icon"
-              alt="Menu"
-            />
+            <img src={menuIcon} className="icon" />
             Menu
           </button>
         )}
 
-        {/* Dummy reviews UI */}
+        {/* Reviews */}
         <div className="reviews">
-          <p className="review">
-            “Amazing food! Fresh and flavorful.”
-          </p>
-          <p className="review">
-            “Cozy place and quick service.”
-          </p>
+          <p className="review">“Amazing food!”</p>
+          <p className="review">“Cozy place.”</p>
         </div>
       </div>
 
-      {/* RIGHT SIDE: Admin or User */}
+      {/* RIGHT SIDE */}
       <div className="card-right">
-        {role === "admin" ? (
-          <div
-            className="admin-menu-wrapper"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-          >
-            <span
-              className="admin-menu-icon"
-              onClick={toggleAdminMenu}
-            >
-              &#8230;
-            </span>
 
-            {showAdminMenu && (
-              <div className="admin-menu-dropdown">
-                <button
-                  onClick={() =>
-                    console.log("Edit", item.restaurantId)
-                  }
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() =>
-                    console.log("Delete", item.restaurantId)
-                  }
-                >
-                  Delete
-                </button>
-              </div>
-            )}
+        {/* ADMIN */}
+        {role === "admin" && (
+          <div className="card-right admin">
+            <div className="admin-actions">
+
+              <button
+                className="edit-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleEdit();
+                }}
+              >
+                Edit
+              </button>
+
+              <button
+                className="delete-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleDelete();
+                }}
+              >
+                Delete
+              </button>
+
+            </div>
           </div>
-        ) : (
+        )}
+
+        {/* USER */}
+        {role !== "admin" && (
           <div
             className="user-toggle"
             onClick={(e) => {
@@ -258,11 +300,7 @@ export function RestaurantCard({
           >
             {isSaved ? (
               <div className="saved-wrapper">
-                <img
-                  src={heartIcon}
-                  alt="saved"
-                  className="heart-big"
-                />
+                <img src={heartIcon} className="heart-big" />
                 <span className="rating-on-heart">
                   {overallRating}
                 </span>
@@ -279,6 +317,7 @@ export function RestaurantCard({
             )}
           </div>
         )}
+
       </div>
     </Link>
   );

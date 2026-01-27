@@ -50,7 +50,6 @@ export default function ViewReview() {
             : r
         )
       );
-  
       toast.success("Review approved");
       closeModal();
     } catch (err) {

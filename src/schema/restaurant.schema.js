@@ -1,4 +1,3 @@
-// src/schema/restaurant.schema.js
 import * as z from "zod";
 
 export const restaurantSchema = z.object({
@@ -17,8 +16,4 @@ export const restaurantSchema = z.object({
   moods: z.array(z.string()).min(1, "Select at least one mood"),
   features: z.array(z.string()).min(1, "Select at least one feature"),
 
-  photos: z
-    .array(z.instanceof(File))
-    .min(1, "Please add at least one photo")
-    .max(5, "You can upload max 5 photos"),
 });

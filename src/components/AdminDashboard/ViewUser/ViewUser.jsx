@@ -19,7 +19,7 @@ export default function ViewUser() {
   const getAllUsers = async () => {
     setLoading(true);
     try {
-      const res = await apiRequest("GET", "/users");
+      const res = await apiRequest("GET", "/admin");
       setUsers(res.data);
     } catch (err) {
       toast.error(err.message || "Failed to load users");
@@ -33,7 +33,7 @@ export default function ViewUser() {
     const toastId = toast.loading("Updating user status...");
   
     try {
-      const res = await apiRequest("PATCH", `/users/${id}/status`);
+      const res = await apiRequest("PATCH", `/admin/${id}/status`);
       // res === { message, status }
   
       setUsers((prev) =>

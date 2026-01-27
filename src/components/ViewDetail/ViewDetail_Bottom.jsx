@@ -389,7 +389,10 @@ const filteredReviews = [...reviews]
                                 </button>                           
                                   </>
                             ) : (
-                             <button>🚩 Report</button>
+                             <button onClick={() => reportReview(review.reviewId)}>
+                              🚩 Report
+                            </button>
+
                            )}
                       </div>
                       )}
