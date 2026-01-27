@@ -36,3 +36,9 @@ export const priceOptions = [
   { label: "₹₹ Medium", value: "Medium" },
   { label: "₹₹₹ High", value: "High" },
 ];
+
+export const ratingOptions = [
+  { label: "High Rating (4+)", value: "high" },
+  { label: "Low Rating (≤2)", value: "low" },
+  { label: "Newly Added", value: "new" }
+];
