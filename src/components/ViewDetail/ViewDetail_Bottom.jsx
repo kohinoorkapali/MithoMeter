@@ -78,13 +78,26 @@ const toggleLike = async (reviewId) => {
   };
 
   const getAverage = (key) => {
-    if (reviews.length === 0) return 0;
-    const sum = reviews.reduce((acc, r) => {
-      const value = r.ratings ? Number(r.ratings[key]) || 0 : 0;
-      return acc + value;
-    }, 0);
-    return (sum / reviews.length).toFixed(1);
-  };
+  if (reviews.length === 0) return 0;
+
+  const sum = reviews.reduce((acc, r) => {
+    let ratings = r.ratings;
+
+    // Parse if string
+    if (typeof ratings === "string") {
+      try {
+        ratings = JSON.parse(ratings);
+      } catch {
+        ratings = {};
+      }
+    }
+
+    const value = ratings && ratings[key] ? Number(ratings[key]) : 0;
+    return acc + value;
+  }, 0);
+
+  return (sum / reviews.length).toFixed(1);
+};
 
   const overallRating = reviews.length
     ? (
@@ -377,7 +390,10 @@ const filteredReviews = [...reviews]
                                 </button>                           
                                   </>
                             ) : (
-                              <button onClick={() => reportReview(review.reviewId)}>🚩 Report </button>
+                             <button onClick={() => reportReview(review.reviewId)}>
+                              🚩 Report
+                            </button>
+
                            )}
                       </div>
                       )}

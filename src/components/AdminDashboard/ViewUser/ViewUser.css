@@ -8,7 +8,7 @@
 }
 
 /* Header area */
-.user-header {
+.user-page .user-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,19 +16,19 @@
   color: #1c1c1c;
 }
 
-.user-header h2 {
+.user-page .user-header h2 {
   font-size: 28px;
   font-weight: 600;
   margin: 0;
 }
 
-.user-header p {
+.user-page .user-header p {
   font-size: 16px;
   color: #333;
   margin: 4px 0 0;
 }
 
-.circle-btn {
+.user-page .circle-btn {
   width: 45px;
   height: 45px;
   border-radius: 50%;
@@ -40,7 +40,7 @@
 }
 
 /* User list */
-.user-list {
+.user-page .user-list {
   display: flex;
   flex-direction: column;
   gap: 16px;           /* SPACE BETWEEN CARDS */
@@ -48,7 +48,7 @@
 }
 
 /* Individual user card */
-.user-card {
+.user-page .user-card {
   background: #fff7f0;               /* CARD BACKGROUND */
   padding: 8px 12px;
   border-radius: 10px;
@@ -62,14 +62,14 @@
 }
 
 /* Hover effect */
-.user-card:hover {
+.user-page .user-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
 
 }
 
 /* User info */
-.user-card .user-info {
+.user-page .user-card .user-info {
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
@@ -77,14 +77,14 @@
 }
 
 /* Stack username + joined date vertically */
-.user-card .user-info > div {
+.user-page .user-card .user-info > div {
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
 }
 
 /* Profile image size */
-.user-card .user-info .profile-img {
+.user-page .user-card .user-info .profile-img {
   width: 45px !important;
   height: 45px !important;
   border-radius: 50% !important;
@@ -93,7 +93,7 @@
 }
 
 /* Name */
-.user-info h3 {
+.user-page .user-info h3 {
   margin: 0;
   font-size: 15px;
   font-weight: 600;
@@ -101,14 +101,14 @@
 }
 
 /* Date */
-.user-info p {
+.user-page .user-info p {
   margin: 2px 0 0;
   color: #777;
   font-size: 13px;
 }
 
 /* Ban button */
-.ban-btn {
+.user-page .ban-btn {
   background: #0c2540;
   color: white;
   padding: 6px 14px;
@@ -119,6 +119,6 @@
   font-weight: 600;
 }
 
-.ban-btn:hover {
+.user-page .ban-btn:hover {
   opacity: 0.9;
 }
