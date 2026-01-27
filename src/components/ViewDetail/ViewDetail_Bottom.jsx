@@ -115,15 +115,16 @@ const toggleLike = async (reviewId) => {
   };
 
   const totalReviews = reviews.length;
-  //REPORT BUTTON
-  const reportReview = async (reviewId) =>{
-    try{
-      await apiRequest("POST", `/reviews/${reviewId}/report`);
-      alert("Review reported")
-    }catch(err){
-      toast.error(err.message || "Failed to load reports");
-    }
+ 
+// REPORT BUTTON
+const reportReview = async (reviewId) => {
+  try {
+    await apiRequest("POST", `/reviews/${reviewId}/report`);
+    toast.success("Review reported "); 
+  } catch (err) {
+    toast.error(err?.response?.data?.message || "Failed to report review ❌"); // ❌ Error toast
   }
+};
 
   async function handleDelete(reviewId) {
   if (!window.confirm("Are you sure you want to delete this review?")) return;
@@ -376,7 +377,7 @@ const filteredReviews = [...reviews]
                                 </button>                           
                                   </>
                             ) : (
-                             <button>🚩 Report</button>
+                              <button onClick={() => reportReview(review.reviewId)}>🚩 Report </button>
                            )}
                       </div>
                       )}

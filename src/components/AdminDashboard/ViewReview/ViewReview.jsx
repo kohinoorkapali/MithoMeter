@@ -160,7 +160,6 @@ export default function ViewReview() {
             <h3>{item.user?.username}</h3>
             
             <div>
-              <h3>{item.username}</h3>
               <span className={`status-badge ${
                 item.isHidden
                   ? "hidden"
