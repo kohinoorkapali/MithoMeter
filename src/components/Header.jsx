@@ -25,8 +25,12 @@ export function Header({ role }) {
         )}
       </div>
 
-      <div className="left-header">
-        <Link to="/profile">Profile</Link>
+       <div className="left-header">
+        {role === "admin" ? (
+          <Link to="/logout">Logout</Link>
+        ) : (
+          <Link to="/profile">Profile</Link>
+        )}
       </div>
     </div>
   );
