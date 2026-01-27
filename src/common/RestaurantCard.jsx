@@ -34,10 +34,9 @@ export function RestaurantCard({
   /* ----------------------------------
      IMAGE
   ---------------------------------- */
-  const restaurantImage =
-  item.photos && item.photos.length > 0
-    ? `http://localhost:5000/uploads/${item.photos[0]}`
-    : "/placeholder.png";
+  const restaurantImage = item.photos?.length
+  ? `http://localhost:5000${item.photos[0]}`
+  : "/placeholder.png";
 
   /* ----------------------------------
      ADMIN ACTIONS

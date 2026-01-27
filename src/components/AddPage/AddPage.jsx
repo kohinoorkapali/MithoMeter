@@ -1,8 +1,8 @@
 // src/pages/AddPage.jsx
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { restaurantSchema  } from "../../schema/restaurant.schema.js";
+import { restaurantSchema } from "../../schema/restaurant.schema.js";
 import { apiRequest, apiUpload } from "../../utils/api.js";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -12,54 +12,56 @@ import { DropdownFilter } from "../../common/DropdownFilter.jsx";
 import "./AddPage.css";
 import { EditableChips } from "../../common/EditableChips.jsx";
 
+import {
+  cuisineOptions,
+  moodOptions,
+  featureOptions,
+  priceOptions,
+} from "../../common/filterOptions";
+
 export default function AddPage() {
   const { id } = useParams();
   const isEdit = Boolean(id);
 
-  // react-hook-form with Zod
-  const [backendError, setBackendError] = useState("");
-  
-  const [successMessage, setSuccessMessage] = useState(""); //  success state
-
-  
-  const [selectedMoods, setSelectedMoods] = useState([]);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
-  const [selectedCuisines, setSelectedCuisines] = useState([]);
-  const [selectedPrices, setSelectedPrices] = useState([]);
   const [existingPhotos, setExistingPhotos] = useState([]);
   const [newPhotos, setNewPhotos] = useState([]);
 
+  /* ------------------ FORM SETUP ------------------ */
   const {
     register,
     handleSubmit,
     setValue,
     reset,
     control,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(restaurantSchema),
     mode: "onChange",
     defaultValues: {
-      moods: [],
-      features: [],
+      name: "",
+      location: "",
+      openTime: "",
+      closeTime: "",
+      description: "",
+      websiteLink: "",
+      menuLink: "",
       cuisines: [],
       priceRange: [],
-      photos: [],
+      moods: [],
+      features: [],
     },
   });
-  
 
-  //EDIT PAGE
+  /* ------------------ EDIT MODE FETCH ------------------ */
   useEffect(() => {
     if (!id) return;
+
     const fetchRestaurant = async () => {
       try {
         const res = await apiRequest("GET", `/restaurants/${id}`);
-  
-        console.log("EDIT FETCH RESPONSE:", res);
-  
-        const restaurant = res.data; 
-  
+
+        const restaurant = res.data;
+
         reset({
           name: restaurant.name ?? "",
           location: restaurant.location ?? "",
@@ -71,95 +73,37 @@ export default function AddPage() {
           cuisines: restaurant.cuisines ?? [],
           priceRange: restaurant.priceRange ?? [],
           moods: restaurant.moods ?? [],
-          features: restaurant.features ?? []
+          features: restaurant.features ?? [],
         });
 
         setExistingPhotos(restaurant.photos ?? []);
-  
-        setSelectedCuisines(restaurant.cuisines ?? []);
-        setSelectedPrices(restaurant.priceRange ?? []);
-        setSelectedMoods(restaurant.moods ?? []);
-        setSelectedFeatures(restaurant.features ?? []);
       } catch (err) {
-        console.error("Edit fetch failed:", err.message);
+        console.error("Edit fetch failed:", err);
+        toast.error("Failed to load restaurant");
       }
     };
+
     fetchRestaurant();
   }, [id, reset]);
-  
-useEffect(() => {
-  setValue("moods", selectedMoods, { shouldValidate: true });
-}, [selectedMoods, setValue]);
 
-useEffect(() => {
-  setValue("features", selectedFeatures, { shouldValidate: true });
-}, [selectedFeatures, setValue]);
-
-useEffect(() => {
-  setValue("cuisines", selectedCuisines, { shouldValidate: true });
-}, [selectedCuisines, setValue]);
-
-useEffect(() => {
-  setValue("priceRange", selectedPrices, { shouldValidate: true });
-}, [selectedPrices, setValue]);
-
+  /* ------------------ PHOTO UPLOAD ------------------ */
   const handlePhotoUpload = (e) => {
-    const files = Array.from(e.target.files); 
-    const oversized = files.find(file => file.size > 5 * 1024 * 1024);
+    const files = Array.from(e.target.files);
+
+    const oversized = files.find((f) => f.size > 5 * 1024 * 1024);
+
     if (oversized) {
-      alert("Each image must be under 5MB");
+      toast.error("Each image must be under 5MB");
       return;
-    } 
-    setNewPhotos(prev => [...prev, ...files].slice(0, 5));
+    }
+
+    setNewPhotos((prev) => [...prev, ...files].slice(0, 5));
   };
-  
 
-  // options
-  const moodOptions = [
-    { label: "Cozy", value: "Cozy" },
-    { label: "Romantic", value: "Romantic" },
-    { label: "Family-Friendly", value: "Family-Friendly" },
-    { label: "Luxury", value: "Luxury" },
-    { label: "Casual", value: "Casual" },
-    { label: "Party", value: "Party" },
-    { label: "Pet-Friendly", value: "Pet-Friendly" },
-    { label: "Business", value: "Business" },
-  ];
-
-
-  const featureOptions = [
-    { label: "WiFi", value: "WiFi" },
-    { label: "Parking", value: "Parking" },
-    { label: "Outdoor Seating", value: "Outdoor Seating" },
-    { label: "Non-Smoking", value: "Non-Smoking" },
-    { label: "Air Conditioned", value: "Air Conditioned" },
-    { label: "Wheelchair Accessibility", value: "Wheelchair Accessibility" },
-  ];
-
-
-  const cuisineOptions = [
-    { label: "Nepali", value: "Nepali" },
-    { label: "Newari", value: "Newari" },
-    { label: "Indian", value: "Indian" },
-    { label: "Chinese", value: "Chinese" },
-    { label: "Tibetan", value: "Tibetan" },
-    { label: "Fast Food", value: "Fast Food" },
-    { label: "Italian", value: "Italian" },
-    { label: "Continental", value: "Continental" },
-    { label: "Cafe", value: "Cafe" },
-    { label: "Bakery", value: "Bakery" },
-  ];
-
-  const priceOptions = [
-    { label: "₹ Low", value: "Low" },
-    { label: "₹₹ Medium", value: "Medium" },
-    { label: "₹₹₹ High", value: "High" },
-  ];
-
+  /* ------------------ SUBMIT ------------------ */
   const onSubmit = async (data) => {
-    console.log("SUBMIT DATA:", data);
     const formData = new FormData();
-  
+
     formData.append("name", data.name);
     formData.append("location", data.location);
     formData.append("openTime", data.openTime);
@@ -167,214 +111,246 @@ useEffect(() => {
     formData.append("description", data.description);
     formData.append("websiteLink", data.websiteLink);
     formData.append("menuLink", data.menuLink);
-  
-    formData.append("cuisines", JSON.stringify(selectedCuisines));
-    formData.append("priceRange", JSON.stringify(selectedPrices));
-    formData.append("moods", JSON.stringify(selectedMoods));
-    formData.append("features", JSON.stringify(selectedFeatures));
-  
+
+    formData.append("cuisines", JSON.stringify(data.cuisines));
+    formData.append("priceRange", JSON.stringify(data.priceRange));
+    formData.append("moods", JSON.stringify(data.moods));
+    formData.append("features", JSON.stringify(data.features));
+
     formData.append("existingPhotos", JSON.stringify(existingPhotos));
-  
+
     newPhotos.forEach((photo) => {
       formData.append("photos", photo);
     });
-  
+
     try {
       if (isEdit) {
         await apiUpload("PATCH", `/restaurants/${id}`, formData);
-  
-        toast.success("Restaurant updated successfully ✅");
+        toast.success("Restaurant updated 🎉");
       } else {
         await apiUpload("POST", "/restaurants", formData);
-  
-        toast.success("Restaurant added successfully 🎉");
-      }
-  
-      // Optional: Reset after success (for create only)
-      if (!isEdit) {
+        toast.success("Restaurant added 🎉");
+
         reset();
         setNewPhotos([]);
         setExistingPhotos([]);
-        setSelectedCuisines([]);
-        setSelectedPrices([]);
-        setSelectedMoods([]);
-        setSelectedFeatures([]);
       }
-  
     } catch (err) {
-      console.error("Submit error:", err);
-  
-      toast.error(
-        err?.response?.data?.message || "Something went wrong ❌"
-      );
+      console.error(err);
+      toast.error("Something went wrong");
     }
   };
-  
-  
+
+  /* ------------------ UI ------------------ */
   return (
     <>
       <Header role="admin" />
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="create-container">
-          {/* Left - Photos */}
+
+          {/* ================= LEFT : PHOTOS ================= */}
           <div className="left-container">
             <div className="photo-container">
-              Add some photos
+
+              <h3>Add Photos</h3>
+
               <label htmlFor="photo-upload" className="photo-box">
                 Click to add photos
               </label>
+
               <input
                 type="file"
                 id="photo-upload"
-                name="photos"          
                 accept="image/*"
                 multiple
                 onChange={handlePhotoUpload}
               />
-              {errors.photos && <small className="error">{errors.photos.message}</small>}
 
-              {/* EXISTING PHOTOS (from DB) */}
+              {/* Existing */}
               {existingPhotos.length > 0 && (
                 <div className="photo-preview">
-                  {existingPhotos.map((photo, index) => (
-                    <div key={index} className="uploaded-photo-wrapper">
+                  {existingPhotos.map((photo, i) => (
+                    <div key={i} className="uploaded-photo-wrapper">
+
                       <img
-                        src={encodeURI(
-                          `http://localhost:5000/${photo.replace(/\\/g, "/")}`
-                        )}
-                        alt="existing"
+                        src={`http://localhost:5000${photo}`}
                         className="uploaded-photo"
+                        alt=""
                       />
+
                       <span
                         className="remove-photo"
                         onClick={() =>
-                          setExistingPhotos((prev) =>
-                            prev.filter((_, i) => i !== index)
+                          setExistingPhotos((p) =>
+                            p.filter((_, index) => index !== i)
                           )
                         }
                       >
                         ×
                       </span>
+
                     </div>
                   ))}
                 </div>
               )}
 
-              {/* NEWLY UPLOADED PHOTOS */}
+              {/* New */}
               <div className="photo-preview">
-                {newPhotos.map((photo, index) => {
-                  const previewUrl = URL.createObjectURL(photo);
+                {newPhotos.map((photo, i) => {
+                  const url = URL.createObjectURL(photo);
+
                   return (
-                    <div key={index} className="uploaded-photo-wrapper">
+                    <div key={i} className="uploaded-photo-wrapper">
+
                       <img
-                        src={previewUrl}
-                        alt="preview"
+                        src={url}
                         className="uploaded-photo"
-                        onLoad={() => URL.revokeObjectURL(previewUrl)}
+                        alt=""
+                        onLoad={() => URL.revokeObjectURL(url)}
                       />
+
                       <span
                         className="remove-photo"
                         onClick={() =>
-                          setNewPhotos((prev) =>
-                            prev.filter((_, i) => i !== index)
+                          setNewPhotos((p) =>
+                            p.filter((_, index) => index !== i)
                           )
                         }
                       >
                         ×
                       </span>
+
                     </div>
                   );
                 })}
               </div>
+
             </div>
           </div>
 
-          {/* Right - Form Fields */}
+          {/* ================= RIGHT : FORM ================= */}
           <div className="right-container">
-            <div className="name">
-              <label>Title the restaurant</label>
-              <input type="text" {...register("name")} />
-              {errors.name && <small className="error">{errors.name.message}</small>}
-            </div>
-            
 
-            <div className="location">
-              <label>Add the location</label>
-              <input type="text" {...register("location")} />
-              {errors.location && <small className="error">{errors.location.message}</small>}
+            {/* Name */}
+            <div>
+              <label>Restaurant Name</label>
+              <input {...register("name")} />
+              {errors.name && <small>{errors.name.message}</small>}
             </div>
 
-            <div className="cuisine">
-              <label>What cuisine does it offer?</label>
-              <DropdownFilter title="Cuisines" options={cuisineOptions} selectedValues={selectedCuisines} onChange={setSelectedCuisines} />
-              {errors.cuisines && <small className="error">{errors.cuisines.message}</small>}
+            {/* Location */}
+            <div>
+              <label>Location</label>
+              <input {...register("location")} />
+              {errors.location && <small>{errors.location.message}</small>}
             </div>
 
-            <div className="price">
-              <label>Enter the price range</label>
-              <DropdownFilter title="Price" options={priceOptions} selectedValues={selectedPrices} onChange={setSelectedPrices} />
-              {errors.priceRange && <small className="error">{errors.priceRange.message}</small>}
+            {/* Cuisine */}
+            <div>
+              <label>Cuisines</label>
+
+              <Controller
+                name="cuisines"
+                control={control}
+                render={({ field }) => (
+                  <DropdownFilter
+                    title="Cuisines"
+                    options={cuisineOptions}
+                    selectedValues={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
             </div>
 
-            <div className="hours">
-              <label>Enter the opening hours</label>
+            {/* Price */}
+            <div>
+              <label>Price Range</label>
+
+              <Controller
+                name="priceRange"
+                control={control}
+                render={({ field }) => (
+                  <DropdownFilter
+                    title="Price"
+                    options={priceOptions}
+                    selectedValues={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
+
+            {/* Hours */}
+            <div>
+              <label>Opening Hours</label>
+
               <div className="hour-inputs">
                 <input type="time" {...register("openTime")} />
                 <span>to</span>
                 <input type="time" {...register("closeTime")} />
               </div>
-              {errors.openTime && <small className="error">{errors.openTime.message}</small>}
-              {errors.closeTime && <small className="error">{errors.closeTime.message}</small>}
+
+              {errors.openTime && <small>{errors.openTime.message}</small>}
+              {errors.closeTime && <small>{errors.closeTime.message}</small>}
             </div>
 
-            <div className="description">
-              <label>Add a description</label>
-              <textarea rows="7" {...register("description")}></textarea>
-              {errors.description && <small className="error">{errors.description.message}</small>}
+            {/* Description */}
+            <div>
+              <label>Description</label>
+              <textarea rows="6" {...register("description")} />
+              {errors.description && <small>{errors.description.message}</small>}
             </div>
 
-            <div className="website">
-              <label>Link to the restaurant</label>
-              <input type="text" {...register("websiteLink")} />
-              {errors.websiteLink && <small className="error">{errors.websiteLink.message}</small>}
+            {/* Website */}
+            <div>
+              <label>Website</label>
+              <input {...register("websiteLink")} />
             </div>
 
-            <div className="menu">
-              <label>Link to the restaurant's menu</label>
-              <input type="text" {...register("menuLink")} />
-              {errors.menuLink && <small className="error">{errors.menuLink.message}</small>}
+            {/* Menu */}
+            <div>
+              <label>Menu Link</label>
+              <input {...register("menuLink")} />
             </div>
 
-           <EditableChips
-            name="moods"
-            label="Add moods"
-            options={moodOptions}
-            register={register}
-            setValue={setValue}
-            control={control} 
-            error={errors.moods}
-          />
+            {/* Moods */}
+            <Controller
+              name="moods"
+              control={control}
+              render={({ field }) => (
+                <EditableChips
+                  label="Add moods"
+                  options={moodOptions}
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.moods}
+                />
+              )}
+            />
 
-           <EditableChips
 
-            name="features"
-            label="Add features"
-            options={featureOptions}
-            register={register}
-            setValue={setValue}
-            control={control} 
-            error={errors.features}
-          />
-          
-            {backendError && (
-              <div className="backend-error" style={{ color: "red", margin: "10px 0" }}>
-                {backendError}
-              </div>
-            )}
+            {/* Features */}
+            <Controller
+              name="features"
+              control={control}
+              render={({ field }) => (
+                <EditableChips
+                  label="Add features"
+                  options={featureOptions}
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.features}
+                />
+              )}
+            />
+
 
             <button type="submit" className="submit-btn">
               {isEdit ? "Update" : "Submit"}
             </button>
+
           </div>
         </div>
       </form>

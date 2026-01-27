@@ -1,144 +1,233 @@
-/* Wrapper */
+/* ================= WRAPPER ================= */
+
 .editable-chips {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
- 
-/* Label */
+
+
+/* ================= LABEL ================= */
+
 .chips-label {
   font-size: 14px;
-  font-weight: 500;
-  color: #4b5563;
+  font-weight: 600;
+  color: #374151;
 }
- 
-/* Container */
+
+
+/* ================= CONTAINER ================= */
+
 .chips-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
 }
- 
-/* Wrapper for each chip */
+
+
+/* ================= CHIP WRAPPER ================= */
+
 .chip-wrapper {
   position: relative;
 }
- 
-/* Chip button */
+
+
+/* ================= CHIP BUTTON ================= */
+
 .chip-btn {
-  padding: 6px 14px;
+  padding: 7px 16px;
+
   border-radius: 999px;
+
   font-size: 13px;
   font-weight: 500;
-  border: 1px solid #d1d5db;
-  background: white;
+
+  border: 1.5px solid #d1d5db;
+
+  background: #ffffff;
   color: #374151;
+
   cursor: pointer;
+
   transition: all 0.2s ease;
 }
- 
+
+
+/* Hover */
+
 .chip-btn:hover {
   background: #ecfdf5;
   border-color: #059669;
 }
- 
-/* Active chip */
+
+
+/* Focus */
+
+.chip-btn:focus {
+  outline: none;
+
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.4);
+}
+
+
+/* ================= ACTIVE CHIP ================= */
+
 .chip-btn.active {
   background: #059669;
-  color: white;
-  border-color: #047857;
-  transform: scale(1.05);
+  color: #ffffff;
+
+  border: 2px solid #065f46;
+
+  font-weight: 600;
+
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.3);
+
+  transform: scale(1.08);
 }
- 
-/* Delete icon */
+
+
+/* Checkmark */
+
+.chip-check {
+  margin-right: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+/* ================= DELETE ================= */
+
 .chip-delete {
   position: absolute;
   top: -6px;
   right: -6px;
+
   width: 18px;
   height: 18px;
+
   background: #ef4444;
   color: white;
+
   font-size: 11px;
+
   border-radius: 50%;
+
   display: none;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
 }
- 
-/* Show delete on hover */
+
+
+/* Show delete */
+
 .chip-wrapper:hover .chip-delete {
   display: flex;
 }
- 
-/* Add button */
+
+
+/* ================= ADD BUTTON ================= */
+
 .chip-add-btn {
-  padding: 6px 14px;
+  padding: 7px 16px;
+
   border-radius: 999px;
+
   font-size: 13px;
-  border: 1px dashed #059669;
+
+  border: 1.5px dashed #059669;
+
   background: transparent;
   color: #059669;
+
   cursor: pointer;
+
   transition: 0.2s;
 }
- 
+
 .chip-add-btn:hover {
   background: #ecfdf5;
 }
- 
-/* Input box */
+.chip-btn.active {
+  background: linear-gradient(135deg, #059669, #10b981);
+  border-color: #047857;
+}
+
+
+
+/* ================= INPUT BOX ================= */
+
 .chip-input-box {
   display: flex;
   gap: 6px;
   align-items: center;
 }
- 
+
+
 /* Input */
+
 .chip-input {
   padding: 6px 10px;
+
   font-size: 13px;
+
   border-radius: 6px;
+
   border: 1px solid #d1d5db;
+
   outline: none;
 }
- 
+
 .chip-input:focus {
   border-color: #059669;
+
   box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
 }
- 
+
+
 /* Save */
+
 .chip-save-btn {
   padding: 6px 10px;
+
   background: #059669;
   color: white;
+
   border-radius: 6px;
+
   font-size: 12px;
+
   border: none;
+
   cursor: pointer;
 }
- 
+
 .chip-save-btn:hover {
   opacity: 0.9;
 }
- 
+
+
 /* Cancel */
+
 .chip-cancel-btn {
   font-size: 14px;
   color: #6b7280;
+
   background: none;
   border: none;
+
   cursor: pointer;
 }
- 
+
 .chip-cancel-btn:hover {
   color: black;
 }
- 
-/* Error */
+
+
+/* ================= ERROR ================= */
+
 .chips-error {
   font-size: 12px;
   color: #dc2626;

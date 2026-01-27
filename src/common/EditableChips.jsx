@@ -1,74 +1,62 @@
+// src/common/EditableChips.jsx
+
 import { useState } from "react";
-import { useWatch } from "react-hook-form";
 import "./EditableChips.css";
 
 export function EditableChips({
-  name,
   label,
   options = [],
-  register,
-  setValue,
-  control,
+  value = [],
+  onChange,
   error,
 }) {
-
-  const selected = useWatch({
-    control,
-    name,
-    defaultValue: [],
-  });
-
   const [customOptions, setCustomOptions] = useState([]);
   const [showInput, setShowInput] = useState(false);
   const [newValue, setNewValue] = useState("");
 
   const allOptions = [...options, ...customOptions];
 
-  // Toggle
-  const toggleChip = (value) => {
+  /* Toggle chip */
+  const toggleChip = (val) => {
     let updated;
 
-    if (selected.includes(value)) {
-      updated = selected.filter((v) => v !== value);
+    if (value.includes(val)) {
+      updated = value.filter((v) => v !== val);
     } else {
-      updated = [...selected, value];
+      updated = [...value, val];
     }
 
-    setValue(name, updated, { shouldValidate: true });
+    onChange(updated);
   };
 
-  // Add new
+  /* Add new chip */
   const handleAdd = () => {
     if (!newValue.trim()) return;
 
-    const value = newValue.toLowerCase().replace(/\s+/g, "-");
+    const val = newValue.toLowerCase().replace(/\s+/g, "-");
 
-    if (allOptions.some((o) => o.value === value)) return;
+    if (allOptions.some((o) => o.value === val)) return;
 
     const newOption = {
-      value,
+      value: val,
       label: newValue,
     };
 
     setCustomOptions((prev) => [...prev, newOption]);
 
-    const updated = [...selected, value];
-
-    setValue(name, updated, { shouldValidate: true });
+    onChange([...value, val]);
 
     setNewValue("");
     setShowInput(false);
   };
 
-  // Delete
-  const deleteChip = (value) => {
+  /* Delete custom chip */
+  const deleteChip = (val) => {
     setCustomOptions((prev) =>
-      prev.filter((opt) => opt.value !== value)
+      prev.filter((opt) => opt.value !== val)
     );
 
-    const updated = selected.filter((v) => v !== value);
-
-    setValue(name, updated, { shouldValidate: true });
+    onChange(value.filter((v) => v !== val));
   };
 
   return (
@@ -79,8 +67,10 @@ export function EditableChips({
       <div className="chips-container">
 
         {allOptions.map((opt) => {
-          const active = selected.includes(opt.value);
-          const isDefault = options.some(o => o.value === opt.value);
+          const active = value.includes(opt.value);
+          const isDefault = options.some(
+            (o) => o.value === opt.value
+          );
 
           return (
             <div key={opt.value} className="chip-wrapper">
@@ -90,7 +80,7 @@ export function EditableChips({
                 onClick={() => toggleChip(opt.value)}
                 className={`chip-btn ${active ? "active" : ""}`}
               >
-                {active && "✓ "}
+                {active && <span className="chip-check">✓</span>}
                 {opt.label}
               </button>
 
@@ -107,6 +97,7 @@ export function EditableChips({
           );
         })}
 
+        {/* Add button */}
         {!showInput && (
           <button
             type="button"
@@ -117,6 +108,7 @@ export function EditableChips({
           </button>
         )}
 
+        {/* Input box */}
         {showInput && (
           <div className="chip-input-box">
 
@@ -149,9 +141,6 @@ export function EditableChips({
         )}
 
       </div>
-
-      {/* Hidden input for RHF */}
-      <input type="hidden" {...register(name)} />
 
       {error && (
         <p className="chips-error">{error.message}</p>

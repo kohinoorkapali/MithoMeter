@@ -15,7 +15,7 @@ export const featureOptions = [
   { label: "Outdoor Seating", value: "Outdoor Seating" },
   { label: "Non-Smoking", value: "Non-Smoking" },
   { label: "Air Conditioned", value: "Air Conditioned" },
-  { label: "Wheelchair Accessibility", value: "Wheelchair Accessibility" },
+  { label: "Wheelchair Accessibility", value: "Wheelchair Accessibility" }
 ];
 
 export const cuisineOptions = [
