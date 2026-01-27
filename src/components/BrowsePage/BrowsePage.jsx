@@ -61,54 +61,58 @@ const isNewRestaurant = (createdAt) => {
   const today = new Date();
   const addedDate = new Date(createdAt);
   const diffDays = (today - addedDate) / (1000 * 60 * 60 * 24);
-  return diffDays <= 30;
+  return diffDays <= 30; // new if added within last 30 days
 };
 
 const filteredRestaurants = items.filter((r) => {
 
-  if (filters.cuisine.length && 
-      !filters.cuisine.some(c => r.cuisines.includes(c))) {
+  // 🍽️ Cuisine filter
+  if (filters.cuisine.length && !filters.cuisine.some(c => r.cuisines.includes(c))) {
     return false;
   }
 
+  // 💲 Price filter
   if (filters.price.length) {
-    const priceMatches = r.priceRange.some(p =>
-      filters.price.includes(p)
-    );
+    const priceMatches = r.priceRange.some(p => filters.price.includes(p));
     if (!priceMatches) return false;
   }
 
-  if (filters.mood.length && 
-      !filters.mood.some(m => r.moods.includes(m))) {
+  // 😃 Mood filter
+  if (filters.mood.length && !filters.mood.some(m => r.moods.includes(m))) {
     return false;
   }
 
-  if (filters.amenities.length && 
-      !filters.amenities.some(a => r.features.includes(a))) {
+  // 🛋️ Amenities filter
+  if (filters.amenities.length && !filters.amenities.some(a => r.features.includes(a))) {
     return false;
   }
 
-  // ⭐ RATINGS LOGIC (High / Low / New)
+  // ⭐ Ratings filter (number ranges + newly added)
   if (filters.ratings.length) {
-    let ratingMatch = false;
+  let ratingMatch = false;
 
-    if (filters.ratings.includes("high") && r.rating >= 4) {
-      ratingMatch = true;
+  filters.ratings.forEach(val => {
+    if (!isNaN(val)) {
+      const numVal = Number(val); // convert string to number
+
+      if (numVal === 5 && r.rating >= 5) {
+        ratingMatch = true;
+      } else if (numVal < 5 && r.rating >= numVal && r.rating < numVal + 1) {
+        ratingMatch = true;
+      }
     }
 
-    if (filters.ratings.includes("low") && r.rating <= 2) {
+    // Check newly added
+    if (val === "new" && isNewRestaurant(r.createdAt)) {
       ratingMatch = true;
     }
+  });
 
-    if (filters.ratings.includes("new") && r.isNew === true) {
-      ratingMatch = true;
-    }
-
-    if (!ratingMatch) return false;
-  }
-
+  if (!ratingMatch) return false;
+}
   return true;
 });
+
 
 
 // 2️⃣ Pagination slice
