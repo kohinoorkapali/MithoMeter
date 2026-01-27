@@ -8,7 +8,7 @@
 }
 
 /* Header */
-.reviews-header {
+.view-reviews-page  .reviews-header {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -16,19 +16,19 @@
   margin-bottom: 20px;
 }
 
-.reviews-header h2 {
+.view-reviews-page  .reviews-header h2 {
   margin: 0;
   font-size: 28px;
 }
 
-.reviews-header p {
+.view-reviews-page  .reviews-header p {
   margin-top: 3px;
   opacity: 0.85;
   font-size: 14px;
 }
 
 /* Review list */
-.reviews-list {
+.view-reviews-page  .reviews-list {
   margin-top: 25px;
   display: flex;
   flex-direction: column;
@@ -36,7 +36,7 @@
 }
 
 /* Review card (FIXED) */
-.review-card {
+.view-reviews-page .review-card {
   width: 100%;
   max-width: 750px;
   background: rgba(142, 136, 136, 0.25);
@@ -50,49 +50,49 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.review-card:hover {
+.view-reviews-page .review-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
 }
 
 /* Review info */
-.review-card h3 {
+.view-reviews-page .view-reviews-page .review-card h3 {
   margin: 0;
   font-size: 17px;
   color: #171616;
 }
 
-.review-card small {
+.view-reviews-page .review-card small {
   display: block;
   margin-top: 4px;
   font-size: 12px;
   color: rgba(9, 9, 9, 0.8);
 }
 
-.status-badge {
+.view-reviews-page .status-badge {
   padding: 3px 8px;
   border-radius: 12px;
   font-size: 12px;
   margin-left: 8px;
 }
 
-.status-badge.pending {
+.view-reviews-page .status-badge.pending {
   background: orange;
   color: white;
 }
 
-.status-badge.approved {
+.view-reviews-page .status-badge.approved {
   background: green;
   color: white;
 }
 
-.status-badge.hidden {
+.view-reviews-page .status-badge.hidden {
   background: red;
   color: white;
 }
 
 /* Profile image */
-.profile-img {
+.view-reviews-page .profile-img {
   width: 55px;
   height: 55px;
   border-radius: 50%;
@@ -100,9 +100,9 @@
 }
 
 /* Buttons */
-.accept-btn,
-.remove-btn,
-.close-btn {
+.view-reviews-page .accept-btn,
+.view-reviews-page .remove-btn,
+.view-reviews-page .close-btn {
   padding: 9px 18px;
   border-radius: 10px;
   font-size: 14px;
@@ -112,27 +112,27 @@
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
-.accept-btn {
+.view-reviews-page .accept-btn {
   background-color: #1e7e34;
 }
 
-.remove-btn {
+.view-reviews-page .remove-btn {
   background-color: #b11226;
 }
 
-.close-btn {
+.view-reviews-page .close-btn {
   background-color: #343a40;
 }
 
-.accept-btn:hover,
-.remove-btn:hover,
-.close-btn:hover {
+.view-reviews-page .accept-btn:hover,
+.view-reviews-page .remove-btn:hover,
+.view-reviews-page .close-btn:hover {
   transform: translateY(-2px);
   opacity: 0.9;
 }
 
 /* Modal */
-.modal-overlay {
+.view-reviews-page .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -145,7 +145,7 @@
   z-index: 1000;
 }
 
-.modal-box {
+.view-reviews-page .modal-box {
   background: #ffffff;
   padding: 25px;
   border-radius: 14px;
@@ -154,12 +154,12 @@
   color: #333;
 }
 
-.modal-box h3 {
+.view-reviews-page .modal-box h3 {
   margin-top: 0;
   color: #ff6a00;
 }
 
-.review-text {
+.view-reviews-page .review-text {
   background: #f5f5f5;
   padding: 12px;
   border-radius: 8px;
@@ -168,7 +168,7 @@
   color: #333;
 }
 
-.modal-actions {
+.view-reviews-page .modal-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
@@ -176,7 +176,7 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .review-card {
+  .view-reviews-page .review-card {
     flex-direction: column;
     align-items: flex-start;
   }
