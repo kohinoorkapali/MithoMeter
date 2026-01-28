@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import "./ProfilePage.css";
 import { Header } from "../Header";
 import toast from "react-hot-toast";
@@ -67,23 +68,53 @@ export default function ProfilePage({ setToken, currentUser, setUser }) {
     localStorage.removeItem("user");
     setToken(null);
   };
-
   const handleDelete = async () => {
-    if (!userId) return toast.error("User not found");
-
-    const confirmed = window.confirm("Are you sure? This action cannot be undone.");
-    if (!confirmed) return;
-
-    toast.promise(apiRequest("DELETE", `/users/${userId}`), {
-      loading: "Deleting account...",
-      success: "Account deleted successfully",
-      error: "Failed to delete account",
-    }).then(() => {
+    if (!userId) {
+      toast.error("User not found");
+      return;
+    }
+  
+    // SweetAlert confirmation
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, delete my account",
+      cancelButtonText: "Cancel",
+    });
+  
+    if (!result.isConfirmed) return;
+  
+    // Loading toast
+    const loadingToast = toast.loading("Deleting account...");
+  
+    try {
+      await apiRequest("DELETE", `/users/${userId}`);
+  
+      toast.dismiss(loadingToast);
+  
+      // Success toast
+      toast.success("Account deleted successfully");
+  
+      // Clear storage
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      setTimeout(() => setToken(null), 1500);
-    });
+  
+      // Logout after short delay
+      setTimeout(() => {
+        setToken(null);
+      }, 1500);
+  
+    } catch (err) {
+      toast.dismiss(loadingToast);
+  
+      toast.error(err.message || "Failed to delete account");
+    }
   };
+  
 
   const handleSave = async () => {
     try {

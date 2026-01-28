@@ -1,5 +1,5 @@
-// src/pages/AddReviewPage.jsx
 import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import "./AddReviewPage.css";
 import { Header } from "../Header";
@@ -164,11 +164,12 @@ export default function AddReviewPage({ currentUser }) {
         setLoading(false);
 
         if (data.success) {
-          alert("Review submitted!");
+          toast.success("Review submitted!");
           navigate(`/restaurant/${restaurant.restaurantId}`);
         } else {
+          toast.error(data.message || "Failed to submit review");
           setError(data.message || "Failed to submit review");
-        }
+        }     
       } catch (err) {
         console.error(err);
         setLoading(false);
@@ -215,11 +216,12 @@ export default function AddReviewPage({ currentUser }) {
         const data = await res.json();
         setLoading(false);
         if (res.ok) {
-          alert("Review updated successfully!");
+          toast.success("Review updated successfully!");
           navigate(-1);
         } else {
+          toast.error(data.message || "Failed to update review");
           setError(data.message || "Failed to update review");
-        }
+        }        
       } catch (err) {
         console.error(err);
         setLoading(false);

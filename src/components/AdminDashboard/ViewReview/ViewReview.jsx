@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import toast from "react-hot-toast";  
+import Swal from "sweetalert2";
 import "./ViewReview.css";
 import { apiRequest } from "../../../utils/api";
 import { DropdownFilter } from "../../../common/DropdownFilter.jsx";
@@ -63,7 +64,17 @@ export default function ViewReview() {
   const handleDelete = async () => {
     if (!selectedReview) return;
   
-    if (!window.confirm("Hide this review?")) return;
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This review will be hidden",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, hide it",
+    });
+  
+    if (!result.isConfirmed) return;
   
     try {
       setLoading(true);
@@ -73,28 +84,16 @@ export default function ViewReview() {
         `/admin/reported-reviews/${selectedReview.reviewId}`
       );
   
-      // Update flags in UI
-      setReviews((prev) =>
-        prev.map((r) =>
-          r.reviewId === selectedReview.reviewId
-            ? {
-                ...r,
-                isHidden: true,
-                isReported: false,
-              }
-            : r
-        )
-      );
-  
       toast.success("Review hidden");
       closeModal();
-    } catch (err) {
+  
+    } catch {
       toast.error("Failed to hide review");
-      console.error(err);
     } finally {
       setLoading(false);
     }
-  };  
+  };
+   
   
   const closeModal = () => {
     setSelectedReview(null);

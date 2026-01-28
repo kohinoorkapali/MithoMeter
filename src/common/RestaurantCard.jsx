@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -47,22 +48,37 @@ export function RestaurantCard({
   };
 
   const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete ${item.name}?`
-    );
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: `Do you really want to delete ${item.name}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "Cancel",
+    });
   
-    if (!confirmDelete) return;
+    if (!result.isConfirmed) return;
+  
+    const loadingToast = toast.loading("Deleting restaurant...");
   
     try {
       await axios.delete(
         `http://localhost:5000/api/restaurants/${item.restaurantId}`
       );
   
+      toast.dismiss(loadingToast);
+  
       toast.success("Restaurant deleted successfully 🗑️");
   
+      // Update UI
       onDelete?.(item.restaurantId);
+  
     } catch (error) {
       console.error("Delete failed", error);
+  
+      toast.dismiss(loadingToast);
   
       toast.error(
         error?.response?.data?.message || "Failed to delete restaurant ❌"
@@ -70,7 +86,6 @@ export function RestaurantCard({
     }
   };
   
-
   /* ----------------------------------
      REVIEWS
   ---------------------------------- */
@@ -131,18 +146,34 @@ export function RestaurantCard({
   }, [currentUser, item.restaurantId, callApi]);
 
   const toggleSave = async () => {
+    // If not logged in
     if (!currentUser) {
-      alert("Please login first");
+      await Swal.fire({
+        title: "Login Required",
+        text: "Please login to save restaurants.",
+        icon: "info",
+        confirmButtonColor: "#2563eb",
+      });
+  
       return;
     }
-
+  
+    const loadingToast = toast.loading(
+      isSaved ? "Removing from favorites..." : "Saving to favorites..."
+    );
+  
     try {
       if (isSaved) {
         await callApi(
           "DELETE",
           `/favorites/${currentUser.id}/${item.restaurantId}`
         );
+  
+        toast.dismiss(loadingToast);
+        toast.success("Removed from favorites ❤️‍🩹");
+  
         setIsSaved(false);
+  
       } else {
         await callApi("POST", "/favorites/save", {
           data: {
@@ -150,15 +181,25 @@ export function RestaurantCard({
             restaurantId: item.restaurantId,
           },
         });
-
+  
+        toast.dismiss(loadingToast);
+        toast.success("Added to favorites ❤️");
+  
         setIsSaved(true);
       }
-
+  
+      // Update parent if needed
       onToggleFavorite?.(item.restaurantId);
+  
     } catch (err) {
       console.error("Favorite toggle error:", err);
+  
+      toast.dismiss(loadingToast);
+  
+      toast.error("Failed to update favorites ❌");
     }
   };
+  
 
   /* ----------------------------------
      DATA

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../../schema/register.schema"; // Your Zod schema
 import { apiRequest } from "../../utils/api.js";
@@ -22,25 +23,44 @@ export default function Register() {
   const [backendError, setBackendError] = useState("");
   const [loading, setLoading] = useState(false);
 
-const onSubmit = async (data) => {
-  try {
-    setBackendError("");
+  const onSubmit = async (data) => {
     setLoading(true);
-
-    const payload = {
-      fullname: data.fullname,
-      username: data.username,
-      email: data.email,
-      password: data.password,
-    };
-    await apiRequest("POST", "/auth/register", { data: payload });
-    setLoading(false);
-    navigate("/login"); 
-  } catch (err) {
-    setBackendError(err.message);
-    setLoading(false);
-  }
-};
+    setBackendError("");
+  
+    // Show loading toast
+    const loadingToast = toast.loading("Creating account...");
+  
+    try {
+      const payload = {
+        fullname: data.fullname,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      };
+  
+      await apiRequest("POST", "/auth/register", {
+        data: payload,
+      });
+  
+      toast.dismiss(loadingToast);
+  
+      // Success toast
+      toast.success("Account created successfully!");
+  
+      // Redirect to login
+      navigate("/login");
+  
+    } catch (err) {
+      toast.dismiss(loadingToast);
+  
+      // Error toast
+      toast.error(err.message || "Registration failed");
+  
+      setBackendError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };  
 
   return (
     <div className="register-page">

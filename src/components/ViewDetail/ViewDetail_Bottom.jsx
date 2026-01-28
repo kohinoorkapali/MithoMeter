@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import { apiRequest } from "../../utils/api";
 import "./ViewDetail_Bottom.css";
 import personIcon from "../../assets/person.png";
@@ -139,36 +140,60 @@ const reportReview = async (reviewId) => {
   }
 };
 
-  async function handleDelete(reviewId) {
-  if (!window.confirm("Are you sure you want to delete this review?")) return;
+// DELETE BUTTON
+async function handleDelete(reviewId) {
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "This review will be permanently deleted!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#dc2626",
+    cancelButtonColor: "#6b7280",
+    confirmButtonText: "Yes, delete it",
+    cancelButtonText: "Cancel",
+  });
 
-  // Optional: Show a "Loading" toast
+  if (!result.isConfirmed) return;
+
   const loadingToast = toast.loading("Deleting review...");
 
   try {
     const res = await fetch(`http://localhost:5000/api/reviews/${reviewId}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: currentUser.id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: currentUser.id,
+      }),
     });
 
+    const data = await res.json();
+
+    toast.dismiss(loadingToast);
+
     if (res.ok) {
-      // Dismiss loading and show success
-      toast.dismiss(loadingToast);
       toast.success("Review deleted successfully!");
-      
-      setReviews((prev) => prev.filter((r) => r.reviewId !== reviewId));
+
+      // Remove from UI
+      setReviews((prev) =>
+        prev.filter((r) => r.reviewId !== reviewId)
+      );
+
       setOpenMenuId(null);
+
     } else {
-      toast.dismiss(loadingToast);
-      const errorData = await res.json();
-      toast.error(errorData.message || "Failed to delete");
+      toast.error(data.message || "Failed to delete review");
     }
+
   } catch (err) {
+    console.error(err);
+
     toast.dismiss(loadingToast);
     toast.error("Network error. Please try again.");
   }
 }
+
 const filteredReviews = [...reviews]
   .filter(r => travellerFilter === "All" || r.visitCompany === travellerFilter)
   .sort((a, b) => {

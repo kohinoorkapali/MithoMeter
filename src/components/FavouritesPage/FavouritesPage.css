@@ -3,6 +3,10 @@
   min-height: 100vh;
   background-color: #f8f9fa;
 }
+.favorites-container{
+  margin-left: 200px;
+  margin-right: 200px;
+}
 
 .favorites-page h1 {
   font-size: 28px;

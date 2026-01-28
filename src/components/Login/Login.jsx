@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../schema/loginschema"; 
 import { Link, useNavigate } from "react-router-dom";
@@ -10,7 +11,7 @@ import { apiRequest } from "../../utils/api.js";
 import "./Login.css";
 
 export default function Login({ setToken, setUser }) {
-  const navigate = useNavigate(); // ✅ initialize navigate
+  const navigate = useNavigate(); // initialize navigate
 
   const [showPassword, setShowPassword] = useState(false);
   const [backendError, setBackendError] = useState("");
@@ -22,43 +23,57 @@ export default function Login({ setToken, setUser }) {
 
   const onSubmit = async (data) => {
     setLoading(true);
-    setBackendError("");
-
+  
+    // Show loading toast
+    const loadingToast = toast.loading("Logging in...");
+  
     try {
       const res = await apiRequest("POST", "/auth/login", {
         data: { email: data.email, password: data.password },
       });
-
+  
+      toast.dismiss(loadingToast);
+  
       if (res.access_token) {
-        // store token
+  
+        // Save token
+        localStorage.setItem("token", res.access_token);
         setToken(res.access_token);
-
-        // store full user info including role
+  
+        // Save user
         const userData = {
           id: res.user.id,
           username: res.user.username,
           fullname: res.user.fullname,
-          role: res.user.role?.trim().toLowerCase(), // admin/user
+          role: res.user.role?.trim().toLowerCase(),
           email: res.user.email,
         };
+  
+        localStorage.setItem("user", JSON.stringify(userData));
         setUser(userData);
-
-        // ✅ navigate based on role
+  
+        // Success toast
+        toast.success("Login successful!");
+  
+        // Navigate
         if (userData.role === "admin") {
           navigate("/admin", { replace: true });
         } else {
           navigate("/browse", { replace: true });
         }
-
+  
       } else {
-        setBackendError(res.message || "Invalid credentials");
+        toast.error(res.message || "Invalid credentials");
       }
+  
     } catch (err) {
-      setBackendError(err.message || "Something went wrong");
+      toast.dismiss(loadingToast);
+      toast.error(err.message || "Login failed");
     } finally {
       setLoading(false);
     }
   };
+  
   
   return (
     <div className="login-container">
