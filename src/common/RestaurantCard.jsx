@@ -20,13 +20,14 @@ export function RestaurantCard({
   currentUser,
   role,
   onToggleFavorite,
+  disableClick = false,
   isSelected,
   onSelect,
   onDelete,
 }) {
   const { callApi } = useApi();
   const navigate = useNavigate();
-
+  const CardWrapper = disableClick ? "div" : Link;
   const [isSaved, setIsSaved] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [reviews, setReviews] = useState([]);
@@ -34,9 +35,9 @@ export function RestaurantCard({
   /* ----------------------------------
      IMAGE
   ---------------------------------- */
-  const restaurantImage =
+const restaurantImage =
   item.photos && item.photos.length > 0
-    ? `http://localhost:5000/uploads/${item.photos[0]}`
+    ? `http://localhost:5000${item.photos[0]}`
     : "/placeholder.png";
 
   /* ----------------------------------
@@ -180,12 +181,18 @@ export function RestaurantCard({
   ---------------------------------- */
 
   return (
-    <Link
-      to={`/restaurant/${item.restaurantId}`}
-      state={{ currentUser }}
-      className="restaurant-card"
-      style={{ textDecoration: "none", color: "inherit" }}
-    >
+    <CardWrapper
+    {...(!disableClick && {
+      to: `/restaurant/${item.restaurantId}`,
+      state: { currentUser },
+    })}
+    className="restaurant-card"
+    style={{
+      textDecoration: "none",
+      color: "inherit",
+      cursor: disableClick ? "default" : "pointer",
+    }}
+  >
       {/* IMAGE */}
       <div className="card-image">
         <img src={restaurantImage} alt={item.name} />
@@ -319,6 +326,6 @@ export function RestaurantCard({
         )}
 
       </div>
-    </Link>
+    </CardWrapper>
   );
 }
