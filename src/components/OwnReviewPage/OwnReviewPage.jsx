@@ -65,7 +65,7 @@ export default function OwnReviewsPage({ currentUser }) {
                   state={{ currentUser }}
                   style={{ textDecoration: "none", color: "black" }}
                 >
-                  <Card className="review-card shadow-sm">
+                  <Card className="own-review-card shadow-sm">
                     {/* Restaurant Image */}
                     <img
                       src={restaurantImage}

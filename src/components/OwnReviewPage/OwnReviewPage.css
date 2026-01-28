@@ -1,5 +1,5 @@
 /* Base desktop layout (row) */
-.review-card {
+.own-review-card {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -8,11 +8,11 @@
   border-radius: 12px;
   padding: 20px;
   max-width: 1300px;
-  margin: 0 auto 20px auto; /* center horizontally */
+  margin: 0 auto 20px auto;
 }
 
 /* Image */
-.review-image {
+.own-review-card .review-image {
   width: 200px;
   height: 200px;
   object-fit: cover;
@@ -20,50 +20,75 @@
 }
 
 /* Content */
-.review-content {
+.own-review-card .review-content {
   flex: 1;
 }
 
-.review-content h3 {
+.own-review-card .review-content h3 {
   font-weight: 700;
   font-size: 1.5rem;
   margin-bottom: 10px;
 }
 
-.review-content h5 {
+.own-review-card .review-content h5 {
   font-weight: 500;
   font-size: 1.2rem;
   margin-bottom: 8px;
 }
 
-.review-content p {
+.own-review-card .review-content p {
   font-size: 1rem;
   color: #333;
 }
 
+/* Buttons */
+.own-review-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.own-review-actions .edit-btn,
+.own-review-actions .delete-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.own-review-actions .edit-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.own-review-actions .delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
 /* MOBILE: stack image above content */
 @media (max-width: 576px) {
-  .review-card {
+  .own-review-card {
     flex-direction: column;
     align-items: flex-start;
     padding: 15px;
   }
 
-  .review-image {
+  .own-review-card .review-image {
     width: 100%;
     height: auto;
     margin-bottom: 15px;
   }
 
-  .review-content h3 {
+  .own-review-card .review-content h3 {
     font-size: 1.2rem;
   }
 
-  .review-content h5 {
+  .own-review-card .review-content h5 {
     font-size: 1rem;
   }
 
-  .review-content p {
+  .own-review-card .review-content p {
     font-size: 0.95rem;
   }
 }
