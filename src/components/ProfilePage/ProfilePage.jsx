@@ -119,39 +119,49 @@ export default function ProfilePage({ setToken, currentUser, setUser }) {
   const handleSave = async () => {
     try {
       const formData = new FormData();
-      if (username && username.trim() !== "") formData.append("username", username);
-      if (profileImageFile) formData.append("profile", profileImageFile);
-
-      if (formData.has("username") || formData.has("profile")) {
-        await apiUpload(`/users/upload/${userId}`, formData);
+  
+      if (username && username.trim() !== "") {
+        formData.append("username", username);
       }
-
+  
+      if (profileImageFile) {
+        formData.append("profile", profileImageFile);
+      }
+  
+      if (formData.has("username") || formData.has("profile")) {
+        await apiUpload("PATCH", `/users/upload/${userId}`, formData);
+      }
+  
       toast.success("Profile updated successfully");
       setIsEditing(false);
-
-      // Refresh latest user data
+  
       const res = await apiRequest("GET", `/users/${userId}`);
       const updated = res.data;
-
+  
       setUsername(updated.username);
       setFullName(updated.fullname);
       setEmail(updated.email);
+  
       setProfileImageUrl(
-        updated.profile_image
-          ? `http://localhost:5000/uploads/profile/${updated.profile_image}`
+        currentUser.profile_image
+          ? `http://localhost:5000/uploads/profile/${currentUser.profile_image}`
           : ""
       );
+      
+      setUsername(currentUser.username);
+      
+  
       setProfileImageFile(null);
-
-      // Update global user state
+  
       setUser(updated);
       localStorage.setItem("user", JSON.stringify(updated));
-
+  
     } catch (err) {
       console.error(err);
       toast.error("Failed to update profile");
     }
   };
+  
 
   return (
     <>

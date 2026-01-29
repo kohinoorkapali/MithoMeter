@@ -84,6 +84,19 @@ export default function ViewReview() {
         `/admin/reported-reviews/${selectedReview.reviewId}`
       );
   
+      // ✅ UPDATE UI STATE
+      setReviews((prev) =>
+        prev.map((r) =>
+          r.reviewId === selectedReview.reviewId
+            ? {
+                ...r,
+                isHidden: true,
+                isReported: false,
+              }
+            : r
+        )
+      );
+  
       toast.success("Review hidden");
       closeModal();
   
@@ -93,6 +106,7 @@ export default function ViewReview() {
       setLoading(false);
     }
   };
+  
    
   
   const closeModal = () => {

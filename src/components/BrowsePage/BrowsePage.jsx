@@ -111,20 +111,31 @@ export default function BrowsePage({ currentUser }) {
     )
       return false;
 
-    if (
-      filters.mood.length &&
-      !filters.moods?.some((m) => filters.mood.includes(m))
-    )
-      return false;
+    
+const moods = r.moods?.map((m) => m.toLowerCase()) || [];
+const selectedMoods = filters.mood.map((m) => m.toLowerCase());
 
-    if (
-      filters.amenities.length &&
-      !filters.features?.some((a) => filters.amenities.includes(a))
-    )
-      return false;
+if (
+  filters.mood.length &&
+  !selectedMoods.some((m) => moods.includes(m))
+) {
+  return false;
+}
+
+
+const amenities = r.features?.map((a) => a.toLowerCase()) || [];
+const selectedAmenities = filters.amenities.map((a) => a.toLowerCase());
+
+if (
+  filters.amenities.length &&
+  !selectedAmenities.some((a) => amenities.includes(a))
+) {
+  return false;
+}
 
     return true;
-  });
+  }
+);
 
   /* ==============================
      Sorting
