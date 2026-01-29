@@ -9,6 +9,8 @@ import {
   moodOptions,
   featureOptions,
   priceOptions,
+  ratingSortOptions,
+  dateSortOptions
 } from "../../common/filterOptions";
 
 import useNotifications from '../../hooks/useNotifications.js';
@@ -127,27 +129,29 @@ export default function BrowsePage({ currentUser }) {
   /* ==============================
      Sorting
   ============================== */
-  filteredRestaurants = [...filteredRestaurants];
-
-  if (ratingSort === "high") {
+  const ratingValue = filters.ratingSort[0];
+  const dateValue = filters.dateSort[0];
+  
+  if (ratingValue === "high") {
     filteredRestaurants.sort((a, b) => (b.rating || 0) - (a.rating || 0));
   }
-
-  if (ratingSort === "low") {
+  
+  if (ratingValue === "low") {
     filteredRestaurants.sort((a, b) => (a.rating || 0) - (b.rating || 0));
   }
-
-  if (dateSort === "newest") {
+  
+  if (dateValue === "newest") {
     filteredRestaurants.sort(
       (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
     );
   }
-
-  if (dateSort === "oldest") {
+  
+  if (dateValue === "oldest") {
     filteredRestaurants.sort(
       (a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0)
     );
   }
+  
 
   /* ==============================
      Pagination
@@ -160,15 +164,12 @@ export default function BrowsePage({ currentUser }) {
     indexOfLastItem
   );
 
-  const hasActiveFilters =
-    Object.values(filters).some((arr) => arr.length > 0) ||
-    ratingSort !== "" ||
-    dateSort !== "";
+  const hasActiveFilters = Object.values(filters).some(
+    (arr) => arr.length > 0
+  );  
 
   const clearAllFilters = () => {
     setFilters(initialFilters);
-    setRatingSort("");
-    setDateSort("");
     setCurrentPage(1);
   };
 
@@ -243,37 +244,36 @@ export default function BrowsePage({ currentUser }) {
             }
           />
 
+                  
           {/* Rating Sort */}
-          <div className="sort-dropdown">
-            <select
-              value={ratingSort}
-              onChange={(e) => {
-                setRatingSort(e.target.value);
-                setDateSort("");
-                setCurrentPage(1);
-              }}
-            >
-              <option value="">Sort by Rating</option>
-              <option value="high">High → Low ⭐</option>
-              <option value="low">Low → High ⭐</option>
-            </select>
-          </div>
+          <DropdownFilter
+            title="Rating"
+            options={ratingSortOptions}
+            selectedValues={filters.ratingSort}
+            onChange={(values) => {
+              setFilters((prev) => ({
+                ...prev,
+                ratingSort: values,
+                dateSort: [], // clear date when rating selected
+              }));
+              setCurrentPage(1);
+            }}
+          />
 
           {/* Date Sort */}
-          <div className="sort-dropdown">
-            <select
-              value={dateSort}
-              onChange={(e) => {
-                setDateSort(e.target.value);
-                setRatingSort("");
-                setCurrentPage(1);
-              }}
-            >
-              <option value="">Sort by Date</option>
-              <option value="newest">Newest First 🆕</option>
-              <option value="oldest">Oldest First 🕒</option>
-            </select>
-          </div>
+          <DropdownFilter
+            title="Date"
+            options={dateSortOptions}
+            selectedValues={filters.dateSort}
+            onChange={(values) => {
+              setFilters((prev) => ({
+                ...prev,
+                dateSort: values,
+                ratingSort: [], // clear rating when date selected
+              }));
+              setCurrentPage(1);
+            }}
+          />
 
           <DropdownFilter
             title="Price"
@@ -334,25 +334,29 @@ export default function BrowsePage({ currentUser }) {
 
         {/* Compare */}
         {selected.length === 2 && (
-          <div className="compare-bar">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
+  <div className="compare-bar">
+    <button
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
 
-                const selectedData = items.filter((item) =>
-                  selected.includes(item.restaurantId)
-                );
+        const selectedData = items
+          .filter((item) => selected.includes(item.restaurantId))
+          .map((item) => ({
+            ...item,
+            rating: item.rating ?? 0, // ✅ guarantee rating
+          }));
 
-                navigate("/compare", {
-                  state: { selectedRestaurants: selectedData },
-                });
-              }}
-            >
-              Compare Restaurants
-            </button>
-          </div>
-        )}
+        navigate("/compare", {
+          state: { selectedRestaurants: selectedData },
+        });
+      }}
+    >
+      Compare Restaurants
+    </button>
+  </div>
+)}
+
 
         {/* Pagination */}
         <Pagination

@@ -155,9 +155,12 @@ export default function ViewReview() {
               alt={item.user?.username || "User"}
               className="profile-img"
             />
-
-            <h3>{item.user?.username}</h3>
-            
+            <div>
+            <h4>{item.user?.username}</h4>
+              <small>
+                Reported on: {new Date(item.reportedAt).toLocaleString()}
+              </small>
+            </div>
             <div>
               <span className={`status-badge ${
                 item.isHidden
@@ -172,9 +175,6 @@ export default function ViewReview() {
                   ? "Pending"
                   : "Approved"}
               </span>
-              <small>
-                Reported on: {new Date(item.reportedAt).toLocaleString()}
-              </small>
             </div>
           </div>
         ))}

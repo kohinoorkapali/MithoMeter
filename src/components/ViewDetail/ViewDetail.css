@@ -207,9 +207,19 @@
   margin-bottom: 10px;
 }
 
-.overview-link:hover {
+.overview-link a {
+  color: rgb(230, 104, 14);
+  text-decoration: underline;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.overview-link a:hover {
   opacity: 0.8;
 }
+
 
 .reviews-page {
   background: #000;
