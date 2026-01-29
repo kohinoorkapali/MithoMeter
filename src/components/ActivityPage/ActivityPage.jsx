@@ -31,6 +31,7 @@ export default function ActivityPage({ currentUser }) {
                 item={item}
                 currentUser={currentUser}
                 role={currentUser?.role}
+                 disableClick={currentUser?.role === "admin"}
                 onDelete={(id) =>
                   setItems((prev) => prev.filter((r) => r.restaurantId !== id)) 
               }
