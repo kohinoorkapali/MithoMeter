@@ -1,0 +1,54 @@
+.favorites-page {
+  padding: 20px 40px;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+.favorites-container{
+  margin-left: 200px;
+  margin-right: 200px;
+}
+
+.favorites-page h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.favorites-page p {
+  font-size: 16px;
+  color: #777;
+}
+
+/* Grid for restaurant cards */
+.favorites-page .restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Optional: animation for cards */
+.favorites-page.restaurant-grid .restaurant-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.favorites-page .restaurant-grid .restaurant-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* MOBILE: 1 column layout for screens <= 768px */
+@media (max-width: 768px) {
+  .favorites-page .restaurant-grid {
+    grid-template-columns: 1fr; /* stack cards vertically */
+    gap: 15px;                  /* slightly smaller gap for mobile */
+    padding: 0 10px;            /* optional horizontal padding */
+  }
+
+  .favorites-page h1 {
+    font-size: 22px; /* smaller title on mobile */
+  }
+
+  .favorites-page p {
+    font-size: 14px; /* smaller text for mobile */
+  }
+}

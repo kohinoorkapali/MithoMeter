@@ -1,0 +1,121 @@
+/* Fullscreen background */
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-image: url("../../assets/Login.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    font-family: Arial, sans-serif;
+}
+
+
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.logo img {
+    width: 120px; 
+    height: auto;
+}
+
+
+/* Center container */
+.register-container {
+    
+    margin: 0 200px;
+    width: 500px;
+    background: black;
+    border: #f9f9f7 1px solid;
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow:
+    0 0 40px rgba(0, 0, 0, 0.9),
+    0 0 20px rgba(0, 0, 0, 0.7);
+
+
+    text-align: center;
+}
+
+/* Title */
+h2 {
+    margin: 0;
+    color: #fff;
+}
+
+.subtitle {
+    margin-bottom: 20px;
+    color: #f3f3f3;
+}
+
+/* Change this section */
+.input-group {
+    display: flex;
+    flex-direction: column; /* Stack Label and the Input-Area vertically */
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+/* Create a row for just the Label and Input if you want them side-by-side */
+/* OR, if you want the label above the input: */
+.input-group label {
+    margin-bottom: 5px;
+    color: #f3f3f3;
+    font-size: 14px;
+    text-align: left;
+}
+
+.input-group input {
+    width: 100%; /* Make input take full container width */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box; /* Ensures padding doesn't break width */
+}
+
+/* Style the error message specifically */
+.invalid-feedback {
+    color: #ff4d4d; /* Bright red for visibility on black bg */
+    font-size: 12px;
+    margin-top: 4px;
+    text-align: left;
+    width: 100%;
+    min-height: 15px; /* Keeps layout stable when error appears */
+}
+
+/* Button */
+.btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background:#e2301d;
+
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #a91403;
+}
+
+.login-link {
+    margin-top: 15px;
+    color: #f3f3f3;
+    text-align: right;
+    font-size: 14px;
+}
+.login-link a {
+    color: #FFCC00;
+    text-decoration: none;
+}
+

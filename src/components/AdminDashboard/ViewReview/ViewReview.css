@@ -1,0 +1,183 @@
+.view-reviews-page {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ff8600, #ff6a00);
+  padding: 30px;
+  color: white;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Header */
+.view-reviews-page  .reviews-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.view-reviews-page  .reviews-header h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.view-reviews-page  .reviews-header p {
+  margin-top: 3px;
+  opacity: 0.85;
+  font-size: 14px;
+}
+
+/* Review list */
+.view-reviews-page  .reviews-list {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Review card (FIXED) */
+.view-reviews-page .review-card {
+  width: 90%;
+  max-width: 750px;
+  background: rgba(247, 245, 245, 0.25);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.view-reviews-page .review-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
+}
+
+/* Review info */
+.view-reviews-page .view-reviews-page .review-card h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #171616;
+}
+
+.view-reviews-page .review-card small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(9, 9, 9, 0.8);
+}
+
+.view-reviews-page .status-badge {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.view-reviews-page .status-badge.pending {
+  background: orange;
+  color: white;
+}
+
+.view-reviews-page .status-badge.approved {
+  background: green;
+  color: white;
+}
+
+.view-reviews-page .status-badge.hidden {
+  background: red;
+  color: white;
+}
+
+/* Profile image */
+.view-reviews-page .profile-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Buttons */
+.view-reviews-page .accept-btn,
+.view-reviews-page .remove-btn,
+.view-reviews-page .close-btn {
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.view-reviews-page .accept-btn {
+  background-color: #1e7e34;
+}
+
+.view-reviews-page .remove-btn {
+  background-color: #b11226;
+}
+
+.view-reviews-page .close-btn {
+  background-color: #343a40;
+}
+
+.view-reviews-page .accept-btn:hover,
+.view-reviews-page .remove-btn:hover,
+.view-reviews-page .close-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+/* Modal */
+.view-reviews-page .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.view-reviews-page .modal-box {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 14px;
+  width: 420px;
+  max-width: 90%;
+  color: #333;
+}
+
+.view-reviews-page .modal-box h3 {
+  margin-top: 0;
+  color: #ff6a00;
+}
+
+.view-reviews-page .review-text {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.view-reviews-page .modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .view-reviews-page .review-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

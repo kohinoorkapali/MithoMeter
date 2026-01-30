@@ -1,0 +1,44 @@
+/* MOBILE */
+.activity-container {
+  max-width: 1200px;
+  margin: 0;          /* IMPORTANT: no auto here */
+  padding: 10px;
+}
+
+/* GRID */
+.activity-container .items-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* MOBILE – 1 card */
+.activity-container .items-grid > * {
+  flex: 1 1 100%;
+}
+
+/* TABLET */
+@media (min-width: 600px) {
+  .activity-container {
+    margin-left: 200px;
+    margin-right: 200px;
+  }
+
+  .activity-container .items-grid > * {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+/* DESKTOP */
+@media (min-width: 1024px) {
+  .activity-container {
+    margin-left: 200px;
+    margin-right: 200px;
+  }
+
+  .activity-container .items-grid > * {
+    flex: 1 1 calc(33.333% - 20px);
+  }
+}

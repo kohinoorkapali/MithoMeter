@@ -1,0 +1,220 @@
+.review-page {
+  background-color: #000;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.review-page .review-container {
+  max-width: 1400px; 
+  margin: auto;
+  padding: 40px;
+  display: flex;
+  gap: 100px; 
+}
+
+.review-page .subtitle {
+  color: #aaa;
+}
+
+.review-page .left-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* stack content vertically */
+  align-items: center;   
+}
+
+.review-page .restaurant-card {
+  border: 2px solid orange;
+  width: 400px;          
+  margin: 20px 0;         
+  border-radius: 15px;    
+  overflow: hidden;
+  background-color: #111; 
+  box-shadow: 0 0 20px rgba(255, 165, 0, 0.4);
+}
+
+.review-page .restaurant-card img {
+  width: 100%;
+  height: 250px;          
+  object-fit: cover;
+}
+
+.review-page .restaurant-card h3 {
+  margin: 15px 0 5px 15px;
+  font-size: 28px;        
+  font-weight: 700;
+  color: #fff;
+}
+
+.review-page .restaurant-card p {
+  margin: 5px 0 15px 15px;
+  font-size: 20px;        
+  color: #aaa;
+  font-weight: 500;
+}
+.review-page .right-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+}
+
+.review-page .right-section h3{
+  font-weight: 600;
+  font-size: 24px; 
+  text-align: left;
+}
+.review-page .right-section label {
+  display: block;
+    margin: 20px 0 10px; 
+  font-weight: 600;
+  font-size: 24px; 
+  text-align: left;
+  width: 100%;
+  letter-spacing: 0.5px;
+}
+
+.review-page .rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  width: 100%;
+}
+.review-page .rating-row label {
+  font-size: 18px;     
+  font-weight: 400;    
+}
+
+.review-page .star {
+  width: 25px;
+  height: 25px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+/* for diveder between rating and when did you go */
+.review-page .rating-divider {
+  width: 100%;            
+  height: 2px;            
+  background-color: #666;  
+  margin: 15px 0;          
+}
+
+.review-page .dropdown,
+.review-page .title-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 10px;
+  border: none;
+}
+
+.review-page .review-text {
+  width: 100%;
+  height: 110px;       
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  resize: none;        /* disable resizing */
+  overflow-y: auto;    /* scrollable */
+  box-sizing: border-box;
+}
+
+.review-page .datepicker-wrapper,
+.review-page .react-datepicker-wrapper,
+.review-page .react-datepicker__input-container,
+.review-page .react-datepicker__input-container input {
+  display: block;
+  width: 100%;
+}
+
+.review-page .react-datepicker__input-container input {
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 10px;
+  border: none;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: #000;
+}
+
+/* Photo Upload Section */
+.review-page .photo-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* container stays centered */
+  margin-top: 30px;
+  width: 100%;
+}
+
+.review-page .right-section .photo-upload-container .photo-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 120px;
+  border: 2px dashed #ccc;
+  cursor: pointer;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #1a1a1a;
+  color: #aaa;
+  margin: 0;
+}
+
+.review-page .photo-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;                 
+  justify-content: flex-start; 
+  margin-top: 15px;           
+  width: 100%;
+}
+
+.review-page .uploaded-photo-wrapper {
+  position: relative;
+  width: 150px;   
+  height: 150px;  
+}
+
+.review-page .uploaded-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.review-page .remove-photo {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(0,0,0,0.6);
+  color: #fff;
+  text-align: center;
+  line-height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.review-page .uploaded-photo-wrapper:hover .remove-photo {
+  display: block;
+}
+
+.review-page .submit-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background: linear-gradient(to right, orange, red);
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}

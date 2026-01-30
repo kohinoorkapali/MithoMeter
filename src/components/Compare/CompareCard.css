@@ -1,0 +1,214 @@
+/* Main Card */
+.compare-card {
+  background: #111;
+  color: #fff;
+
+  border-radius: 15px;
+  padding: 20px;
+
+  width: 100%;
+  max-width: 420px;
+
+  margin: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.3);
+
+}
+
+/* Image */
+.compare-image {
+  width: 100%;
+  height: 260px;
+
+  position: relative;
+  overflow: hidden;
+
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow:
+    0 0 10px rgba(255, 140, 0, 0.6),
+    0 0 25px rgba(255, 140, 0, 0.4),
+    0 0 50px rgba(255, 140, 0, 0.2);
+
+  border: 1px solid rgba(255, 140, 0, 0.6);
+}
+
+.compare-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  
+}
+
+/* Carousel buttons */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: rgba(0, 0, 0, 0.7);
+  color: #ff8c00;
+
+  border: none;
+  font-size: 24px;
+  padding: 5px 10px;
+
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.nav-btn:hover {
+  background: #ff8c00;
+  color: black;
+}
+
+.nav-btn.left {
+  left: 5px;
+}
+
+.nav-btn.right {
+  right: 5px;
+}
+
+/* Title */
+.compare-card h2 {
+  color: #ff8c00;
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* Open / Close Status */
+.compare-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.compare-status img {
+  width: 18px;
+  height: 18px;
+}
+
+.open-text {
+  color: #2ecc71; /* green */
+}
+
+.closed-text {
+  color: #e74c3c; /* red */
+}
+
+
+/* Rating */
+.rating {
+  color: gold;
+  font-size: 16px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+/* Info texts */
+.text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 14px;
+  margin: 4px 0;
+  color: #e6e4e4;
+}
+
+.icon {
+  width: px;
+  height: 24px;
+  margin-right: 6px;
+
+  filter: invert(1) brightness(2);
+}
+
+/* Sections */
+.section {
+  width: 100%;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.section h4 {
+  color: #ff8c00;
+  margin-bottom: 6px;
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.section li {
+  font-size: 13px;
+  padding: 2px 0;
+  color: #f9f8f8;
+}
+
+/* Buttons */
+.compare-actions {
+  width: 100%;
+  margin-top: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+  align-items: center;  
+}
+
+/* Menu Button */
+.menu-btn {
+  background: transparent;
+
+  color: #ff8c00;
+
+  padding: 8px;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.menu-btn:hover {
+  background: #ff8c00;
+  color: black;
+}
+
+/* Visit Button */
+.visit-btn {
+  text-align: center;
+  text-decoration: none;
+
+  background: #ff8c00;
+  color: black;
+
+  padding: 8px;
+  border-radius: 8px;
+
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.visit-btn:hover {
+  background: #ffa733;
+}
