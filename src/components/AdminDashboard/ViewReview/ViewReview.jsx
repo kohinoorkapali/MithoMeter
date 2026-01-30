@@ -106,7 +106,6 @@ export default function ViewReview() {
       setLoading(false);
     }
   };
-  
    
   
   const closeModal = () => {

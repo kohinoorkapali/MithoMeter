@@ -137,24 +137,22 @@ export default function ProfilePage({ setToken, currentUser, setUser }) {
   
       const res = await apiRequest("GET", `/users/${userId}`);
       const updated = res.data;
-  
+
       setUsername(updated.username);
       setFullName(updated.fullname);
       setEmail(updated.email);
-  
+      
       setProfileImageUrl(
-        currentUser.profile_image
-          ? `http://localhost:5000/uploads/profile/${currentUser.profile_image}`
+        updated.profile_image
+          ? `http://localhost:5000/uploads/profile/${updated.profile_image}`
           : ""
       );
       
-      setUsername(currentUser.username);
-      
-  
       setProfileImageFile(null);
-  
+      
       setUser(updated);
       localStorage.setItem("user", JSON.stringify(updated));
+      
   
     } catch (err) {
       console.error(err);
